@@ -1,0 +1,10 @@
+body {
+    background-color: #ecf2ff;
+}
+
+.redactor-visual {
+    margin-bottom: 1px;
+    padding: 10px;
+    border: 20px solid #bfe2f2;
+    background-color: #eb6dff;
+}

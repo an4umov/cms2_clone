@@ -1,0 +1,62 @@
+<?php
+
+namespace common\models\search;
+
+use common\models\ReferencePartner;
+use yii\base\Model;
+use yii\data\ActiveDataProvider;
+
+/**
+ * Class ReferencesPartnerSearch
+ *
+ * @package common\models\search
+ */
+class ReferencePartnerSearch extends ReferencePartner
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function rules()
+    {
+        return [
+            [['name', 'is_active',], 'safe'],
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function scenarios()
+    {
+        // bypass scenarios() implementation in the parent class
+        return Model::scenarios();
+    }
+
+    /**
+     * Creates data provider instance with search query applied
+     *
+     * @param array $params
+     *
+     * @return ActiveDataProvider
+     */
+    public function search($params)
+    {
+        $query = ReferencePartner::find();
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        $this->load($params);
+
+        if (!$this->validate()) {
+            return $dataProvider;
+        }
+
+        $query->andFilterWhere(['ilike', 'name', $this->name,])
+            ->andFilterWhere(['is_active' => $this->is_active,]);
+        $query->orderBy(['id' => SORT_ASC,]);
+
+        return $dataProvider;
+    }
+}

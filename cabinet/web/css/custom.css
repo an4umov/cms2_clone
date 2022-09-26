@@ -1,0 +1,35 @@
+.nk-sidebar-brand-title {
+    color: #ee7203;
+    font-family: "DM Sans", sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: 0.01em;
+    text-transform: none;
+    line-height: 1.25rem;
+}
+
+.user-contact-phones-container-item {
+    margin-top: 10px;
+}
+
+.user-contact-phones-input {
+    width:95%;
+    display:inline-block;
+}
+
+.user-contact-phones-actions {
+    display:inline-block;
+}
+
+.data-head-right {
+    float: right;
+}
+
+.form-field-required {
+    color: #cc0b0b;
+    font-weight: 700;
+    vertical-align: text-top;
+}
+
+/* #854fff */
+

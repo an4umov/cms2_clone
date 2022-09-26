@@ -1,0 +1,72 @@
+<?php
+
+namespace common\models\search;
+
+use yii\base\Model;
+use yii\data\ActiveDataProvider;
+use common\models\DepartmentMenu;
+
+/**
+ * DepartmentMenuSearch represents the model behind the search form of `common\models\DepartmentMenu`.
+ */
+class DepartmentMenuSearch extends DepartmentMenu
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function rules()
+    {
+        return [
+            [['department_id',], 'integer'],
+            [['url', 'name',], 'safe'],
+            [['is_active',], 'boolean'],
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function scenarios()
+    {
+        // bypass scenarios() implementation in the parent class
+        return Model::scenarios();
+    }
+
+    /**
+     * Creates data provider instance with search query applied
+     *
+     * @param array $params
+     *
+     * @return ActiveDataProvider
+     */
+    public function search($params)
+    {
+        $query = DepartmentMenu::find();
+
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        $this->load($params);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'department_id' => $this->department_id,
+            'is_active' => $this->is_active,
+        ]);
+
+        $query->andFilterWhere(['ilike', 'url', $this->url])
+            ->andFilterWhere(['ilike', 'name', $this->name])
+            ->orderBy(['sort' => SORT_ASC,]);
+
+        return $dataProvider;
+    }
+}
