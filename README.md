@@ -60,4 +60,4 @@ environments/            contains environment-based overrides
 ```
 
 
-//Демонстрационная предрелизная версия для кандидатов на должность Backend/Fullstack разработчика 
+⚠️ Демонстрационная предрелизная версия для кандидатов на должность Backend/Fullstack разработчика 
