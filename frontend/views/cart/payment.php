@@ -161,8 +161,7 @@ $payment = CartHelper::getCartDataByType('payment');
 						<div class="cart-payment-error__description-inner">
 
 							<div class="cart-payment-error__description">выбранный вами способ оплаты недоступен</div>
-							<div class="cart-payment-error__description">для оплаты измените <a href="">способ получения</a></div>
-							<div class="cart-payment-error__description">или выберите другой способ оплаты</div>
+							<div class="cart-payment-error__description">выберите <a class="cartPaymentSwitchBtn" href="">доступный способ оплаты</a></div>
 
 						</div>
 					</div>

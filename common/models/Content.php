@@ -572,6 +572,11 @@ class Content extends \yii\db\ActiveRecord
         return $deleted;
     }
 
+    public function deletePermanently()
+    {
+        $this->delete();
+    }
+
     public function beforeSave($insert)
     {
         // Сохранение поля "Ссылка на Артикул"

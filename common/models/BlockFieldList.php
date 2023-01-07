@@ -34,6 +34,7 @@ class BlockFieldList extends \yii\db\ActiveRecord
         BlockField::TYPE_ARTICLE_ID,
         BlockField::TYPE_PAGE_ID,
         BlockField::TYPE_LIST,
+        BlockField::TYPE_RADIO,
     ];
 
     /** @var array */
@@ -49,6 +50,7 @@ class BlockFieldList extends \yii\db\ActiveRecord
         $this->_field = new BlockField();
         $this->_types = $this->_field->getTypeOptions();
         unset($this->_types[BlockField::TYPE_LIST]);
+        unset($this->_types[BlockField::TYPE_RADIO]);
     }
 
     /**

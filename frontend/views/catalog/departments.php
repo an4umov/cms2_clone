@@ -22,12 +22,10 @@ if (!empty($last['label'])) {
     $this->title = $departmentMenu->title;
 }
 ?>
-<? if (count($breadcrumbs) > 1): ?>
+<? if (count($breadcrumbs) > 0): ?>
     <?= \frontend\components\widgets\BreadcrumbsWidget::widget(['breadcrumbs' => $breadcrumbs,]); ?>
 <? endif; ?>
 <?//= \frontend\components\widgets\NewItemGroupsWidget::widget(['model' => $departmentMenu->landingPage,]) ?>
-
-<!--<pre>--><?// print_r(CatalogHelper::getCatalogGroupDepartmentsData()) ?><!--</pre>-->
 
 <!-- Catalog Model Auto -->
 <section class="model-auto" style="margin-top: 10px">

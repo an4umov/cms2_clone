@@ -20,17 +20,21 @@ $totalPageCount = $pagination->pageCount;
 ?>
 <? if ($isPage && empty($data[$number]['products'])): ?>
     <!-- Блок с информацией об отсутствии товарных предложений -->
-    <div class="single-offer-vendor-page__no-offers-info no-offers-info">
-        <div class="no-offers-info__content">
-            <div class="no-offers-info__first-paragraph">
-                <img class="no-offers-info__picture" src="/img/offers/no-offers-info-pic.png" alt="no-offers">
-                <p>к сожалению, сейчас нет ни одного предложения по данному товару</p>
+    <div class="no-offers-info-banner">
+        <div class="no-offers-info-banner__title">
+            к сожалению, сейчас нет ни одного предложения по данному товару
+        </div>
+        <div class="no-offers-info-banner__inner">
+            <div class="no-offers-info-banner__image">
+                <img src="/img/no-offer-new-illustration.svg" alt="">
             </div>
-            <div class="no-offers-info__second-paragraph">
-                вы можете отправить <a class="send-offer-request" href="#">запрос</a>, чтобы мы вам помогли подобрать аналоги
+            <div class="no-offers-info-banner__wrapper">
+                <div class="no-offers-info-banner__info">
+                    Чтобы мы помогли подобрать аналоги, Вы можете
+                </div>
+                <a class="no-offers-info-banner__btn"> Отправить запрос </a>
             </div>
         </div>
-        <div class="no-offers-info__shadow"></div>
     </div>
 <? else: ?>
     <section class="<?= $class ?>">
@@ -51,17 +55,6 @@ $totalPageCount = $pagination->pageCount;
                 <?= CatalogHelper::getCardProductMobileHtml($item) ?>
             <? endif; ?>
         <? endforeach; ?>
-        <?php if ($currentPageNumber == $totalPageCount): ?>
-            <? if (!$isPage && $data_noprice): ?>
-                <?= Html::tag('h1', $title_noprice) ?>
-            <? endif; ?>
-            <? foreach ($data_noprice as $item): ?>
-                <? if (!$isPage): ?>
-                    <!-- <div style="background: rgb(255 255 255 / 30%); position: absolute; max-width: 2000px; width: 100%; min-height: 550px; pointer-events: none; z-index: 100;"></div> -->
-                    <?= CatalogHelper::getCardProductMobileHtml($item) ?>
-                <? endif; ?>
-            <? endforeach; ?>
-        <? endif; ?>
     </section>
     <? $class = $isPage ? 'offers-vendor-catalog-desktop' : 'offers-catalog-desktop'; ?>
     <section class="<?= $class ?>">
@@ -71,35 +64,43 @@ $totalPageCount = $pagination->pageCount;
             <button class="offerCardDesktopHelpBtn">Понятно</button>
         </div>
         <? endif; ?>
-
-        <? if ($isPage): ?>
+        <? 
+            foreach ($data as $item) { 
+                if (!$isPage && $item['price'] == 0) {
+                    $dataCount = count($item);
+                    $n = 0;
+                } else {
+                    $p = 0;
+                }
+            } 
+        ?>
+        <? if ($isPage) { ?>
             <?= Html::tag('h2', $title, ['class' => 'offers-vendor-catalog-desktop__title',]) ?>
-        <? else: ?>
-            <?
+        <? } ?>
+        <? foreach ($data as $item): ?>
+            <? 
                 if (count($data) > 0) {
-                    echo Html::tag('h1', $title);
+                    if ($item['price'] == 0) { 
+                        if ($n == 0) {
+                            echo Html::tag('h1', $title_noprice);
+                        }
+                        $n++;
+                    } else {
+                        if (!$isPage) {
+                            if ($p == 0) {
+                                echo Html::tag('h1', $title);
+                            }
+                            $p++;
+                        }
+                    }
                 }
             ?>
-        <? endif; ?>
-        <? foreach ($data as $item): ?>
             <? if ($isPage): ?>
                 <?= CatalogHelper::getCardProductDesktopPageHtml($item) ?>
             <? else: ?>
                 <?= CatalogHelper::getCardProductDesktopHtml($item) ?>
             <? endif; ?>
         <? endforeach; ?>
-
-        <?php if ($currentPageNumber == $totalPageCount): ?>
-            <? if (!$isPage && $data_noprice): ?>
-                <?= Html::tag('h1', $title_noprice) ?>
-            <? endif; ?>
-            <? foreach ($data_noprice as $item): ?>
-                <? if (!$isPage): ?>
-                    <!-- <div style="background: rgb(255 255 255 / 30%); position: absolute; max-width: 2000px; width: 100%; min-height: 550px; pointer-events: none; z-index: 100;"></div> -->
-                    <?= CatalogHelper::getCardProductDesktopHtml($item) ?>
-                <? endif; ?>
-            <? endforeach; ?>
-        <? endif; ?>
     </section>
     <section class="pagination">
         <?= \yii\widgets\LinkPager::widget([
@@ -122,7 +123,7 @@ $totalPageCount = $pagination->pageCount;
             ]
         ]) ?>
     </section>
-    <?php if ($currentPageNumber == $totalPageCount): ?>
+    <?php if (Yii::$app->controller->id == 'catalog' && $currentPageNumber == $totalPageCount && !$isPage): ?>
         <div class="offers-catalog-next-wrapper">
             <a href="#" class="offers-catalog-next-btn">
                 <div class="offers-catalog-next-btn__text">ДАЛЕЕ К РАЗДЕЛУ: <b></b></div>

@@ -177,8 +177,8 @@ $isEmpty = empty($cartItems = $cart->getItems());
                                 </li>
                             </ul>
 
-                            <?= Html::activeRadio($shopOrder, 'legal_payment', ['id' => 'cart-customer-radio-btn-3', 'class' => 'cart-customer__radio-btn-input', 'checked' => $shopOrder->legal_payment === ShopOrder::LEGAL_PAYMENT_BANK_TRANSFER, 'value' => ShopOrder::LEGAL_PAYMENT_BANK_TRANSFER, 'label'=> false, 'uncheck' => false,]);  ?>
-                            <label class="cart-customer__radio-btn-label" for="cart-customer-radio-btn-3"><?= $shopOrder->getAttributeLabel('legal_payment')?></label>
+                            <?= Html::activeRadio($shopOrder, 'legal_payment', ['id' => 'cart-customer-radio-btn-4', 'class' => 'cart-customer__radio-btn-input', 'checked' => $shopOrder->legal_payment === ShopOrder::LEGAL_PAYMENT_BANK_TRANSFER, 'value' => ShopOrder::LEGAL_PAYMENT_BANK_TRANSFER, 'label'=> false, 'uncheck' => false,]);  ?>
+                            <label class="cart-customer__radio-btn-label" for="cart-customer-radio-btn-4"><?= $shopOrder->getAttributeLabel('legal_payment')?></label>
 
                             <!-- payment details data -->
                             <ul class="cart-customer-payment-details-data__inner" style="margin-bottom: 25px;">

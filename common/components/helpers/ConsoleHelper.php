@@ -18,8 +18,10 @@ use common\models\ReclamaStatus;
 use common\models\RemnantsOfGoods;
 use common\models\Replacements;
 use common\models\SpecialOffers;
+use common\models\Delivery;
 use frontend\components\widgets\CatalogListWidget;
 use yii\db\Query;
+use yii\caching\FileCache;
 
 class ConsoleHelper
 {
@@ -40,6 +42,7 @@ class ConsoleHelper
     const MIGRATE_REPLACEMENTS = 'replacements';
     const MIGRATE_SPECIAL_OFFERS = 'special_offers';
     const MIGRATE_RECLAMA_STATUS = 'reclama_status';
+    const MIGRATE_DELIVERY = 'delivery';
     const MIGRATE_TEST = 'test';
     const MIGRATE_TEST2 = 'test2';
 
@@ -56,6 +59,7 @@ class ConsoleHelper
         self::MIGRATE_REPLACEMENTS,
         self::MIGRATE_SPECIAL_OFFERS,
         self::MIGRATE_RECLAMA_STATUS,
+        self::MIGRATE_DELIVERY,
     ];
 
     private static $_debugMessages;
@@ -67,6 +71,9 @@ class ConsoleHelper
      */
     public static function debug($message, $isConsole = true, $isError = false) : void
     {
+        $cache = new FileCache([
+            'cachePath' => '@root/frontend/runtime/cache',
+        ]);
         $msg = '['.date('H:i:s'). '] '.$message.PHP_EOL;
         if ($isConsole) {
             echo $msg;
@@ -78,7 +85,7 @@ class ConsoleHelper
                 self::$_debugMessages[] = $msg;
             }
         }
-
+        $cache->flush();
         return;
     }
 
@@ -187,6 +194,7 @@ class ConsoleHelper
                             $row['kross_type'],
                             $row['article_number'],
                             $row['product_code'],
+                            $row['delivery_code'],
                             $row['manufacturer'],
                             $row['quality'],
                             $row['price'],
@@ -199,7 +207,7 @@ class ConsoleHelper
                         ];
                     }
 
-                    $count = $db->createCommand()->batchInsert(PriceList::tableName(), ['code', 'cross_type', 'article_number', 'product_code', 'manufacturer', 'quality', 'price', 'availability', 'commentary', 'multiplicity', 'key', 'created_at', 'updated_at',], $data)->execute();
+                    $count = $db->createCommand()->batchInsert(PriceList::tableName(), ['code', 'cross_type', 'article_number', 'product_code', 'delivery_code', 'manufacturer', 'quality', 'price', 'availability', 'commentary', 'multiplicity', 'key', 'created_at', 'updated_at',], $data)->execute();
 
                     self::debug('Вставлено '.$count.' записей в таблицу '.PriceList::tableName(), $isConsole);
                     $totalCount += $count;
@@ -714,6 +722,49 @@ class ConsoleHelper
 
                     $count = $db->createCommand()->batchInsert(ReclamaStatus::tableName(),
                         ['code', 'name', 'type', 'color', 'description', 'created_at', 'updated_at',],
+                        $data)->execute();
+
+                    self::debug('Вставлено ' . $count . ' записей в таблицу ' . $tableName, $isConsole);
+                    $totalCount += $count;
+                }
+
+                self::debug('Всего вставлено ' . $totalCount . ' записей в таблицу ' . $tableName, $isConsole);
+                self::debug('Пропущено ' . $skipped . ' записей для таблицы ' . $tableName, $isConsole);
+            }
+
+            self::debug('Затрачено ' . (time() - $time) . ' секунд при работе с таблицей ' . $tableName, $isConsole);
+            self::debug(PHP_EOL, $isConsole);
+        }
+
+        //Delivery table
+        if (empty($name) || $name === self::MIGRATE_DELIVERY) {
+            $time = time();
+            $tableName = '{{shop.delivery}}';
+            $query = (new Query())->from($tableName);
+            $queryCount = clone $query;
+            $skipped = 0;
+            if ($queryCount->count('*', $externalDb) > 0) {
+                self::truncateTable(Delivery::tableName(), $db, $isConsole);
+
+                $totalCount = 0;
+                foreach ($query->batch(self::BATCH_LIMIT, $externalDb) as $rows) {
+                    $data = [];
+                    foreach ($rows as $row) {
+                        if (!empty($row['code'])) {
+                            $data[] = [
+                                $row['code'],
+                                $row['delivery'],
+                                $row['delivery_time'],
+                                $row['color'],
+                                $row['stock'],
+                            ];
+                        } else {
+                            $skipped++;
+                        }
+                    }
+
+                    $count = $db->createCommand()->batchInsert(Delivery::tableName(),
+                        ['code', 'delivery', 'delivery_time', 'color', 'stock',],
                         $data)->execute();
 
                     self::debug('Вставлено ' . $count . ' записей в таблицу ' . $tableName, $isConsole);

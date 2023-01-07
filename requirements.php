@@ -1,5 +1,5 @@
 <?php
-/**
+/** 
  * Application requirement checker script.
  *
  * In order to run this script use the following console command:
@@ -26,9 +26,9 @@ $requirementsChecker = new YiiRequirementChecker();
 $gdMemo = $imagickMemo = 'Either GD PHP extension with FreeType support or ImageMagick PHP extension with PNG support is required for image CAPTCHA.';
 $gdOK = $imagickOK = false;
 
-if (extension_loaded('imagick')) {
+if (extension_loaded('imagick')) { 
     $imagick = new Imagick();
-    $imagickFormats = $imagick->queryFormats('PNG');
+    $imagickFormats = $imagick->queryFormats('PNG'); 
     if (in_array('PNG', $imagickFormats)) {
         $imagickOK = true;
     } else {
@@ -38,12 +38,12 @@ if (extension_loaded('imagick')) {
 
 if (extension_loaded('gd')) {
     $gdInfo = gd_info();
-    if (!empty($gdInfo['FreeType Support'])) {
+    if (!empty($gdInfo['FreeType Support'])) { 
         $gdOK = true;
     } else {
         $gdMemo = 'GD extension should be installed with FreeType support in order to be used for image CAPTCHA.';
     }
-}
+}  
 
 /**
  * Adjust requirements according to your application specifics.

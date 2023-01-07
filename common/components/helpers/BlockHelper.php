@@ -51,10 +51,9 @@ class BlockHelper
      * @param int   $listSort
      * @param null  $content
      *
-     * @return string
      * @throws \Exception
      */
-    public static function generateBlockField(int $contentBlockID, array $block, $field, array $data, int $listSort = 0, $content = null) : string
+    public static function generateBlockField(int $contentBlockID, array $block, $field, array $data, int $listSort = 0, $content = null)
     {
         /** @var BlockField $field */
         $html = '';
@@ -169,7 +168,6 @@ class BlockHelper
                     'displayOptions' => [
                         'class' => 'form-control kv-monospace',
                         'placeholder' => 'Введите число...',
-                        'style' => 'width:140px',
                     ],
                     'saveInputContainer' => ['style' => 'display:none',],
                     'maskedInputOptions' => [
@@ -260,7 +258,7 @@ class BlockHelper
                             <div class="row">
                                 <div class="col-lg-11"><h5 class="panel-title" style="font-size: 14px;">'.$field->name.' <span class="badge">Список полей Повторитель</span></h5></div>
                                 <div class="col-lg-1">'.
-                                    Html::a('<i class="fas fa-plus-circle" style="color: #8a6d3b;font-size: 21px;"></i>', ['#',], ['title' => 'Добавить блок', 'class' => 'pull-right', 'data' => ['content_block_id' => $contentBlockID, 'block_id' => $blockID, 'field_id' => $field->id,], 'id' => 'block-field-list-add-btn',]).'
+                                    Html::a('<i class="fas fa-plus-circle"></i>', ['#',], ['title' => 'Добавить блок', 'class' => 'pull-right', 'data' => ['content_block_id' => $contentBlockID, 'block_id' => $blockID, 'field_id' => $field->id,], 'id' => 'block-field-list-add-btn',]).'
                                 </div>
                             </div>
                         </div>
@@ -296,6 +294,80 @@ class BlockHelper
                     $html .= '</div></div>';
                 } else {
                     $html = '<div class="alert alert-danger" role="alert"><span class="fa fa-exclamation-circle" title=""></span> Отсутствует список полей в таблице '.BlockFieldList::tableName().' для записи '.$field->id.'</div>';
+                }
+                break;
+            case BlockField::TYPE_RADIO:
+                $radio_type = '';
+                $radioTabsHtml = [];
+                $radioTabsList = [];
+                $radioTabsHtml['nav'] = '';
+                $radioTabsHtml['content'] = '';
+
+                if (isset($data['radio_type_list'])) {
+                    $radio_type = $data['radio_type_list'][0]['radio_type'];
+                }
+                if (in_array($field->type, [BlockField::TYPE_RADIO])) {
+                    if (BlockHelper::currentTabCheck($radio_type, $field->id) == 1) {
+                        $checked = 'checked="true"';
+                        $is_active = 'is-active';
+                    } else {
+                        $checked = $is_active = '';
+                    }
+                    $radioTabsHtml['nav'] = '
+                        <label class="radio-tab radio-tab__'.$block['content_block_id'].'_'.$field->id.' '.$is_active.'" data-tab-name="radio-tab_'.$block['content_block_id'].'_'.$field->id.'">
+                            <input type="radio" name="Content[content_blocks_list]['.$block['content_block_id'].'][blocks_list]['.$block['id'].'][fields][radio_type_list][list][0][radio_type]" value="'.$field->id.'" '.$checked.' />
+                            <span>'.$field->name.'</span>
+                        </label>
+                    ';
+                }
+                
+                if (in_array($field->type, [BlockField::TYPE_RADIO])) {
+                    if (BlockHelper::currentTabCheck($radio_type, $field->id) == 1) {
+                        $is_active = 'is-active';
+                    } else {
+                        $is_active = '';
+                    }
+                    $radioTabsHtml['content'] = '
+                        <div class="radio-tab-content radio-tab_'.$block['content_block_id'].'_'.$field->id.' '.$is_active.'">
+                            <div class="radio-tab-content_left">
+                                <div class="radio-tabs-descr"><i>'.$field->description.'</i></div>
+                                <div class="radio-tabs-info">'.$field->info.'</div>
+                            </div>
+                            <div class="radio-tab-content_right">
+                    ';
+                    $key = 0;
+                    foreach ($field->list as $tabsList) {
+                        if ($tabsList->type == 'digit') {
+                            $radioTabsList = [$field->id => $tabsList];
+                            $inputField = $radioTabsList[$tabsList->field_id];
+                            $inputFieldValue = $inputFieldP = '';
+
+                            if (isset($data[$field->id][$key][$inputField->id])) {
+                                $inputFieldValue = $data[$field->id][$key][$inputField->id];
+                            }
+                            if (empty($inputFieldValue)) {
+                                if ($key == 0) {
+                                    $inputFieldP = 500;
+                                } elseif ($key == 1) {
+                                    $inputFieldP = 350;
+                                } elseif ($key == 2) {
+                                    $inputFieldP = 200;
+                                }
+                            }
+
+                            $radioTabsHtml['content'] .= '
+                            <label class="radio-tab-input">
+                                <span>'.$inputField->name.'</span>
+                                <input type="number" class="form-control" name="Content[content_blocks_list]['.$block['content_block_id'].'][blocks_list]['.$block['id'].'][fields]['.$field->id.'][list]['.$key.']['.$inputField->id.']" placeholder="'.$inputFieldP.'" value="'.$inputFieldValue.'" />
+                            </label>
+                            ';
+                        }
+                        $key++;
+                    }
+                    $radioTabsHtml['content'] .= '
+                            </div>
+                        </div>
+                    ';
                 }
                 break;
             case BlockField::TYPE_VALUES_LIST:
@@ -536,9 +608,23 @@ class BlockHelper
             $i .= '<i class="fas fa-info-circle text-primary"></i>';
             $i .= '</a>';
         }
-
-        return $field->type === BlockField::TYPE_LIST ? $html : '<div class="form-group block-field-'.$idPart.' block-type-'.$field->type.'">
+        if ($field->type == BlockField::TYPE_RADIO) {
+            return $radioTabsHtml;
+        } else {
+            return $field->type === BlockField::TYPE_LIST ? $html : '<div class="form-group block-field-'.$idPart.' block-type-'.$field->type.'">
             <label class="control-label" for="block-field-'.$idPart.'" style="display: block;">'.$field->name.$i.'</label>'.$html.'</div>';
+        }
+    }
+
+    // ckecing active radio tab
+
+    public static function currentTabCheck($radio_type, $name_id)
+    {
+        $res = false;
+        if ($name_id == $radio_type) {
+            $res = true;
+        }
+        return $res;
     }
 
     /**
@@ -724,9 +810,10 @@ class BlockHelper
                 $d = isset($itemValue[$item->id]) ? [$item->id => $itemValue[$item->id],] : [];
             }
             $rendered = self::generateBlockField($contentBlockID, $block, $item, $d, $listSort);
-
-            if (in_array($item->type, [BlockField::TYPE_TEXTAREA, BlockField::TYPE_TEXTAREA_EXT, BlockField::TYPE_GRADIENT_COLOR, BlockField::TYPE_LIST, BlockField::TYPE_IMAGE,])) {
+            if (in_array($item->type, [BlockField::TYPE_TEXTAREA, BlockField::TYPE_TEXTAREA_EXT, BlockField::TYPE_GRADIENT_COLOR, BlockField::TYPE_LIST, BlockField::TYPE_RADIO])) {
                 $rowHtml[] = $rendered;
+            } elseif (in_array($item->type, [BlockField::TYPE_IMAGE])) {
+                $imagesHtml[] = $rendered;
             } else {
                 $colsHtml[] = $rendered;
             }
@@ -745,11 +832,14 @@ class BlockHelper
 
             $index += count($colsHtml);
         }
+        $html .= '<div class="block-type-image_row">'.PHP_EOL;
+        foreach ($imagesHtml as $item) {
+            $html .= $item;
+        }
+        $html .= '</div>'.PHP_EOL;
 
         foreach ($rowHtml as $item) {
-            $html .= '<div class="row">'.PHP_EOL;
-            $html .= '<div class="col-lg-12 col-xl-12">'.$item.'</div>'.PHP_EOL;
-            $html .= '</div>'.PHP_EOL;
+            $html .= $item;
         }
 
         $html .= '<div class="form-group" style="margin-bottom: 0;">'.Html::button('<i class="fas fa-ban"></i> Удалить набор полей', ['class' => 'btn btn-warning btn-sm content-block-field-list-delete-btn',]).'</div>';
@@ -899,7 +989,7 @@ class BlockHelper
             $fields = BlockField::find()->where(['block_id' => $block['id'], 'deleted_at' => null,])->orderBy(['sort' => SORT_ASC,])->all();
 
             foreach ($fields as $field) {
-                if ($field->type === BlockField::TYPE_LIST) {
+                if ($field->type === BlockField::TYPE_LIST || $field->type === BlockField::TYPE_RADIO) {
                     $field->list = $field->getBlockFieldLists()->all();
                 }
 
@@ -1330,19 +1420,28 @@ class BlockHelper
     /**
      * @param        $data
      * @param        $delay
-     * @param string $width
-     * @param array $width
-     *
+     * @param array  $sliderHeight
      * @return string
      */
-    public static function getNewsSlider($data, $delay, $width = '100%', $sliderHeight, $isPage) : string
+    public static function getNewsSlider($sliderType = '', $sliderHeight, $data, $delay = 0, $isPage) : string
     {
+        if (empty($sliderHeight)) {
+            $sliderHeight = array('desktop' => 500, 'tablet' => 350, 'mobile' => 200);
+        }
         if (empty($sliderHeight['desktop'])) {
-            $sliderHeight['desktop'] = 550;
-        } elseif (empty($sliderHeight['tablet'])) {
+            $sliderHeight['desktop'] = 500;
+        } 
+        if (empty($sliderHeight['tablet'])) {
             $sliderHeight['tablet'] = 350;
-        } elseif(empty($sliderHeight['mobile'])) {
+        } 
+        if (empty($sliderHeight['mobile'])) {
             $sliderHeight['mobile'] = 200;
+        }
+
+        if ($sliderType == 369 || $sliderType == 371) {
+            $maxWidth = 'max-width: 1140px;';
+        } else {
+            $maxWidth = 'max-width: 100%;';
         }
 
         $data = !is_array($data) ? [$data,] : $data;
@@ -1352,11 +1451,8 @@ class BlockHelper
         if (empty($data)) {
             return $html;
         }
-        if ($delay) {
-            $delay .= '000';
-        } 
         if ($isPage) {
-            $html .= Html::beginTag('div', ['class' => 'single-universal-slider', 'style' => 'max-width: '.$width.'; margin: 0 auto;', 'data-timer' => $delay, 'data-height-desktop' => $sliderHeight['desktop'], 'data-height-tablet' => $sliderHeight['tablet'], 'data-height-mobile' => $sliderHeight['mobile']]);
+            $html .= Html::beginTag('div', ['class' => 'single-universal-slider', 'style' => ''.$maxWidth.' margin: 0 auto;', 'data-timer' => $delay, 'data-height-desktop' => $sliderHeight['desktop'], 'data-height-tablet' => $sliderHeight['tablet'], 'data-height-mobile' => $sliderHeight['mobile']]);
         }
         $html .= Html::beginTag('div', ['class' => 'news-post__full-slider',]);
         $html .= Html::beginTag('div', ['class' => 'news-post__full-slider-wrapper',]);
@@ -1364,10 +1460,6 @@ class BlockHelper
 
         foreach ($data as $key => $value) {
 
-            $imgFit = 'object-fit: contain;';
-            if (empty($value['fill_image'])) {
-                $imgFit = 'object-fit: cover;';
-            }
             $html .= Html::beginTag('span', ['class' => 'news-post__full-slide',]);
             if (isset($value['img'])) {
             $pos = mb_stripos($value['img']['desktop'], 'youtube.com', 0, 'utf-8');
@@ -1393,18 +1485,18 @@ class BlockHelper
                     }
                 } else {
                     $html .= Html::beginTag('picture');
-                        if (!empty($value['img']['wide2k'])) {
-                            $img = self::prepareImage($value['img']['wide2k']);
-                            $html .= Html::beginTag('source', ['media' => '(min-width: 1140px)', 'srcset' => $img, 'style' => $imgFit ]);
+                        if (!empty($value['img']['tablet'])) {
+                            $img = self::prepareImage($value['img']['tablet']);
+                            $html .= Html::beginTag('source', ['media' => '(min-width: 1140px)', 'srcset' => $img]);
                             $html .= Html::endTag('source').PHP_EOL;
                         } elseif (!empty($value['img']['desktop'])) {
                             $img = self::prepareImage($value['img']['desktop']);
-                            $html .= Html::beginTag('source', ['media' => '(min-width: 768px)', 'srcset' => $img, 'style' => $imgFit ]);
+                            $html .= Html::beginTag('source', ['media' => '(min-width: 768px)', 'srcset' => $img]);
                             $html .= Html::endTag('source').PHP_EOL;
                         } else {
                             $img = self::prepareImage($value['img']['mobile']);
                         }
-                        $html .= Html::img($img, ['alt' => '', 'style' => $imgFit ]);
+                        $html .= Html::img($img, ['alt' => '']);
                     $html .= Html::endTag('picture').PHP_EOL;
                 }
             } else {
@@ -1436,7 +1528,7 @@ class BlockHelper
      *
      * @return string
      */
-    public static function getSlider($data, $delay) : string
+    public static function getSlider($sliderType, $data, $delay) : string
     {
         $data = !is_array($data) ? [$data,] : $data;
 
@@ -1445,36 +1537,35 @@ class BlockHelper
         if (empty($data)) {
             return $html;
         }
-        if ($delay) {
-            $delay .= '000';
+        if ($sliderType == 369 || $sliderType == 371) {
+            $maxWidth = 'max-width: 1140px; margin: 0 auto;';
+        } else {
+            $maxWidth = 'max-width: 100%;';
         }
-        $html .= Html::beginTag('div', ['class' => 'slider', 'data-timer' => $delay]);
+
+        $html .= Html::beginTag('div', ['class' => 'slider', 'style' => $maxWidth, 'data-timer' => $delay]);
         $html .= Html::beginTag('div', ['class' => 'slider__wrap',]);
 
         foreach ($data as $key => $value) {
-            $imgFit = 'object-fit: contain; width: 100%; height: 100%;';
-            if (empty($value['fill_image'])) {
-                $imgFit = 'object-fit: cover; width: 100%; height: 100%;';
-            }
             $html .= Html::beginTag('div', ['class' => 'slider__item fade',]);
                     $html .= Html::beginTag('picture');
-                        $imageWide2k = $value['img']['wide2k'];
-                        $imageDesktop = $value['img']['desktop'];
-                        $imageMobile = $value['img']['mobile'];
-                        if ($imageDesktop || $imageMobile || $imageWide2k) {
-                            if (!empty($imageWide2k)) {
-                                $imageWide2k = self::prepareImage($imageWide2k);
+                        if (isset($value['img']['mobile']) || isset($value['img']['tablet']) || isset($value['img']['desktop'])) {
+                            $imageTablet = $value['img']['tablet'];
+                            $imageDesktop = $value['img']['desktop'];
+                            $imageMobile = $value['img']['mobile'];
+                            if (!empty($imageTablet)) {
+                                $imageTablet = self::prepareImage($imageTablet);
                             } elseif (!empty($imageDesktop)) {
                                 $imageDesktop = self::prepareImage($imageDesktop);
                             } else {
                                 $imageMobile = self::prepareImage($imageMobile);
                             }
                         }
-                        $html .= Html::beginTag('source', ['media' => '(min-width: 1140px)', 'srcset' => $imageWide2k, 'style' => $imgFit ]);
+                        $html .= Html::beginTag('source', ['media' => '(min-width: 1140px)', 'srcset' => $imageTablet]);
                         $html .= Html::endTag('source').PHP_EOL;
-                        $html .= Html::beginTag('source', ['media' => '(min-width: 768px)', 'srcset' => $imageDesktop, 'style' => $imgFit ]);
+                        $html .= Html::beginTag('source', ['media' => '(min-width: 768px)', 'srcset' => $imageDesktop]);
                         $html .= Html::endTag('source').PHP_EOL;
-                        $html .= Html::img($imageMobile, ['alt' => '', 'style' => $imgFit ]);
+                        $html .= Html::img($imageMobile, ['alt' => '']);
                     $html .= Html::endTag('picture').PHP_EOL;
                 if ($value['header'] || $value['text']) {
                 $html .= Html::beginTag('div', ['class' => 'slider__item-info',]);

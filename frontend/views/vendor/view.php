@@ -5,17 +5,31 @@ use common\components\helpers\ContentHelper;
 use common\models\PriceList;
 use common\models\Catalog;
 use yii\helpers\Html;
+use yii\widgets\Breadcrumbs;
 
 
-$this->title = $model->name;
+$this->title = $model->title;
 
 $images = CatalogHelper::scanCatalogImages($model->number);
 if (!$images) {
-	$images[] = '/img/'.Catalog::IMAGE_NOT_AVAILABLE_180;
+    $images[] = '/img/'.Catalog::IMAGE_NOT_AVAILABLE_180;
+}
+if (count($breadcrumbs) > 1) {
+    echo Breadcrumbs::widget([
+        'options' => ['class' => 'breadcrumbs',],
+        'itemTemplate' => "<li>{link}</li>\n",
+        'encodeLabels' => false,
+        'homeLink' => [
+            'label' => '',
+            'url' => '/',
+        ],
+        'links' => $breadcrumbs,
+    ]);
 }
 ?>
 <!--Single-offer-vendor-page-->
 <section class="single-offer-vendor-page">
+
 	<h1 class="single-offer-vendor-page__title"><?= $this->title ?></h1>
 	<div class="single-offer-vendor-page__inner">
 		<div class="single-offer-vendor-page__slider vendor-slider">
@@ -51,9 +65,11 @@ if (!$images) {
 			<div class="single-vendor-description__text" style="min-height: unset;">
 				<p>
 					<b>Описание:</b><br>
-					<?= $model->description ?>
+					<?php 
+                    	$description = nl2br(htmlentities($model->description, ENT_QUOTES, 'UTF-8'))
+					?>
+					<?= $description ?>
 				</p>
-
 				<div class="full-desktop-card__list">
 					<div class="full-desktop-card__item desktop-card-item">
 						<div class="desktop-card-item__inner" style="min-width: unset">
@@ -72,10 +88,10 @@ if (!$images) {
 							<?php 
 								}
 							?>
-							<div class="desktop-card-item__price-inner" style="min-width: unset; width: 100%;">
+							<div class="desktop-card-item__price-inner" style="min-width: unset; width: 100%; padding-left: 0;">
 								<div class="desktop-card-item__price"><?=CatalogHelper::formatPrice($product->price)?></div>
 							</div>
-							<div class="desktop-card-item__description desktop-description" style="min-width: unset; width: 100%;">
+							<div class="desktop-card-item__description desktop-description" style="min-width: unset; width: 100%; padding-left: 0; padding-right: 15px; white-space: nowrap;">
 								<div class="desktop-description__shop"><?=$product->availability?> <span>шт</span></div>
 							</div>
 							<div class="desktop-card-item__buy desktop-buy" style="min-width: unset; width: 100%;">
@@ -105,9 +121,22 @@ if (!$images) {
 
 			</div>
 			<div class="single-vendor-description__panel">
-				<?= ContentHelper::generatePanelAskButton() ?>
-				<?= ContentHelper::generatePanelShareButton() ?>
-				<?= ContentHelper::generatePanelFavoriteButton() ?>
+			
+				<a href="#" class="single-vendor-description__panel--ask">
+					<div class="single-vendor-description__panel--ask-tip">
+						Задать вопрос
+					</div>
+				</a>
+				<a href="#" class="single-vendor-description__panel--share">
+					<div class="single-vendor-description__panel--share-tip">
+						Поделиться
+					</div>
+				</a>
+				<a class="single-vendor-description__panel--favorite">
+					<div class="single-vendor-description__panel--favorite-tip">
+						в Избранное
+					</div>
+				</a>
 			</div>
 		</div>
 	</div>

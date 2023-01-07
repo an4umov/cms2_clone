@@ -57,8 +57,9 @@ class ContentBlockWidget extends Widget
         } elseif ($this->block['content_block_type'] === ContentBlock::TYPE_FORM) {
             $fields = FormField::find()->where(['form_id' => $this->block['id'],])->orderBy(['sort' => SORT_ASC,])->all();
         }
+
         foreach ($fields as $field) {
-            if ($field->type === BlockField::TYPE_LIST) {
+            if ($field->type === BlockField::TYPE_LIST || $field->type === BlockField::TYPE_RADIO) {
                 $field->list = $field->getBlockFieldLists()->andWhere(['deleted_at' => null,])->all();
             } elseif ($field->type === BlockField::TYPE_VALUES_LIST) {
                 $field->values_list = $field->getBlockFieldValuesLists()->all();

@@ -1,167 +1,4 @@
     !function(){"use strict";function o(){var o=window,t=document;if(!("scrollBehavior"in t.documentElement.style&&!0!==o.__forceSmoothScrollPolyfill__)){var l,e=o.HTMLElement||o.Element,r=468,i={scroll:o.scroll||o.scrollTo,scrollBy:o.scrollBy,elementScroll:e.prototype.scroll||n,scrollIntoView:e.prototype.scrollIntoView},s=o.performance&&o.performance.now?o.performance.now.bind(o.performance):Date.now,c=(l=o.navigator.userAgent,new RegExp(["MSIE ","Trident/","Edge/"].join("|")).test(l)?1:0);o.scroll=o.scrollTo=function(){void 0!==arguments[0]&&(!0!==f(arguments[0])?h.call(o,t.body,void 0!==arguments[0].left?~~arguments[0].left:o.scrollX||o.pageXOffset,void 0!==arguments[0].top?~~arguments[0].top:o.scrollY||o.pageYOffset):i.scroll.call(o,void 0!==arguments[0].left?arguments[0].left:"object"!=typeof arguments[0]?arguments[0]:o.scrollX||o.pageXOffset,void 0!==arguments[0].top?arguments[0].top:void 0!==arguments[1]?arguments[1]:o.scrollY||o.pageYOffset))},o.scrollBy=function(){void 0!==arguments[0]&&(f(arguments[0])?i.scrollBy.call(o,void 0!==arguments[0].left?arguments[0].left:"object"!=typeof arguments[0]?arguments[0]:0,void 0!==arguments[0].top?arguments[0].top:void 0!==arguments[1]?arguments[1]:0):h.call(o,t.body,~~arguments[0].left+(o.scrollX||o.pageXOffset),~~arguments[0].top+(o.scrollY||o.pageYOffset)))},e.prototype.scroll=e.prototype.scrollTo=function(){if(void 0!==arguments[0])if(!0!==f(arguments[0])){var o=arguments[0].left,t=arguments[0].top;h.call(this,this,void 0===o?this.scrollLeft:~~o,void 0===t?this.scrollTop:~~t)}else{if("number"==typeof arguments[0]&&void 0===arguments[1])throw new SyntaxError("Value could not be converted");i.elementScroll.call(this,void 0!==arguments[0].left?~~arguments[0].left:"object"!=typeof arguments[0]?~~arguments[0]:this.scrollLeft,void 0!==arguments[0].top?~~arguments[0].top:void 0!==arguments[1]?~~arguments[1]:this.scrollTop)}},e.prototype.scrollBy=function(){void 0!==arguments[0]&&(!0!==f(arguments[0])?this.scroll({left:~~arguments[0].left+this.scrollLeft,top:~~arguments[0].top+this.scrollTop,behavior:arguments[0].behavior}):i.elementScroll.call(this,void 0!==arguments[0].left?~~arguments[0].left+this.scrollLeft:~~arguments[0]+this.scrollLeft,void 0!==arguments[0].top?~~arguments[0].top+this.scrollTop:~~arguments[1]+this.scrollTop))},e.prototype.scrollIntoView=function(){if(!0!==f(arguments[0])){var l=function(o){for(;o!==t.body&&!1===(e=p(l=o,"Y")&&a(l,"Y"),r=p(l,"X")&&a(l,"X"),e||r);)o=o.parentNode||o.host;var l,e,r;return o}(this),e=l.getBoundingClientRect(),r=this.getBoundingClientRect();l!==t.body?(h.call(this,l,l.scrollLeft+r.left-e.left,l.scrollTop+r.top-e.top),"fixed"!==o.getComputedStyle(l).position&&o.scrollBy({left:e.left,top:e.top,behavior:"smooth"})):o.scrollBy({left:r.left,top:r.top,behavior:"smooth"})}else i.scrollIntoView.call(this,void 0===arguments[0]||arguments[0])}}function n(o,t){this.scrollLeft=o,this.scrollTop=t}function f(o){if(null===o||"object"!=typeof o||void 0===o.behavior||"auto"===o.behavior||"instant"===o.behavior)return!0;if("object"==typeof o&&"smooth"===o.behavior)return!1;throw new TypeError("behavior member of ScrollOptions "+o.behavior+" is not a valid value for enumeration ScrollBehavior.")}function p(o,t){return"Y"===t?o.clientHeight+c<o.scrollHeight:"X"===t?o.clientWidth+c<o.scrollWidth:void 0}function a(t,l){var e=o.getComputedStyle(t,null)["overflow"+l];return"auto"===e||"scroll"===e}function d(t){var l,e,i,c,n=(s()-t.startTime)/r;c=n=n>1?1:n,l=.5*(1-Math.cos(Math.PI*c)),e=t.startX+(t.x-t.startX)*l,i=t.startY+(t.y-t.startY)*l,t.method.call(t.scrollable,e,i),e===t.x&&i===t.y||o.requestAnimationFrame(d.bind(o,t))}function h(l,e,r){var c,f,p,a,h=s();l===t.body?(c=o,f=o.scrollX||o.pageXOffset,p=o.scrollY||o.pageYOffset,a=i.scroll):(c=l,f=l.scrollLeft,p=l.scrollTop,a=n),d({scrollable:c,method:a,startTime:h,startX:f,startY:p,x:e,y:r})}}"object"==typeof exports&&"undefined"!=typeof module?module.exports={polyfill:o}:o()}();
-    // toogle hidding menu button
-    function toggleHiddenMenuBtn(){
-      let hiddenMenuBtn = document.querySelector('.hidden-btn__icon');
-      let hiddenMenu = document.querySelector('.user-wrapper__hidden-menu');
-      let header = document.querySelector('.header');
-      
-      let body = document.querySelector('body');
-    
-    
-      if(hiddenMenuBtn === null){
-        console.log('hiddebBtn just left this time');
-      } else {
-        let glassBackground = document.createElement("div");
-        glassBackground.classList.add('header-blur-wrap');
-        header.after(glassBackground);
-    
-        hiddenMenuBtn.addEventListener('click', function() {
-          this.classList.toggle('active');
-          hiddenMenu.classList.toggle('hidden-menu--on');
-          glassBackground.classList.toggle('header-blur-wrap--on');
-          body.classList.toggle('page-body__no-scroll');
-        });
-    
-        glassBackground.addEventListener('click', function(){
-          hiddenMenuBtn.classList.remove('active');
-          hiddenMenu.classList.remove('hidden-menu--on');
-          glassBackground.classList.remove('header-blur-wrap--on');
-          body.classList.remove('page-body__no-scroll');
-        });
-      }
-    }
-    toggleHiddenMenuBtn();
-    
-    function headerContactUsModal(){
-      let contactUsModal = document.querySelector('.header-contact-us');
-      let contactUsModalClose = document.querySelector('.header-contact-us__close');
-    
-      let contactUsDesktopHeaderNumbers = document.querySelectorAll('.contacts__number');
-    
-      let contactUsHeaderMobileHidden = document.querySelector('.hidden-menu__call-btn');
-      let contactUsHeaderMobileRightPanelNumber = document.querySelector('.right-panel__info');
-    
-      let contactUsHeaderGlassBack = document.querySelector('.header-contact-us__blur');
-    
-      let body = document.querySelector('body');
-    
-      if(contactUsModal === null || contactUsModalClose === null){
-        // console.log('No Header modal on the page');
-      } else {
-    
-        for(let i = 0; i < contactUsDesktopHeaderNumbers.length; i++){
-          contactUsDesktopHeaderNumbers[i].addEventListener('click', function(e){
-            e.preventDefault();
-            contactUsModal.style.display = 'block';
-            body.classList.add('page-body__no-scroll');
-          });
-        }
-    
-        contactUsHeaderMobileHidden.addEventListener('click', function(){
-          contactUsModal.style.display = 'block';
-          body.classList.add('page-body__no-scroll');
-        });
-    
-        contactUsHeaderMobileRightPanelNumber.addEventListener('click', function(){
-          contactUsModal.style.display = 'block';
-          body.classList.add('page-body__no-scroll');
-        });
-    
-        contactUsModalClose.addEventListener('click', function(){
-          contactUsModal.style.display = 'none';
-          body.classList.remove('page-body__no-scroll');
-        });
-    
-        contactUsHeaderGlassBack.addEventListener('click', function(){
-          contactUsModal.style.display = 'none';
-          body.classList.remove('page-body__no-scroll');
-        });
-      }
-    }
-    headerContactUsModal();
-    
-    //Green navigation arrow mech
-    function navArrowMech(){
-      let navLeftArrow = document.querySelector('.navigation__arrow-left');
-      let navRightArrow = document.querySelector('.navigation__arrow-right');
-      let navFirstItem = document.querySelector('.navigation__nav-item');
-      let navItemsList = document.querySelectorAll('.navigation__nav-item');
-      let navItemsListParent = document.querySelector('.navigation__nav-list');
-      
-    
-      if(navLeftArrow === null || navRightArrow === null || navFirstItem === null){
-        // console.log('no navigation on the page');
-      }else{
-    
-        let lastItem = navItemsList[navItemsList.length - 1];
-        
-        let intViewportWidth = window.innerWidth;
-        // console.warn(intViewportWidth);
-    
-        if(intViewportWidth > 1140){
-    
-          let coordOfLastItem = lastItem.getBoundingClientRect();
-      
-          
-          
-          if(coordOfLastItem.right > intViewportWidth){
-            // console.warn('last item out of viewport');
-    
-            navRightArrow.style.display = 'block';
-    
-            navRightArrow.addEventListener('click', function(){
-              lastItem.scrollIntoView({ block: 'end',  behavior: 'smooth' });
-              navRightArrow.style.display = 'none';
-              navLeftArrow.style.display = 'block';
-            });
-    
-            navLeftArrow.addEventListener('click', function(){
-              navFirstItem.scrollIntoView({ block: 'end', inline: 'end',  behavior: 'smooth' });
-              navLeftArrow.style.display = 'none';
-              navRightArrow.style.display = 'block';
-              
-            });
-    
-          } else{
-            console.warn('last item in viewport');
-    
-            let summ = 0;
-            for(let i = 0; i < navItemsList.length; i++){
-              summ += navItemsList[i].offsetWidth;
-            }
-    
-            let summPlusPl = summ + 550;
-            // console.log('sum of items width ' + summPlusPl + 'px');
-            // console.log(intViewportWidth);
-    
-            if(intViewportWidth > summPlusPl ){
-              navItemsListParent.style.justifyContent = 'flex-end';
-              navItemsListParent.style.paddingRight = '40px';
-              navRightArrow.style.display = 'none';
-              navLeftArrow.style.display = 'none';
-            }
-            
-    
-          }
-        } else {
-          console.warn('mobile viewport');
-        }
-    
-    
-      }
-    }
-    
-    // navArrowMech();
-    
-    setTimeout(() => navArrowMech(), 200);
-    
-    // function watchResizingOfViewPort(){
-    //   window.addEventListener("resize", function(){
-    //     navArrowMech();
-    //   });
-    // }
-    
-    // watchResizingOfViewPort();
     function newsSlider() {
     	const modifiers = {
     		controlNews: 'news-slider__control--active',
@@ -601,7 +438,7 @@
               // console.warn("only one!");
               
               newPostSlider();
-              fullPostSliderVideoNews();
+              // fullPostSliderVideoNews();
     
               // newPostSlider();
             }, {once : true});
@@ -1494,7 +1331,7 @@
     
         if(singleNewsPostClose === null){
           newPostSliderSingle();
-          fullPostSliderVideoNews();
+          // fullPostSliderVideoNews();
         }else{
           singleNewsPostTitle.style.pointerEvents = 'none';
           singleNewsPostPanel.style.display = 'none';
@@ -1502,7 +1339,7 @@
           singleNewsPostClose.style.display = 'none';
           
           newPostSliderSingle();
-          fullPostSliderVideoNews();
+          // fullPostSliderVideoNews();
         }
       }
     }
@@ -1516,7 +1353,7 @@
       } else{
         // console.warn('news post single');
         newPostSliderSingle();
-        fullPostSliderVideoNews();
+        // fullPostSliderVideoNews();
     
       }
     }
@@ -1646,7 +1483,7 @@
       }
     }
     
-    fullPostSliderVideo();
+    // fullPostSliderVideo();
     
     
     //universalSLider 2000px
@@ -2172,6 +2009,212 @@
                 });
             });
         }
+    
+        // Click on each Item on the 2 lvl of catalog
+        for (let i = 0; i < secondSectionItems.length; i++) {
+            secondSectionItems[i].addEventListener('click', function (e) {
+                e.preventDefault();
+                //clear repeat / re-opened blocks
+                thirdTitleBlocks.forEach(item => {
+                    item.style.display = 'none';
+                });
+    
+                thirdSectionItems.forEach(item => {
+                    item.style.display = 'none';
+                });
+    
+                function innerBlocksActivesClear2Stage(){
+        
+                    thirdSections.forEach(item => {
+                        item.classList.remove('shop-catalog-desktop__inner--third-active');
+                    });
+        
+                    fourthSections.forEach(item => {
+                        item.classList.remove('shop-catalog-desktop__inner--fourth-active');
+                    });
+                }
+                innerBlocksActivesClear2Stage();
+    
+                // titleStaticCurrentSecondBlock.style.display = 'none';
+                // titleOpenOfCurrentSecondBlock.style.display = 'block';
+    
+                thirdSections.forEach(item => {
+                    item.style.display = 'none';
+                });
+    
+                fourthSections.forEach(item => {
+                    item.style.display = 'none';
+                });
+    
+                clearLastOfferData();
+                fourthBlocksClear();
+                thirdBlocksClear();
+                secondBlocksClear();
+    
+                let secondItem = this.querySelector('a');
+                let secondTextBlock = this.querySelector('.shop-catalog-desktop__item-text');
+                secondTextBlock.classList.add('shop-catalog-desktop__item-text--active');
+    
+                thirdSections.forEach(item => {
+                    if (item.dataset.code == secondItem.dataset.code) {
+                        
+                        let currentThirdSection = item;
+                        currentThirdSection.style.display = 'flex';
+                        currentThirdSection.classList.add('shop-catalog-desktop__inner--third-active');
+        
+                        //Smooth scroll to the proper position
+                        const yOffset = -90; 
+                        const y = currentThirdSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
+    
+                        window.scrollTo({top: y, behavior: 'smooth'});
+    
+                        let titleOfCurrentThirdBlock = currentThirdSection.querySelector('.shop-catalog-desktop__title--third');
+                        let titleOpenOfCurrentThirdBlock = currentThirdSection.querySelector('.shop-catalog-desktop__title-open--third');
+                        let titleCloseOfCurrentThirdBlock = currentThirdSection.querySelector('.shop-catalog-desktop__title-close--third');
+                        let titleStaticCurrentThirdBlock = currentThirdSection.querySelector('.shop-catalog-desktop__title-static--third');
+    
+                        titleOfCurrentThirdBlock.style.display = 'flex';
+                        titleOpenOfCurrentThirdBlock.style.display = 'none';
+                        titleStaticCurrentThirdBlock.style.display = 'flex';
+    
+                        let itemsFromCurrentThirdSection = currentThirdSection.querySelectorAll('.shop-catalog-desktop__item--third');
+                        itemsFromCurrentThirdSection.forEach(item => {
+                            item.style.display = 'block';
+                        });
+                      
+                        // Click on each Item on the 3 lvl of catalog
+                        for (let i = 0; i < thirdSectionItems.length; i++) {
+                            thirdSectionItems[i].addEventListener('click', function (e) {
+                                e.preventDefault();
+                                fourthTitleBlocks.forEach(item => {
+                                    item.style.display = 'none';
+                                });
+    
+                                fourthSectionsItems.forEach(item => {
+                                    item.style.display = 'none';
+                                });
+    
+                                fourthSections.forEach(item => {
+                                    item.style.display = 'none';
+                                });
+    
+                                function innerBlocksActivesClear3Stage(){
+                        
+                                    fourthSections.forEach(item => {
+                                        item.classList.remove('shop-catalog-desktop__inner--third-active');
+                                    });
+                        
+                                }
+                                innerBlocksActivesClear3Stage();
+    
+                                clearLastOfferData();
+                                fourthBlocksClear();
+                                thirdBlocksClear();
+    
+                                // titleStaticCurrentThirdBlock.style.display = 'none';
+                                // titleOpenOfCurrentThirdBlock.style.display = 'flex';
+    
+                                let thirdItem = this.querySelector('a');
+                                let thirdTextBlock = this.querySelector('.shop-catalog-desktop__item-text');
+                                thirdTextBlock.classList.add('shop-catalog-desktop__item-text--active');
+    
+                                fourthSections.forEach(item => {
+                                    if (item.dataset.code == thirdItem.dataset.code) {
+                                        let currentFourthSection = item;
+                                        currentFourthSection.style.display = 'flex';
+                                        currentFourthSection.classList.add('shop-catalog-desktop__inner--fourth-active');
+    
+                                        
+                                        //Smooth scroll to the proper position
+                                        const yOffset = -90; 
+                                        const y = currentFourthSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
+    
+                                        window.scrollTo({top: y, behavior: 'smooth'});
+    
+                                        let titleOfCurrentFourthBlock = currentFourthSection.querySelector('.shop-catalog-desktop__title--fourth');
+                                        let titleOpenOfCurrentFourthBlock = currentFourthSection.querySelector('.shop-catalog-desktop__title-open--fourth');
+                                        let titleCloseOfCurrentFourthBlock = currentFourthSection.querySelector('.shop-catalog-desktop__title-close--fourth');
+    
+                                        titleOfCurrentFourthBlock.style.display = 'flex';
+    
+                                        let itemsFromCurrentFourthSection = currentFourthSection.querySelectorAll('.shop-catalog-desktop__item--fourth');
+    
+                                        itemsFromCurrentFourthSection.forEach(item => {
+                                            item.style.display = 'block';
+                                        });
+                                    }
+                                });
+                            });
+                        }
+                    }
+                });
+            });
+        }
+    
+        // Click on each Item on the 3 lvl of catalog
+        for (let i = 0; i < thirdSectionItems.length; i++) {
+            thirdSectionItems[i].addEventListener('click', function (e) {
+                e.preventDefault();
+                fourthTitleBlocks.forEach(item => {
+                    item.style.display = 'none';
+                });
+    
+                fourthSectionsItems.forEach(item => {
+                    item.style.display = 'none';
+                });
+    
+                fourthSections.forEach(item => {
+                    item.style.display = 'none';
+                });
+    
+                function innerBlocksActivesClear3Stage(){
+        
+                    fourthSections.forEach(item => {
+                        item.classList.remove('shop-catalog-desktop__inner--third-active');
+                    });
+        
+                }
+                innerBlocksActivesClear3Stage();
+    
+                clearLastOfferData();
+                fourthBlocksClear();
+                thirdBlocksClear();
+    
+                // titleStaticCurrentThirdBlock.style.display = 'none';
+                // titleOpenOfCurrentThirdBlock.style.display = 'flex';
+    
+                let thirdItem = this.querySelector('a');
+                let thirdTextBlock = this.querySelector('.shop-catalog-desktop__item-text');
+                thirdTextBlock.classList.add('shop-catalog-desktop__item-text--active');
+    
+                fourthSections.forEach(item => {
+                    if (item.dataset.code == thirdItem.dataset.code) {
+                        let currentFourthSection = item;
+                        currentFourthSection.style.display = 'flex';
+                        currentFourthSection.classList.add('shop-catalog-desktop__inner--fourth-active');
+    
+                        
+                        //Smooth scroll to the proper position
+                        const yOffset = -90; 
+                        const y = currentFourthSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
+    
+                        window.scrollTo({top: y, behavior: 'smooth'});
+    
+                        let titleOfCurrentFourthBlock = currentFourthSection.querySelector('.shop-catalog-desktop__title--fourth');
+                        let titleOpenOfCurrentFourthBlock = currentFourthSection.querySelector('.shop-catalog-desktop__title-open--fourth');
+                        let titleCloseOfCurrentFourthBlock = currentFourthSection.querySelector('.shop-catalog-desktop__title-close--fourth');
+    
+                        titleOfCurrentFourthBlock.style.display = 'flex';
+    
+                        let itemsFromCurrentFourthSection = currentFourthSection.querySelectorAll('.shop-catalog-desktop__item--fourth');
+    
+                        itemsFromCurrentFourthSection.forEach(item => {
+                            item.style.display = 'block';
+                        });
+                    }
+                });
+            });
+        }
     }
     
     function shopCatalogWithOutFirstTitle(){
@@ -2191,12 +2234,10 @@
         const innerSecondActive = document.querySelector('.shop-catalog-desktop__inner--second-active');   
         const innerThirdActive = document.querySelector('.shop-catalog-desktop__inner--third-active'); 
         const finalItemActive = document.querySelector('.final-item--active');
-    
+        let intViewportWidth = window.innerWidth;
         const shopCatalogParent = document.querySelector('.shop-catalog-desktop');   
     
-        if(innerThirdActive === null){
-            
-        }else{
+        if(innerThirdActive){
             const innerFirstActiveTitle = firstSection.querySelector('.shop-catalog-desktop__title');
             const innerSecondActiveTitle = innerSecondActive.querySelector('.shop-catalog-desktop__title--second');
             const innerThirdActiveTitle = innerThirdActive.querySelector('.shop-catalog-desktop__title--third');
@@ -2204,7 +2245,12 @@
             //CLONE First Meta Title  
             let firstActiveTitleMeta = innerFirstActiveTitle.cloneNode(true);
             firstActiveTitleMeta.classList.add('shop-catalog-desktop__title--first-meta');
-            firstActiveTitleMeta.style.marginLeft = '25px';
+            if(intViewportWidth > 1440){
+                firstActiveTitleMeta.style.marginLeft = '25px';
+            }else{
+                firstActiveTitleMeta.style.marginLeft = '0px';
+            }
+            
             firstActiveTitleMeta.style.visibility = 'visible';
             //CLONE Second Meta Title  
             let secondActiveTitleMeta = innerSecondActiveTitle.cloneNode(true);
@@ -2269,7 +2315,6 @@
                 ShopCatalogDesktopMetaHide();
                 finalItemActiveClear();
             });
-    
             thirdActiveTitleMeta.addEventListener('click', function(){
                 firstSection.style.display = 'flex';
                 innerSecondActive.style.display = 'flex';
@@ -2285,6 +2330,129 @@
             });
         }
     }
+    
+    //MetaCloser when link-onloaded
+    function shopCatalogDesktopMetaCloserFromLink(){
+        let firstSection = document.querySelector('.shop-catalog-desktop__inner');
+    
+        if(firstSection){
+            const innerSeconds = document.querySelectorAll('.shop-catalog-desktop__inner--second');   
+            const innerThirds = document.querySelectorAll('.shop-catalog-desktop__inner--third'); 
+            const finalItemActive = document.querySelector('.final-item--active');
+            let intViewportWidth = window.innerWidth;
+            const shopCatalogParent = document.querySelector('.shop-catalog-desktop');   
+        
+            if(innerSeconds){
+                innerSeconds.forEach(item => {
+                    if(window.getComputedStyle(item).display == 'flex'){
+                        item.classList.add('shop-catalog-desktop__inner--second-active');
+                    }
+                });
+                innerThirds.forEach(item => {
+                    if(window.getComputedStyle(item).display == 'flex'){
+                        item.classList.add('shop-catalog-desktop__inner--third-active');
+                    }
+                });
+        
+                //then generate meta block
+                const innerSecondActive = document.querySelector('.shop-catalog-desktop__inner--second-active');   
+                const innerThirdActive = document.querySelector('.shop-catalog-desktop__inner--third-active'); 
+                
+                const innerFirstActiveTitle = firstSection.querySelector('.shop-catalog-desktop__title');
+                const innerSecondActiveTitle = innerSecondActive.querySelector('.shop-catalog-desktop__title--second');
+                const innerThirdActiveTitle = innerThirdActive.querySelector('.shop-catalog-desktop__title--third');
+        
+                if(innerFirstActiveTitle){
+                    //CLONE First Meta Title  
+                    let firstActiveTitleMeta = innerFirstActiveTitle.cloneNode(true);
+                    firstActiveTitleMeta.classList.add('shop-catalog-desktop__title--first-meta');
+                    if(intViewportWidth > 1440){
+                        firstActiveTitleMeta.style.marginLeft = '25px';
+                    }else{
+                        firstActiveTitleMeta.style.marginLeft = '0px';
+                    }
+                    
+                    firstActiveTitleMeta.style.visibility = 'visible';
+                    //CLONE Second Meta Title  
+                    let secondActiveTitleMeta = innerSecondActiveTitle.cloneNode(true);
+                    secondActiveTitleMeta.classList.add('shop-catalog-desktop__title--second-meta');
+                    //Transform to OPEN Phase
+                    const innerSecondMetaTitleStaticBlock = secondActiveTitleMeta.querySelector('.shop-catalog-desktop__title-static--second');
+                    const innerSecondMetaTitleOpenBlock = secondActiveTitleMeta.querySelector('.shop-catalog-desktop__title-open--second');
+                    innerSecondMetaTitleStaticBlock.style.display = 'none';
+                    innerSecondMetaTitleOpenBlock.style.display = 'block';
+                    //CLONE Third Meta Title  
+                    const thirdActiveTitleMeta = innerThirdActiveTitle.cloneNode(true);
+                    thirdActiveTitleMeta.classList.add('shop-catalog-desktop__title--third-meta');
+                    //Transform to OPEN Phase
+                    const innerThirdMetaTitleStaticBlock = thirdActiveTitleMeta.querySelector('.shop-catalog-desktop__title-static--third');
+                    const innerThirdMetaTitleOpenBlock = thirdActiveTitleMeta.querySelector('.shop-catalog-desktop__title-open--third');
+                    innerThirdMetaTitleStaticBlock.style.display = 'none';
+                    innerThirdMetaTitleOpenBlock.style.display = 'block';
+                    //Clone Final item ACTIVE
+                    const finalItemParent = finalItemActive.parentElement;
+                    const finalItemActiveMeta = finalItemParent.cloneNode(true);
+                    finalItemActiveMeta.classList.add('final-item--active-meta');
+                    finalItemActiveMeta.style.pointerEvents = 'none';
+                    finalItemActiveMeta.style.display = 'block';
+        
+        
+                    let metaInner = document.createElement('div');
+                    metaInner.classList.add('shop-catalog-desktop__inner--meta');
+                    firstSection.before(metaInner);
+                    
+                    metaInner.append(firstActiveTitleMeta);
+                    metaInner.append(secondActiveTitleMeta);
+                    metaInner.append(thirdActiveTitleMeta);
+                    metaInner.append(finalItemActiveMeta);
+        
+                    firstSection.style.display = 'none';
+                    innerSecondActive.style.display = 'none';
+                    innerThirdActive.style.display = 'none';
+        
+                    //Now OPEN
+                    //First level
+                    firstActiveTitleMeta.addEventListener('click', function(){
+                        firstSection.style.display = 'flex';
+                        clearLastOfferData();
+                        //Smooth scroll to the proper position
+                        const yOffset = -370; 
+                        const y = firstSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                        window.scrollTo({top: y, behavior: 'smooth'});
+        
+                        ShopCatalogDesktopMetaHide();
+                        finalItemActiveClear();
+                    });
+                    secondActiveTitleMeta.addEventListener('click', function(){
+                        firstSection.style.display = 'flex';
+                        innerSecondActive.style.display = 'flex';
+                        //Smooth scroll to the proper position
+                        const yOffset = -370; 
+                        const y = innerSecondActive.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        
+                        window.scrollTo({top: y, behavior: 'smooth'});
+        
+                        ShopCatalogDesktopMetaHide();
+                        finalItemActiveClear();
+                    });
+                    thirdActiveTitleMeta.addEventListener('click', function(){
+                        firstSection.style.display = 'flex';
+                        innerSecondActive.style.display = 'flex';
+                        innerThirdActive.style.display = 'flex';
+                        //Smooth scroll to the proper position
+                        const yOffset = -370; 
+                        const y = innerThirdActive.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        
+                        window.scrollTo({top: y, behavior: 'smooth'});
+        
+                        ShopCatalogDesktopMetaHide();
+                        finalItemActiveClear();
+                    });
+                }
+            }
+        }
+    }
+    // setTimeout(shopCatalogDesktopMetaCloserFromLink, 15);
     
     //clear final-item active
     function finalItemActiveClear(){
@@ -2314,6 +2482,7 @@
         let finalItems = document.querySelectorAll('.final-item');
         let offersContainer = document.querySelector('.offersContainer');
         let preloaderContainer = document.querySelector('.preloader-container');
+        const catalogDepBlock = document.querySelector('.catalog__departament');
     
         for (let i = 0; i < finalItems.length; i++) {
             finalItems[i].addEventListener('click', function(e){
@@ -2324,11 +2493,8 @@
                 const finalItem = this;
                 finalItem.classList.add('final-item--active');
                 const finalItemCode = finalItem.dataset.code;
-                // console.log(finalItem);
                 const finalItemUrl = finalItem.getAttribute("href");
-                // console.log(finalItemUrl);
                 let requestUrl = `/catalog/offers/${finalItemCode}`;
-                // console.log(requestUrl);
     
                 let finalItemTextBlock = this.querySelector('.shop-catalog-desktop__item-text');
                 finalItemTextBlock.classList.add('shop-catalog-desktop__item-text--active');
@@ -2340,10 +2506,10 @@
                 shopCatalogDesktopMetaCloser();
                
                 //Smooth scroll to the proper position
-                const yOffset = -90; 
-                const y = preloaderContainer.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                const yOffset = -15; 
+                const y = catalogDepBlock.getBoundingClientRect().top + window.pageYOffset + yOffset;
     
-                window.scrollTo({top: y, behavior: 'smooth'});
+                window.scrollTo({top: y, behavior: 'instant'});
     
                 function fetchingOffers(){
     
@@ -2361,9 +2527,8 @@
                             let responseHtml = document.createElement("div");
                             responseHtml.innerHTML = response;
                             
-                            
-                            offersContainer.appendChild(responseHtml);
                             shopCatalogMechDesktop();
+                            offersContainer.appendChild(responseHtml);
     
                             hideFirstSeparatorOnMobile();
                             hideFirstSeparatorOnDesktop();
@@ -2402,20 +2567,11 @@
                             
                             preloaderContainer.style.display = 'none';
                             offersContainer.style.display = 'block';
-                            
-                            //Smooth scroll to the proper position
-                            const yOffset = -90; 
-                            const y = offersContainer.getBoundingClientRect().top + window.pageYOffset + yOffset;
-    
-                            window.scrollTo({top: y, behavior: 'smooth'});
                         }
                     } 
-                    
                     xhr.send(finalItemUrl);
                 }
-    
-                setTimeout(fetchingOffers, 1000);
-                   
+                setTimeout(fetchingOffers, 1000);   
             });
         }
     }
@@ -2431,6 +2587,7 @@
             offersContainer.removeChild(lastFetchedOffer);
         }
     }
+    
     //text-block clear functions
     function modelsClear() {
         let firstSect = document.querySelectorAll('.shop-catalog-desktop__item');
@@ -2477,7 +2634,6 @@
         let fourthSectionsMobile = document.querySelectorAll('.shop-catalog-mobile__inner--fourth');
         let fourthSectionItemsMobile = document.querySelectorAll('.shop-catalog-mobile-item--fourth');
     
-        scrollUpToTop();
     
         // click on each model mobile 1lvl
         for (let i = 0; i < modelsMobile.length; i++) {
@@ -2743,6 +2899,7 @@
         let finalItemsMobile = document.querySelectorAll('.final-item-mobile');
         let offersContainer = document.querySelector('.offersContainer');
         let preloaderContainer = document.querySelector('.preloader-container');
+        const mobileShopCatalogParent = document.querySelector('.shop-catalog-mobile');
     
         for (let i = 0; i < finalItemsMobile.length; i++) {
             finalItemsMobile[i].addEventListener('click', function(e){
@@ -2756,7 +2913,10 @@
                 let requestUrlMobile = `/catalog/offers/${finalItemMobileCode}`;
                 // console.log(requestUrl);
                 preloaderContainer.style.display = 'flex';
-                preloaderContainer.scrollIntoView({behavior: "smooth"});
+                const yOffset = -7; 
+                const y = mobileShopCatalogParent.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                window.scrollTo({top: y, behavior: 'instant'});
+    
                 shopCatalogMobileMetaCloser();
                 function fetchingOffersMobile() {
                     
@@ -2765,17 +2925,15 @@
                     xhr.open("POST", requestUrlMobile, true);
     
                     xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                    // const offerContainer = document.querySelector('.offersContainer');
     
                     xhr.onreadystatechange = function() {
+    
                         if (this.readyState == 4 && this.status == 200) {
     
                             const response = xhr.response;
                             let responseHtml = document.createElement("div");
                             responseHtml.innerHTML = response;
                             offersContainer.appendChild(responseHtml);
-                            shopCatalogMechDesktop();
-                            shopCatalogMechMobile();
     
                             hideFirstSeparatorOnMobile();
                             hideFirstSeparatorOnDesktop();
@@ -2800,23 +2958,22 @@
                             offerCardFavoriteBtnMobileAdd();
                             offerCardFavoriteBtnMobileRemove();
     
-                            
                             offersCatalogSortByPriceMechDesktop();
                             offersCatalogSortByPriceMechMobile();
     
                             shopCatalogPager();
                             generateNextOfferBtn();
+    
                             
                             preloaderContainer.style.display = 'none';
                             offersContainer.style.display = 'block';
-                            offersContainer.scrollIntoView({behavior: "auto"});
+                            
                         }
                     } 
                     xhr.send(finalItemUrlMobile);
                 }
     
                 setTimeout(fetchingOffersMobile, 1000);
-    
             })
         }
     }
@@ -2884,6 +3041,19 @@
         }
     }
     
+    function changeUrlShopCatalogMobile(){
+        let finalItemMobile = document.querySelectorAll('.final-item-mobile');
+    
+        for(let i = 0; i < finalItemMobile.length; i++){
+            finalItemMobile[i].addEventListener('click', function(e){
+                e.preventDefault();
+                let thisFinalItemHref = this.getAttribute("href");
+                
+                history.pushState("state", "title", thisFinalItemHref);
+            })
+        }
+    }
+    
     function shopCatalogSwitcher(){
         // shop-catalog desktop mechanics
         let shopCatalogSect = document.querySelector('.shop-catalog-desktop');
@@ -2897,6 +3067,7 @@
                 shopCatalogMechMobile();
                 shopCatalogFetchMobile();
                 changeUrlShopCatalog();
+                changeUrlShopCatalogMobile();
             
                 let footer = document.querySelector('.footer');
                 footer.style.marginTop = "250px";
@@ -2971,7 +3142,6 @@
             }
         }
     }
-    
     //tag-link--model-no-offers replacement link mech in Second row (lvl) in catalog
     function tagLinkNoOffersLinkReplacementSecond() {
         let catalogItemsSecondRow = document.querySelectorAll('.shop-catalog-desktop__item--second');
@@ -3082,7 +3252,6 @@
             }
         }
     }
-    
     //tag-link--backward link replacement link mech in Second row (lvl) in catalog
     function tagLinkBackwardLinkReplacementSecond() {
         let catalogItemsSecondRow = document.querySelectorAll('.shop-catalog-desktop__item--second');
@@ -3109,7 +3278,6 @@
             }
         }
     }
-    
     //tag-link--backward link replacement link mech in Third row (lvl) in catalog
     function tagLinkBackwardLinkReplacementThird() {
         let catalogItemsThirdRow = document.querySelectorAll('.shop-catalog-desktop__item--third');
@@ -3136,7 +3304,6 @@
             }
         }
     }
-    
     //tag-link--backward link replacement link mech in Fourth row (lvl) in catalog
     function tagLinkBackwardLinkReplacementFourth() {
         let catalogItemsFourthRow = document.querySelectorAll('.shop-catalog-desktop__item--fourth');
@@ -3168,449 +3335,6 @@
     tagLinkBackwardLinkReplacementSecond();
     tagLinkBackwardLinkReplacementThird();
     tagLinkBackwardLinkReplacementFourth();
-    function singleOfferSlider(){
-        let slides = document.querySelectorAll('.activeSlide__slider-item');
-        let prevBtn = document.querySelector('.activeSlide__prev-slide');
-        let nextBtn = document.querySelector('.activeSlide__next-slide');
-    
-        let thumbnailsContainer = document.querySelector('.vendor-slider__thumbnails-inner');
-        let activeThumbnail = document.querySelector('.activeSlide__active-thumbnail');
-        let slidesMassiveArray = slides.length;
-    
-        if (slides === null || prevBtn === null || nextBtn === null || activeThumbnail === null) {
-            // console.log('singleOfferSlider just left HTML');
-        } else {
-            if(slidesMassiveArray == 1){
-                console.warn('only 1 slide');
-            }else{
-                let slideIndex = 1;
-                showSlides(slideIndex);
-        
-                function nextSlide() {
-                    showSlides(slideIndex += 1);
-                }
-        
-                function previousSlide() {
-                    showSlides(slideIndex -= 1);  
-                }
-        
-        
-                function currentSlide(n) {
-                    showSlides(slideIndex = n);
-                }
-        
-                function showSlides(n){
-                    let i;
-                    
-                    if (n > slides.length) {
-                      slideIndex = 1;
-                    }
-                    if (n < 1) {
-                        slideIndex = slides.length;
-                    }
-                  
-                  
-                    for (let slide of slides) {
-                        slide.style.display = "none";
-                    }   
-                    slides[slideIndex - 1].style.display = "flex"; 
-                }  
-        
-                prevBtn.addEventListener('click', function(){
-              
-                    activeThumbnail.style.display = 'none';
-                    showSlides(slideIndex -= 1);
-                });
-        
-                nextBtn.addEventListener('click', function(){
-                    removeVideoFromActiveThumb();
-                    activeThumbnail.style.display = 'none';
-                    showSlides(slideIndex += 1);
-                });
-        
-                //thumbnail initial
-                slides.forEach(item => {  
-                    let currentItem = item;
-                    let slideThubmnail = document.createElement("div");
-                    thumbnailsContainer.appendChild(slideThubmnail);
-                    slideThubmnail.classList.add('vendor-slider__thumbnail');
-                    slideThubmnail.innerHTML = currentItem.innerHTML;
-                    let slideThumbnailImg = slideThubmnail.querySelector('img');
-                    if(slideThumbnailImg === null){
-        
-                    }else{
-                        slideThumbnailImg.style.objectFit = 'contain';
-                        slideThumbnailImg.style.width = '100%';
-                        slideThumbnailImg.style.height = '100%';
-                    }
-                });
-    
-                
-                hideArrows();
-            }
-            
-        }
-    }
-    
-    singleOfferSlider();
-    
-    function thumbnailSliderPart(){
-        let activeThumbnail = document.querySelector('.activeSlide__active-thumbnail');
-        let thumbnails = document.querySelectorAll('.vendor-slider__thumbnail');
-    
-        if (thumbnails === null || activeThumbnail === null) {
-            // console.log('singleOfferSlider just left HTML');
-        } else {
-            for (let i = 0;i < thumbnails.length; i++){
-                thumbnails[i].addEventListener('click', function(){
-                    let activeThumb = this;
-                    let activeThumbImg = activeThumb.querySelector('img');
-                    let activeThumbImgHeight = activeThumbImg.naturalHeight;
-                    let activeThumbImgWidth = activeThumbImg.naturalWidth;
-                    console.warn('activeThumbImgWidth');
-                    console.warn(activeThumbImgWidth);
-                    if(activeThumbImgWidth < 450){
-                        activeThumbnail.style.display ='flex';
-                        activeThumbnail.innerHTML = activeThumb.innerHTML;
-                        let activeThumbnailImg = activeThumbnail.querySelector('img');
-                        activeThumbnailImg.style.objectFit = 'none';
-                        activeThumbnailImg.style.width = 'auto';
-                        activeThumbnailImg.style.height = 'auto';
-                    }else{
-                        activeThumbnail.style.display ='flex';
-                        activeThumbnail.innerHTML = activeThumb.innerHTML;
-                        let activeThumbnailImg = activeThumbnail.querySelector('img');
-                    }
-                });
-            }
-        }
-    }
-    
-    thumbnailSliderPart();
-    
-    function thumbnailSliderArrows(){
-        let modifiersForSpecial = {
-            controlActive: 'vendor-slider__control--active',
-        };
-    
-        const elRoot = document.querySelector('.vendor-slider__thumbnails');
-        if (elRoot === null) {
-            // console.log("vendorSlider left html");
-        } else {
-            const elsItem = elRoot.querySelectorAll('.vendor-slider__thumbnail');
-            const elItems = elRoot.querySelector('.vendor-slider__thumbnails-inner');
-            const elNext = elRoot.querySelector('.vendor-slider__control--next');
-            const elPrevious = elRoot.querySelector('.vendor-slider__control--prev');
-    
-            //Max value is scrollWidth - clientWidth, since it's the right side of the block
-            const maxScrollValue = elItems.scrollWidth - elRoot.clientWidth;
-            //State values
-            let currentSlide = 0;
-            let currentX = 0;
-    
-            //Toggle controls visibility
-            const updateControls = () => {
-                //Hide previous button if we are at the start
-                elPrevious.classList.toggle(modifiersForSpecial.controlActive, currentX !== 0);
-                //Hide next button if we are at the end
-                elNext.classList.toggle(modifiersForSpecial.controlActive, currentX < maxScrollValue);
-            };
-    
-            //Slide to card by its index
-            const slideTo = (index) => {
-                //Check for minimal/maximal valid endexes
-                if(index < 0 || index > elItems.length - 1) return;
-    
-                //Get total width of all items. CSS is built the way that items don't have any offsets between them.
-                //Padding are used for that reason
-                let scrollValue = 0;
-                for(let i = 0; i < index; i++) {
-                    scrollValue += elsItem[i].clientWidth;
-                }
-    
-                //Limit by maximal scroll value
-                const targetValue = Math.min(scrollValue, maxScrollValue);
-    
-                //Scroll to card
-                elItems.scrollTo({left: targetValue, behavior: 'smooth'});
-    
-                //Update state values and controls
-                currentSlide = index;
-                currentX = targetValue;
-                updateControls();
-            };
-    
-            //Update controls on page load, They start hidden not to have visible controls that can't be clicked while js still loads.
-            updateControls();
-    
-            //Whenever you click controls you go to next or previous index
-            elNext.addEventListener('click', () => slideTo(currentSlide + 1));
-            elPrevious.addEventListener('click', () => slideTo(currentSlide - 1));
-    
-        }
-    }
-    
-    thumbnailSliderArrows();
-    
-    // Video in slider
-    function generateVideoInSlider(){
-        let videosBlock = document.querySelectorAll('.activeSlide__slider-video');
-    
-        if (videosBlock === null) {
-            // console.log("sliderVideos left HTML");
-          } else {
-              
-            for (let i = 0; i < videosBlock.length; i++) {
-                setupVideo(videosBlock[i]);
-            }
-    
-            function setupVideo(video) {
-                let link = video.querySelector('.activeSlide__video-link');
-                let media = video.querySelector('.activeSlide__media');
-                let button = video.querySelector('.activeSlide__button');
-          
-          
-                let id = parseMediaURL(media);
-              
-                video.addEventListener('click', () => {
-                    let iframe = createIframe(id);
-              
-                    link.remove();
-                    button.remove();
-                    video.appendChild(iframe);
-                      
-                    link.removeAttribute('href');
-                    video.classList.add('video--enabled');
-    
-    
-                    videoControlSingleOfferPage();
-    
-                });
-          
-            }
-    
-            function parseMediaURL(media) {
-                let regexp = /https:\/\/i\.ytimg\.com\/vi\/([a-zA-Z0-9_-]+)\/maxresdefault\.jpg/i;
-                let url = media.src;
-                let match = url.match(regexp);
-              
-                return match[1];
-            }
-    
-            function createIframe(id) {
-                let iframe = document.createElement('iframe');
-              
-                iframe.setAttribute('allowfullscreen', '');
-                iframe.setAttribute('allow', 'autoplay');
-                iframe.setAttribute('src', generateURL(id));
-                iframe.classList.add('video__media');
-              
-                return iframe;
-            }
-    
-            function generateURL(id) {
-                let query = '?rel=0&showinfo=0&autoplay=1&enablejsapi=1';
-              
-                return 'https://www.youtube.com/embed/' + id + query;
-            }
-          }
-    }
-    
-    generateVideoInSlider();
-    
-    
-    function videoControlSingleOfferPage(){
-        let iframes = document.querySelectorAll('iframe');
-        let nextBtn = document.querySelectorAll('.activeSlide__next-slide');
-        let prevBtn = document.querySelectorAll('.activeSlide__prev-slide');
-    
-        let thumbnailPanel = document.querySelector('.vendor-slider__thumbnails')
-      
-        for(let i = 0; i < nextBtn.length; i++){
-          nextBtn[i].addEventListener('click', function(){
-            // console.warn('BAM!!');
-            var stopAllYouTubeVideos = () => { 
-              var iframes = document.querySelectorAll('iframe');
-              Array.prototype.forEach.call(iframes, iframe => { 
-                iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', 
-              func: 'pauseVideo' }), '*');
-             });
-            }
-            stopAllYouTubeVideos();
-          });
-        }
-        
-        for(let i = 0; i < prevBtn.length; i++){
-          prevBtn[i].addEventListener('click', function(){
-            // console.warn('BAM!!');
-            var stopAllYouTubeVideos = () => { 
-              var iframes = document.querySelectorAll('iframe');
-              Array.prototype.forEach.call(iframes, iframe => { 
-                iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', 
-              func: 'pauseVideo' }), '*');
-             });
-            }
-            stopAllYouTubeVideos();
-          });
-        }
-    
-        
-        window.addEventListener('scroll', function(){
-            let pauseAllYouTubeVideos = () => { 
-              let iframes = document.querySelectorAll('iframe');
-              Array.prototype.forEach.call(iframes, iframe => { 
-                iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', 
-              func: 'pauseVideo' }), '*');
-             });
-            }
-        
-            pauseAllYouTubeVideos();
-        });
-    
-        thumbnailPanel.addEventListener('click', function(){
-            let pauseAllYouTubeVideos = () => { 
-              let iframes = document.querySelectorAll('iframe');
-              Array.prototype.forEach.call(iframes, iframe => { 
-                iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', 
-              func: 'pauseVideo' }), '*');
-             });
-            }
-        
-            pauseAllYouTubeVideos();
-        });
-    
-    
-        
-    }
-    
-      
-    
-    function tumbnailVideo(){
-        let videosInSlider = document.querySelectorAll('.activeSlide__slider-video');
-        let videosliderThubmnails = document.querySelectorAll('.vendor-slider__thumbnail');
-        let activeThumbnail = document.querySelector('.activeSlide__active-thumbnail');
-    
-        if (videosInSlider === null || videosliderThubmnails === null || activeThumbnail === null) {
-            // console.log("videoInSlider left HTML");
-          } else {
-            videosliderThubmnails.forEach(item => {  
-                let videoInThumb = item.querySelector('.activeSlide__slider-video');
-    
-                if (videoInThumb === null){
-                    // console.log("No video in slider!");
-                } else{
-                    let previewOfVideo = videoInThumb.querySelector('.activeSlide__video-link');
-                    item.classList.remove('vendor-slider__thumbnail');
-                    item.classList.add('vendor-slider__thumbnail--video');
-                    let videoThumb = item;
-                    // console.log(videoThumb);
-                    item.innerHTML = previewOfVideo.innerHTML;
-                }
-            });
-          }
-    }
-    
-    tumbnailVideo();
-    
-    //remove video from thumb
-    function removeVideoFromActiveThumb(){
-        let activeThumbnail = document.querySelector('.activeSlide__active-thumbnail');
-        let iframeActiveThumb = activeThumbnail.querySelector('iframe');
-    
-        if (activeThumbnail === null || iframeActiveThumb === null){
-            // console.log('NO VIDEO IN ACTIVEThumb');
-        } else {
-            iframeActiveThumb.remove();
-        }
-    }
-    
-    //Generate video from THUMB
-    function generateVideoInSliderFromThumb(){
-        let activeThumb = document.querySelector('.activeSlide__active-thumbnail');
-        let videoInSlide = document.querySelectorAll('.activeSlide__slider-video');
-        let videoThumb = document.querySelectorAll('.vendor-slider__thumbnail--video');
-    
-        if(activeThumb === null || videoInSlide === null || videoThumb === null){
-            // console.log('no Video in slider');
-        }else{
-            function setupVideo() {
-    
-                for(let i = 0; i < videoThumb.length; i++){ 
-                    videoThumb[i].addEventListener('click', function(){
-                        let currentThumb = this;
-                        
-                        let media = currentThumb.querySelector('.activeSlide__media');
-                        let button = currentThumb.querySelector('.activeSlide__button');
-    
-                        let id = parseMediaURL(media);
-                        let iframe = createIframe(id);
-                    
-                        
-                        // button.remove();
-                        activeThumb.style.display = 'flex';
-                        activeThumb.appendChild(iframe);
-    
-                        
-                    });  
-                }   
-            }
-        
-            setupVideo();
-        
-            function parseMediaURL(media) {
-                let regexp = /https:\/\/i\.ytimg\.com\/vi\/([a-zA-Z0-9_-]+)\/maxresdefault\.jpg/i;
-                let url = media.src;
-                let match = url.match(regexp);
-              
-                return match[1];
-            }
-        
-            function createIframe(id) {
-                let iframe = document.createElement('iframe');
-              
-                iframe.setAttribute('allowfullscreen', '');
-                iframe.setAttribute('allow', 'autoplay');
-                iframe.setAttribute('src', generateURL(id));
-                iframe.classList.add('video__media');
-              
-                return iframe;
-            }
-        
-            function generateURL(id) {
-                let query = '?rel=0&showinfo=0&autoplay=1&enablejsapi=1';
-              
-                return 'https://www.youtube.com/embed/' + id + query;
-            }
-    
-            videoControlSingleOfferPage();
-        }
-    }
-    
-    generateVideoInSliderFromThumb();
-    
-    
-    function hideArrows(){
-        let prevArrow = document.querySelector('.activeSlide__prev-slide');
-        let nextArrow = document.querySelector('.activeSlide__next-slide');
-        let activeSlide = document.querySelector('.activeSlide');
-    
-        if (prevArrow === null || nextArrow === null) {
-            // console.log('singleOfferSlider just left HTML');
-        } else { 
-            activeSlide.addEventListener('mouseover', function(){      
-                prevArrow.style.display = 'flex';
-                nextArrow.style.display = 'flex';
-    
-    
-            });
-    
-            activeSlide.addEventListener('mouseout', function(){    
-                prevArrow.style.display = 'none';
-                nextArrow.style.display = 'none';
-    
-            });
-        }
-    }
     function catalogDevSubnavOpen(){
         let btnsList = document.querySelectorAll('.catalogDepOpenSubnav');
         let catDepNavListParent = document.querySelector('.catalog__departament-navigation-list');
@@ -3755,7 +3479,6 @@
         })
     }
     //Main model auto mech
-    
     function modelAutoMech(){
         let autoBrandItems = document.querySelectorAll('.model-auto__brand-item');
     
@@ -3765,17 +3488,13 @@
         let autoGenerationBlock = document.querySelectorAll('.model-auto__generation');
         let autoGenerationItem = document.querySelectorAll('.model-auto__generation-item');
     
-        if (autoBrandItems === null){
-            // console.log('this block out of the current html page');
-        } else{
-    
+        if (autoBrandItems){
             for(let i = 0; i < autoBrandItems.length; i++){
                 autoBrandItems[i].addEventListener('click', function(){
                     hideChosenBrandItem();
                     hideOpenedAutoModelBlocks();
                     hideChosenAutoModelItem();
                     hideChosenGenerationBlock();
-    
     
                     let currentAutoBrand = this;
                     currentAutoBrand.classList.add('model-auto__brand-item--active');
@@ -3794,10 +3513,8 @@
                     hideChosenAutoModelItem();
                     hideChosenGenerationBlock();
     
-    
                     let currentAutoModel = this;
                     currentAutoModel.classList.add('model-auto__model-item--active');
-    
                     autoGenerationBlock.forEach(item => {
                         if(item.dataset.code === currentAutoModel.dataset.code){
                             let currentAutoGenerationBlock = item;
@@ -3806,9 +3523,7 @@
                     });
                 });
             }
-    
-    
-                    
+            
             //hide items when u switch between cars and track
             function hideOnSwitchCarsVsTrucks(){
                 let truckBtn = document.querySelector('label[for="model-tab-type-2"]');
@@ -3823,10 +3538,7 @@
                         hideChosenGenerationBlock();
                     });
                 }
-    
-                
             }
-    
             hideOnSwitchCarsVsTrucks();
     
             function hideOnSwitchTrucksVsCars(){
@@ -3844,12 +3556,9 @@
                 }
                 
             }
-    
             hideOnSwitchTrucksVsCars();
-    
-        }
+        } 
     }
-    
     modelAutoMech();
     
     function hideChosenBrandItem(){
@@ -3884,16 +3593,11 @@
         });
     }
     
-    
-    
     //Generation text hover mech
-    
     function generationItemTextHover(){
         let genItems = document.querySelectorAll('.model-auto__generation-item');
     
-        if(genItems === null){
-            // console.log('no generation on the page');
-        } else{
+        if(genItems){
             let intViewportWidth = window.innerWidth;
             if(intViewportWidth > 1140){
                 // console.warn('desktop!');
@@ -3909,11 +3613,67 @@
                     });
                 }
             } 
-           
         }
     }
     
     generationItemTextHover();
+    
+    //Mobile scroller help
+    function generationMobileHelpToScroll(){
+        let brandItem = document.querySelectorAll('.model-auto__brand-item')
+        
+        if(brandItem){
+            //first lvl
+            let intViewportWidth = window.innerWidth;
+            if(intViewportWidth < 1140){
+                let brandItemParent = document.querySelector('.model-auto__brand');
+                brandItem.forEach(item => {
+                    item.addEventListener('click', function(){
+                        brandItemParent.scrollIntoView({behavior: "smooth"});
+                    });
+                })
+                //second lvl
+                let modelItem = document.querySelectorAll('.model-auto__model-item');
+                let modelItemParent = document.querySelectorAll('.model-auto__model')
+                modelItem.forEach(item => {
+                    item.addEventListener('click', function(){
+                        modelItemParent.forEach(item => {
+                            if(window.getComputedStyle(item).display == 'block'){
+                                item.scrollIntoView({behavior: "smooth"});
+                            }
+                        });
+                    });
+                })
+            }else if(intViewportWidth > 1140){
+                let brandItemParent = document.querySelector('.model-auto__brand');
+                brandItem.forEach(item => {
+                    item.addEventListener('click', function(){
+                        //Smooth scroll to the proper position
+                        const yOffset = -90; 
+                        const y = brandItemParent.getBoundingClientRect().top + window.pageYOffset + yOffset;
+    
+                        window.scrollTo({top: y, behavior: 'smooth'});
+                    });
+                })
+                //second lvl
+                let modelItem = document.querySelectorAll('.model-auto__model-item');
+                let modelItemParent = document.querySelectorAll('.model-auto__model')
+                modelItem.forEach(item => {
+                    item.addEventListener('click', function(){
+                        modelItemParent.forEach(item => {
+                            if(window.getComputedStyle(item).display == 'block'){
+                                const yOffset = -90; 
+                                const y = item.getBoundingClientRect().top + window.pageYOffset + yOffset;
+            
+                                window.scrollTo({top: y, behavior: 'smooth'});
+                            }
+                        });
+                    });
+                })
+            }
+        }
+    }
+    generationMobileHelpToScroll()
     function breadCrumbsAutoScroll(){
         let listOfBreadItems = document.querySelectorAll('.breadcrumbs > li');
         let lastBreadItem = listOfBreadItems[listOfBreadItems.length - 1];
@@ -3936,24 +3696,26 @@
         let searchPanelFromDesktopHeader = document.querySelector('.search-panel__search');
     
         if(searchPanelFromDesktopHeader === null){
-            // console.log('header--custom for cart ON');
-                    
-            stickyHeader.classList.add('sticky-header');
-            stickyHeader.innerHTML = `
+            // console.log('header--custom for cart ON');  
+            //empty cart
+            let emptyStateOfCartHeaderItem = document.querySelector('.header-cart-desktop__nav-item--disabled');
+            if(emptyStateOfCartHeaderItem){
+                stickyHeader.classList.add('sticky-header');
+                stickyHeader.innerHTML = `
                                     <!-- sticky header mobile -->
                                     <ul class="sticky-header__mobile sticky-header-mobile">
                                 
                                         <li class="sticky-header-mobile__item">
                                             <a href="http://final.lr.ru/" class="sticky-header-mobile__link stickyHeaderHomeParent">
                                 
-                                                <div class="sticky-header-mobile__link-icon-home sticky-header-mobile__link-icon-home--active"></div>
-                                                <p class="sticky-header-mobile__link-text sticky-header-mobile__link-text--active">Главная</p>
+                                                <div class="sticky-header-mobile__link-icon-home sticky-header-mobile__link-icon-home"></div>
+                                                <p class="sticky-header-mobile__link-text sticky-header-mobile__link-text">Главная</p>
                                 
                                             </a>
                                         </li>
                                 
                                         <li class="sticky-header-mobile__item">
-                                            <a href="offers-catalog.html" class="sticky-header-mobile__link stickyHeaderCatalogParent">
+                                            <a href="/models" class="sticky-header-mobile__link stickyHeaderCatalogParent">
                                 
                                                 <div class="sticky-header-mobile__link-icon-offers"></div>
                                                 <p class="sticky-header-mobile__link-text">Каталог</p>
@@ -3978,17 +3740,7 @@
                                                 <p class="sticky-header-mobile__link-text">Избранное</p>
                                                 <span style="display: block;">2</span>
                                             </a>
-                                        </li>
-                                
-                                        <li class="sticky-header-mobile__item">
-                                            <a href="#" class="sticky-header-mobile__link">
-                                
-                                                <div class="sticky-header-mobile__link-icon-account"></div>
-                                                <p class="sticky-header-mobile__link-text">Мой LR.RU</p>
-                                                
-                                            </a>
-                                        </li>
-                                
+                                        </li>                            
                                     </ul>
                                 
                                     <!-- sticky header desktop cart -->
@@ -4001,11 +3753,11 @@
                                 
                                             <!-- nav list -->
                                             <ul class="sticky-header-desktop-cart__nav-list header-cart-desktop__nav-list">
-                                                <li class="sticky-header-desktop-cart__nav-item header-cart-desktop__nav-item header-cart-desktop__nav-item--current"><a href="#">корзина</a></li>
-                                                <li class="sticky-header-desktop-cart__nav-item header-cart-desktop__nav-item"><a href="#">покупатель</a></li>
-                                                <li class="sticky-header-desktop-cart__nav-item header-cart-desktop__nav-item"><a href="#">получение</a></li>
-                                                <li class="sticky-header-desktop-cart__nav-item header-cart-desktop__nav-item"><a href="#">оплата</a></li>
-                                                <li class="sticky-header-desktop-cart__nav-item header-cart-desktop__nav-item"><a href="#">отправить</a></li>
+                                                <li class="sticky-header-desktop-cart__nav-item header-cart-desktop__nav-item header-cart-desktop__nav-item--current"><a href="https://final.lr.ru/cart/">корзина</a></li>
+                                                <li class="sticky-header-desktop-cart__nav-item header-cart-desktop__nav-item header-cart-desktop__nav-item--disabled"><a href="https://final.lr.ru/cart/customer">покупатель</a></li>
+                                                <li class="sticky-header-desktop-cart__nav-item header-cart-desktop__nav-item header-cart-desktop__nav-item--disabled"><a href="https://final.lr.ru/cart/delivery">получение</a></li>
+                                                <li class="sticky-header-desktop-cart__nav-item header-cart-desktop__nav-item header-cart-desktop__nav-item--disabled"><a href="https://final.lr.ru/cart/payment">оплата</a></li>
+                                                <li class="sticky-header-desktop-cart__nav-item header-cart-desktop__nav-item header-cart-desktop__nav-item--disabled"><a href="https://final.lr.ru/cart/confirmation">отправить</a></li>
                                             </ul>
                                 
                                             <!-- user  -->
@@ -4022,157 +3774,397 @@
                                                     <p>Корзина</p>
                                                     <span style="display: block;">10</span>
                                                 </a>
-                                
-                                                <a class="user__enter">
-                                                    <img src="/img/enter-icon.svg" alt="">
-                                                    <p>Вход</p>
-                                                </a>
-                                
+                                                            
                                             </div>
                                         
                                     </div>     
-            `
+                `
     
-            body.appendChild(stickyHeader);
-            stickyHeader.style.opacity = '0';
-            stickyHeader.style.visibility = 'hidden';
-    
-            window.addEventListener('scroll', function(e){
-                let scrollPos  = window.scrollY;
-                // console.log(scrollPos);
-    
-                if (scrollPos > 200) {
-                    stickyHeader.style.opacity = '1';
-                    stickyHeader.style.visibility = 'visible';
-                } else if(scrollPos < 200){
-                    stickyHeader.style.opacity = '0';
-                    stickyHeader.style.visibility = 'hidden';
+                body.appendChild(stickyHeader);
+                const stickyHeaderDesktop = document.querySelector('.sticky-header__desktop-cart');
+                const stickyHeaderMobile = document.querySelector('.sticky-header__mobile');
+                window.addEventListener('scroll', function(e){
+                    let scrollPos  = window.scrollY;
+                    // console.log(scrollPos);
+                    if (scrollPos > 130) {
+                        stickyHeaderDesktop.style.top = '0';
+                        stickyHeaderMobile.style.bottom = '0';
+                    } else if(scrollPos < 130){
+                        stickyHeaderDesktop.style.top = '-90px';
+                        stickyHeaderMobile.style.bottom = '-70px'
+                    }
+                }); 
+            }else{
+                stickyHeader.classList.add('sticky-header');
+                stickyHeader.innerHTML = `
+                                        <!-- sticky header mobile -->
+                                        <ul class="sticky-header__mobile sticky-header-mobile">
+                                    
+                                            <li class="sticky-header-mobile__item">
+                                                <a href="http://final.lr.ru/" class="sticky-header-mobile__link stickyHeaderHomeParent">
+                                    
+                                                    <div class="sticky-header-mobile__link-icon-home sticky-header-mobile__link-icon-home"></div>
+                                                    <p class="sticky-header-mobile__link-text sticky-header-mobile__link-text">Главная</p>
+                                    
+                                                </a>
+                                            </li>
+                                    
+                                            <li class="sticky-header-mobile__item">
+                                                <a href="/models" class="sticky-header-mobile__link stickyHeaderCatalogParent">
+                                    
+                                                    <div class="sticky-header-mobile__link-icon-offers"></div>
+                                                    <p class="sticky-header-mobile__link-text">Каталог</p>
+                                    
+                                                </a>
+                                            </li>
+                                    
+                                            <li class="sticky-header-mobile__item">
+                                                <a href="/cart" class="sticky-header-mobile__link stickyHeaderCartParent">
+                                    
+                                                    <div class="sticky-header-mobile__link-icon-cart"></div>
+                                                    <p class="sticky-header-mobile__link-text">Корзина</p>
+                                                    <span style="display: block;">10</span>
+                                                    
+                                                </a>
+                                            </li>
+                                    
+                                            <li class="sticky-header-mobile__item">
+                                                <a href="/favorite" class="sticky-header-mobile__link stickyHeaderFavoriteParent">
+                                    
+                                                    <div class="sticky-header-mobile__link-icon-favorites"></div>
+                                                    <p class="sticky-header-mobile__link-text">Избранное</p>
+                                                    <span style="display: block;">2</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    
+                                        <!-- sticky header desktop cart -->
+                                        <div class="sticky-header__desktop-cart sticky-header-desktop-cart">
+                                        
+                                                <!-- logo -->
+                                                <a href="http://final.lr.ru/" class="sticky-header-desktop-cart__logo">
+                                                    <img src="/img/sticky-header/desktop/sticky-header-desktop-logo.svg" alt="">
+                                                </a>
+                                    
+                                                <!-- nav list -->
+                                                <ul class="sticky-header-desktop-cart__nav-list header-cart-desktop__nav-list">
+                                                    <li class="sticky-header-desktop-cart__nav-item header-cart-desktop__nav-item"><a href="https://final.lr.ru/cart/">корзина</a></li>
+                                                    <li class="sticky-header-desktop-cart__nav-item header-cart-desktop__nav-item"><a href="https://final.lr.ru/cart/customer">покупатель</a></li>
+                                                    <li class="sticky-header-desktop-cart__nav-item header-cart-desktop__nav-item"><a href="https://final.lr.ru/cart/delivery">получение</a></li>
+                                                    <li class="sticky-header-desktop-cart__nav-item header-cart-desktop__nav-item"><a href="https://final.lr.ru/cart/payment">оплата</a></li>
+                                                    <li class="sticky-header-desktop-cart__nav-item header-cart-desktop__nav-item"><a href="https://final.lr.ru/cart/confirmation">отправить</a></li>
+                                                </ul>
+                                    
+                                                <!-- user  -->
+                                                <div class="sticky-header-desktop-cart__user user">
+                                    
+                                                    <a href="/favorite" class="user__favorites">
+                                                        <img src="/img/favorites-icon.svg" alt="">
+                                                        <p>Избранное</p>
+                                                        <span style="display: block;">2</span>
+                                                    </a>
+                                    
+                                                    <a href="/cart" class="user__shopping-cart">
+                                                        <img src="/img/shopping-cart-icon.svg" alt="">
+                                                        <p>Корзина</p>
+                                                        <span style="display: block;">10</span>
+                                                    </a>
+                                                                
+                                                </div>
+                                            
+                                        </div>     
+                `
+        
+                body.appendChild(stickyHeader);
+                const stickyHeaderDesktop = document.querySelector('.sticky-header__desktop-cart');
+                const stickyHeaderMobile = document.querySelector('.sticky-header__mobile');
+                window.addEventListener('scroll', function(e){
+                    let scrollPos  = window.scrollY;
+                    // console.log(scrollPos);
+        
+                    if (scrollPos > 130) {
+                        stickyHeaderDesktop.style.top = '0';
+                        stickyHeaderMobile.style.bottom = '0';
+                    } else if(scrollPos < 130){
+                        stickyHeaderDesktop.style.top = '-90px';
+                        stickyHeaderMobile.style.bottom = '-70px'
+                    }
+                }); 
+        
+                function stickyHeaderCartNavigation(){
+                    let stickyHeaderUl = document.querySelector('.sticky-header-desktop-cart__nav-list');
+                    if(stickyHeaderUl){
+                        let stickyNavItems = stickyHeaderUl.querySelectorAll('.header-cart-desktop__nav-item');
+        
+                        if(window.location.toString().includes("https://final.lr.ru/cart/payment")){
+                            console.warn('https://final.lr.ru/cart/payment')
+                            for(let i = 0; i < stickyNavItems.length; i++){
+                                stickyNavItems[3].classList.add('header-cart-desktop__nav-item--current');
+                            }
+                        }else if(window.location.toString().includes("https://final.lr.ru/cart/delivery")){
+                            console.warn('https://final.lr.ru/cart/delivery')
+                            for(let i = 0; i < stickyNavItems.length; i++){
+                                stickyNavItems[2].classList.add('header-cart-desktop__nav-item--current');
+                            }
+                        }else if(window.location.toString().includes("https://final.lr.ru/cart/customer")){
+                            console.warn('https://final.lr.ru/cart/customer')
+                            for(let i = 0; i < stickyNavItems.length; i++){
+                                stickyNavItems[1].classList.add('header-cart-desktop__nav-item--current');
+                            }
+                        }else if(window.location.toString().includes("https://final.lr.ru/cart/confirmation")){
+                            console.warn('https://final.lr.ru/cart/confirmation')
+                            for(let i = 0; i < stickyNavItems.length; i++){
+                                stickyNavItems[4].classList.add('header-cart-desktop__nav-item--current');
+                            }
+                        }else if(window.location.toString().includes("https://final.lr.ru/cart")){
+                            console.warn('https://final.lr.ru/cart')
+                            for(let i = 0; i < stickyNavItems.length; i++){
+                                stickyNavItems[0].classList.add('header-cart-desktop__nav-item--current');
+                            }
+                        }
+                    }
                 }
-            }); 
+                stickyHeaderCartNavigation();
+            }
         }else{
             // console.log('default header variation');
-            
-            stickyHeader.classList.add('sticky-header');
-            stickyHeader.innerHTML = `
-                                    <!-- sticky header mobile -->
-                                    <ul class="sticky-header__mobile sticky-header-mobile">
-    
-                                        <li class="sticky-header-mobile__item">
-                                            <a href="http://final.lr.ru/" class="sticky-header-mobile__link stickyHeaderHomeParent" >
-    
-                                                <div class="sticky-header-mobile__link-icon-home"></div>
-                                                <p class="sticky-header-mobile__link-text">Главная</p>
-    
-                                            </a>
-                                        </li>
-    
-                                        <li class="sticky-header-mobile__item">
-                                            <a href="offers-catalog.html" class="sticky-header-mobile__link stickyHeaderCatalogParent">
-    
-                                                <div class="sticky-header-mobile__link-icon-offers"></div>
-                                                <p class="sticky-header-mobile__link-text">Каталог</p>
-    
-                                            </a>
-                                        </li>
-    
-                                        <li class="sticky-header-mobile__item">
-                                            <a href="/cart" class="sticky-header-mobile__link stickyHeaderCartParent">
-    
-                                                <div class="sticky-header-mobile__link-icon-cart"></div>
-                                                <p class="sticky-header-mobile__link-text">Корзина</p>
-                                                <span>0</span>
-                                                
-                                            </a>
-                                        </li>
-    
-                                        <li class="sticky-header-mobile__item">
-                                            <a href="/favorite" class="sticky-header-mobile__link stickyHeaderFavoriteParent">
-    
-                                                <div class="sticky-header-mobile__link-icon-favorites"></div>
-                                                <p class="sticky-header-mobile__link-text">Избранное</p>
-                                                <span>0</span>
-                                            </a>
-                                        </li>
-    
-                                        <li class="sticky-header-mobile__item">
-                                            <a href="#" class="sticky-header-mobile__link">
-    
-                                                <div class="sticky-header-mobile__link-icon-account"></div>
-                                                <p class="sticky-header-mobile__link-text">Мой LR.RU</p>
-                                                
-                                            </a>
-                                        </li>
-    
-                                    </ul>
-    
-                                    <!-- sticky header desktop -->
-                                    <div class="sticky-header__desktop sticky-header-desktop">
-                                    
-                                            <!-- logo -->
-                                            <a href="http://final.lr.ru/" class="sticky-header-desktop__logo">
-                                                <img src="/img/sticky-header/desktop/sticky-header-desktop-logo.svg" alt="">
-                                            </a>
-    
-                                            <!-- search -->
-                                            <form class="sticky-header-desktop__search">
-                                                <input class="sticky-header-desktop__search-input" type="text" placeholder="Поиск по артикулу или наименованию...">
-                                                <button class="sticky-header-desktop__search-setting"></button>
-                                                <button class="sticky-header-desktop__search-btn" type="submit"></button>
-                                            </form>
-    
-                                            <!-- user  -->
-                                            <div class="sticky-header-desktop__user user">
-    
-                                                <a href="/favorite" class="user__favorites">
-                                                    <img src="/img/favorites-icon.svg" alt="">
-                                                    <p>Избранное</p>
+            if(window.location.toString().includes("https://final.lr.ru/dep")){
+                stickyHeader.classList.add('sticky-header');
+                stickyHeader.innerHTML = `
+                                        <!-- sticky header mobile -->
+                                        <ul class="sticky-header__mobile sticky-header-mobile">
+        
+                                            <li class="sticky-header-mobile__item">
+                                                <a href="http://final.lr.ru/" class="sticky-header-mobile__link stickyHeaderHomeParent" >
+        
+                                                    <div class="sticky-header-mobile__link-icon-home"></div>
+                                                    <p class="sticky-header-mobile__link-text">Главная</p>
+        
+                                                </a>
+                                            </li>
+        
+                                            <li class="sticky-header-mobile__item">
+                                                <a href="offers-catalog.html" class="sticky-header-mobile__link stickyHeaderCatalogParent">
+        
+                                                    <div class="sticky-header-mobile__link-icon-offers"></div>
+                                                    <p class="sticky-header-mobile__link-text">Каталог</p>
+        
+                                                </a>
+                                            </li>
+        
+                                            <li class="sticky-header-mobile__item">
+                                                <a href="/cart" class="sticky-header-mobile__link stickyHeaderCartParent">
+        
+                                                    <div class="sticky-header-mobile__link-icon-cart"></div>
+                                                    <p class="sticky-header-mobile__link-text">Корзина</p>
+                                                    <span>0</span>
+                                                    
+                                                </a>
+                                            </li>
+        
+                                            <li class="sticky-header-mobile__item">
+                                                <a href="/favorite" class="sticky-header-mobile__link stickyHeaderFavoriteParent">
+        
+                                                    <div class="sticky-header-mobile__link-icon-favorites"></div>
+                                                    <p class="sticky-header-mobile__link-text">Избранное</p>
                                                     <span>0</span>
                                                 </a>
-    
-                                                <a href="/cart" class="user__shopping-cart" href="cart.html">
-                                                    <img src="/img/shopping-cart-icon.svg" alt="">
-                                                    <p>Корзина</p>
-                                                    <span>0</span>
-                                                </a>
-    
-                                                <a class="user__enter">
-                                                    <img src="/img/enter-icon.svg" alt="">
-                                                    <p>Вход</p>
-                                                </a>
-    
-                                            </div>
-    
-                                            <!-- numbers -->
-                                            <div class="sticky-header-desktop__numbers">
-    
-                                                <a href="#" class="sticky-header-desktop__number">+7 (495) 649 60 60</a>
-                                                <a href="#" class="sticky-header-desktop__number">+7 (495) 649 60 60</a>
-    
-                                            </div>
+                                            </li>
+        
+                                        </ul>
+        
+                                        <!-- sticky header desktop -->
+                                        <div class="sticky-header__desktop sticky-header-desktop">
                                         
-                                    </div>                    
-            `
-    
-            body.appendChild(stickyHeader);
-            stickyHeader.style.opacity = '0';
-            stickyHeader.style.visibility = 'hidden';
-    
-            window.addEventListener('scroll', function(e){
-                let scrollPos  = window.scrollY;
-                // console.log(scrollPos);
-    
-                if (scrollPos > 200) {
-                    stickyHeader.style.opacity = '1';
-                    stickyHeader.style.visibility = 'visible';
-                } else if(scrollPos < 200){
-                    stickyHeader.style.opacity = '0';
-                    stickyHeader.style.visibility = 'hidden';
-                }
-            }); 
+                                                <!-- logo -->
+                                                <a href="http://final.lr.ru/" class="sticky-header-desktop__logo">
+                                                    <img src="/img/sticky-header/desktop/sticky-header-desktop-logo.svg" alt="">
+                                                </a>
+        
+                                                <!-- search -->
+                                                <form class="sticky-header-desktop__search" action="/search" method="get">
+                                                    <input class="sticky-header-desktop__search-input" type="text" name="text" id="sitesearch-text" required="true" placeholder="Поиск по артикулу или наименованию...">
+                                                    <button class="sticky-header-desktop__search-setting toggle-settings" type="button"></button>
+                                                    <button class="sticky-header-desktop__search-btn" type="submit"></button>
+                                                    <div class="search__modal-wrapper">
+                                                        <div class="search__modal">
+                                                            <div class="search__modal-header">
+                                                                <b>Настройка поиска</b>
+                                                                Ищем в:
+                                                            </div>
+                                                            <div class="search__modal-body">
+                                                              <input type="checkbox" id="search__input-article" class="search__input-checkbox" name="search_in_article" checked readonly disabled="disabled">
+                                                              <label for="search__input-article">Номере запчасти (Артикуле)</label>
+                                                              <input type="checkbox" id="search__input-name" class="search__input-checkbox" name="search_in_name">
+                                                              <label for="search__input-name">Наименовании запчасти</label>
+                                                              <button class="search__modal-close" type="submit">OK</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+        
+                                                <!-- user  -->
+                                                <div class="sticky-header-desktop__user user">
+        
+                                                    <a href="/favorite" class="user__favorites">
+                                                        <img src="/img/favorites-icon.svg" alt="">
+                                                        <p>Избранное</p>
+                                                        <span>0</span>
+                                                    </a>
+        
+                                                    <a href="/cart" class="user__shopping-cart" href="cart.html">
+                                                        <img src="/img/shopping-cart-icon.svg" alt="">
+                                                        <p>Корзина</p>
+                                                        <span>0</span>
+                                                    </a>
+        
+                                                </div>
+        
+                                                <!-- numbers -->
+                                                <div class="sticky-header-desktop__numbers">
+        
+                                                    <a href="#" class="sticky-header-desktop__number">+7 (495) 649 60 60</a>
+                                                    <a href="#" class="sticky-header-desktop__number">+7 (495) 649 60 60</a>
+        
+                                                </div>
+                                            
+                                        </div>                    
+                `
+        
+                body.appendChild(stickyHeader);
+                const stickyHeaderDesktop = document.querySelector('.sticky-header-desktop');
+                const stickyHeaderMobile = document.querySelector('.sticky-header__mobile');
+                window.addEventListener('scroll', function(e){
+                    let scrollPos  = window.scrollY;
+                    // console.log(scrollPos);
+                    if (scrollPos > 350) {
+                        stickyHeaderDesktop.style.top = '0';
+                        stickyHeaderMobile.style.bottom = '0';
+                    } else if(scrollPos < 350){
+                        stickyHeaderDesktop.style.top = '-90px';
+                        stickyHeaderMobile.style.bottom = '-70px'
+                    }
+                }); 
+            }else {
+                stickyHeader.classList.add('sticky-header');
+                stickyHeader.innerHTML = `
+                                        <!-- sticky header mobile -->
+                                        <ul class="sticky-header__mobile sticky-header-mobile">
+        
+                                            <li class="sticky-header-mobile__item">
+                                                <a href="http://final.lr.ru/" class="sticky-header-mobile__link stickyHeaderHomeParent" >
+        
+                                                    <div class="sticky-header-mobile__link-icon-home"></div>
+                                                    <p class="sticky-header-mobile__link-text">Главная</p>
+        
+                                                </a>
+                                            </li>
+        
+                                            <li class="sticky-header-mobile__item">
+                                                <a href="offers-catalog.html" class="sticky-header-mobile__link stickyHeaderCatalogParent">
+        
+                                                    <div class="sticky-header-mobile__link-icon-offers"></div>
+                                                    <p class="sticky-header-mobile__link-text">Каталог</p>
+        
+                                                </a>
+                                            </li>
+        
+                                            <li class="sticky-header-mobile__item">
+                                                <a href="/cart" class="sticky-header-mobile__link stickyHeaderCartParent">
+        
+                                                    <div class="sticky-header-mobile__link-icon-cart"></div>
+                                                    <p class="sticky-header-mobile__link-text">Корзина</p>
+                                                    <span>0</span>
+                                                    
+                                                </a>
+                                            </li>
+        
+                                            <li class="sticky-header-mobile__item">
+                                                <a href="/favorite" class="sticky-header-mobile__link stickyHeaderFavoriteParent">
+        
+                                                    <div class="sticky-header-mobile__link-icon-favorites"></div>
+                                                    <p class="sticky-header-mobile__link-text">Избранное</p>
+                                                    <span>0</span>
+                                                </a>
+                                            </li>
+        
+                                        </ul>
+        
+                                        <!-- sticky header desktop -->
+                                        <div class="sticky-header__desktop sticky-header-desktop">
+                                        
+                                                <!-- logo -->
+                                                <a href="http://final.lr.ru/" class="sticky-header-desktop__logo">
+                                                    <img src="/img/sticky-header/desktop/sticky-header-desktop-logo.svg" alt="">
+                                                </a>
+        
+                                                <!-- search -->
+                                                <form class="sticky-header-desktop__search" action="/search" method="get">
+                                                    <input class="sticky-header-desktop__search-input" type="text" name="text" id="sitesearch-text" required="true" placeholder="Поиск по артикулу или наименованию...">
+                                                    <button class="sticky-header-desktop__search-setting toggle-settings" type="button"></button>
+                                                    <button class="sticky-header-desktop__search-btn" type="submit"></button>
+                                                    <div class="search__modal-wrapper">
+                                                        <div class="search__modal">
+                                                            <div class="search__modal-header">
+                                                                <b>Настройка поиска</b>
+                                                                Ищем в:
+                                                            </div>
+                                                            <div class="search__modal-body">
+                                                              <input type="checkbox" id="search__input-article-mobile" class="search__input-checkbox" name="search_in_article" checked readonly disabled="disabled">
+                                                              <label for="search__input-article-mobile">Номере запчасти (Артикуле)</label>
+                                                              <input type="checkbox" id="search__input-name-mobile" class="search__input-checkbox" name="search_in_name">
+                                                              <label for="search__input-name-mobile">Наименовании запчасти</label>
+                                                              <button class="search__modal-close" type="submit">OK</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+        
+                                                <!-- user  -->
+                                                <div class="sticky-header-desktop__user user">
+        
+                                                    <a href="/favorite" class="user__favorites">
+                                                        <img src="/img/favorites-icon.svg" alt="">
+                                                        <p>Избранное</p>
+                                                        <span>0</span>
+                                                    </a>
+        
+                                                    <a href="/cart" class="user__shopping-cart" href="cart.html">
+                                                        <img src="/img/shopping-cart-icon.svg" alt="">
+                                                        <p>Корзина</p>
+                                                        <span>0</span>
+                                                    </a>
+        
+                                                </div>
+        
+                                                <!-- numbers -->
+                                                <div class="sticky-header-desktop__numbers">
+        
+                                                    <a href="#" class="sticky-header-desktop__number">+7 (495) 649 60 60</a>
+                                                    <a href="#" class="sticky-header-desktop__number">+7 (495) 649 60 60</a>
+        
+                                                </div>
+                                            
+                                        </div>                    
+                `
+        
+                body.appendChild(stickyHeader);
+                const stickyHeaderDesktop = document.querySelector('.sticky-header-desktop');
+                const stickyHeaderMobile = document.querySelector('.sticky-header__mobile');
+                window.addEventListener('scroll', function(e){
+                    let scrollPos  = window.scrollY;
+                    // console.log(scrollPos);
+                    if (scrollPos > 130) {
+                        stickyHeaderDesktop.style.top = '0';
+                        stickyHeaderMobile.style.bottom = '0';
+                    } else if(scrollPos < 130){
+                        stickyHeaderDesktop.style.top = '-90px';
+                        stickyHeaderMobile.style.bottom = '-70px'
+                    }
+                }); 
+            }
         }
-    
     }
-    
     stickyHeader();
     
     //Mobile count updater for catalog update1
@@ -4186,7 +4178,6 @@
             stickyHeaderCartCounter.innerText = cartBtnMobileMainHeaderSpan.innerText;
         }
     }
-    
     stickyHeaderMobileCartCountUpdate();
     
     //Mobile Favorite count updater for catalog update1
@@ -4200,9 +4191,7 @@
             stickyHeaderFavoriteCounter.innerText = favBtnMobileMainHeaderSpan.innerText;
         }
     }
-    
     stickyHeaderMobileFavCountUpdate();
-    
     
     //Desktop count updater for catalog update1
     function stickyHeaderDesktopCartCountUpdate(){
@@ -4216,7 +4205,6 @@
             stickyHeaderCartCounter.innerText = cartBtnDesktopMainHeaderSpan.innerText;
         }
     }
-    
     stickyHeaderDesktopCartCountUpdate();
     
     //Desktop Favorite count updater for catalog update1
@@ -4231,8 +4219,6 @@
             let stickyHeaderFavCounter = stickyHeaderDesktopFavParent.querySelector('.user__favorites span');
             stickyHeaderFavCounter.innerText = favBtnDesktopMainHeaderSpan.innerText;
         }
-    
-        
     }
     stickyHeaderDesktopFavoriteCountUpdate();
     
@@ -4260,29 +4246,28 @@
         // let stickyHeaderMobileHomeText = stickyHeaderMobileHomeParent.querySelector('.sticky-header-mobile__link-text');
         // let stickyHeaderMobileHomeText = stickyHeaderMobileHomeParent.querySelector('.sticky-header-mobile__link-text');
     
-        if(window.location.toString().includes("http://final.lr.ru/favorite")){
+        if(window.location.toString().includes("final.lr.ru/favorite")){
             // console.warn('This is Favorite PAGE URL');
             // console.log(window.location.href);
             stickyHeaderMobileFavoriteIcon.classList.add('sticky-header-mobile__link-icon-favorites--active');
             stickyHeaderMobileFavoriteText.classList.add('sticky-header-mobile__link-text--active');
-        } else if(window.location.toString().includes("http://final.lr.ru/dep/")){
+        } else if(window.location.toString().includes("final.lr.ru/dep/")){
             // console.warn('This is Catalog PAGE URL');
             // console.log(window.location.href);
             stickyHeaderMobileCatalogIcon.classList.add('sticky-header-mobile__link-icon-offers--active');
             stickyHeaderMobileCatalogText.classList.add('sticky-header-mobile__link-text--active');
-        }else if(window.location.toString().includes("http://final.lr.ru/cart")){
+        }else if(window.location.toString().includes("final.lr.ru/cart")){
             // console.warn('This is Cart PAGE URL');
             // console.log(window.location.href);
             stickyHeaderMobileCartIcon.classList.add('sticky-header-mobile__link-icon-cart--active');
             stickyHeaderMobileCartText.classList.add('sticky-header-mobile__link-text--active');
-        }else if(window.location.toString().includes("http://final.lr.ru/")){
+        }else if(window.location.toString().includes("final.lr.ru/")){
             // console.warn('This is Home PAGE URL');
             // console.log(window.location.href);
             stickyHeaderMobileHomeIcon.classList.add('sticky-header-mobile__link-icon-home--active');
             stickyHeaderMobileHomeText.classList.add('sticky-header-mobile__link-text--active');
         }
     }
-    
     stickyHeaderMobileUrlReaderMech();
     
     //update on Cart page
@@ -4324,7 +4309,6 @@
             stickyHeaderDesktopCartCounter.innerText = cartBtnDesktopMainHeaderSpan.innerText;
         }
     }
-    
     stickyHeaderDesktopCartCountUpdateInCart();
     
     //Desktop Favorite count updater for Cart Page update2
@@ -4337,125 +4321,8 @@
         }else{
             stickyHeaderFavCounter.innerText = favBtnDesktopMainHeaderSpan.innerText;
         }
-    
-        
     }
     stickyHeaderDesktopFavoriteCountUpdateInCart();
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    //testing for hidding conters spans in header/stickyheader
-    //Hide '0' span counters for catalog
-    function countersHidder(){
-        //mobile
-        let headerCartCounter = document.querySelector('.user-mobile__shopping-cart span');
-        let headerFavoriteCounter = document.querySelector('.user-mobile__favorites span');
-    
-        let stickyHeaderMobileCart = document.querySelector('.stickyHeaderCartParent span');
-        let stickyHeaderMobileFavorite = document.querySelector('.stickyHeaderFavoriteParent span');
-    
-    
-    
-        //checking for available on the page
-        if(headerCartCounter === null){
-            // console.log('default header NOT on the page!'); 
-        }else{       
-      
-    
-            //check favorite counter
-            if(headerFavoriteCounter.innerText == '0'){
-                headerFavoriteCounter.style.visibility = 'hidden';
-                stickyHeaderMobileFavorite.style.visibility = 'hidden';
-                desktopFavoriteCounter.forEach(item => {
-                    item.style.visibility = 'hidden'
-                })
-            }
-        }
-    }
-    function countersDeHidder(){
-        //mobile
-        let headerCartCounter = document.querySelector('.user-mobile__shopping-cart span');
-        let headerFavoriteCounter = document.querySelector('.user-mobile__favorites span');
-    
-        let stickyHeaderMobileCart = document.querySelector('.stickyHeaderCartParent span');
-        let stickyHeaderMobileFavorite = document.querySelector('.stickyHeaderFavoriteParent span');
-    
-        //desktop
-        let desktopCartCounter = document.querySelectorAll('.user__shopping-cart span');
-        let desktopFavoriteCounter = document.querySelectorAll('.user__favorites span');
-    
-        //checking for available on the page
-        if(headerCartCounter === null){
-            // console.log('default header NOT on the page!'); 
-        }else{       
-            //change cart counter
-            headerCartCounter.style.visibility = 'visible';
-            stickyHeaderMobileCart.style.visibility = 'visible';
-    
-            desktopCartCounter.forEach(item => {
-                item.style.visibility = 'visible'
-            })
-    
-            //change favorite counter
-            headerFavoriteCounter.style.visibility = 'visible';
-            stickyHeaderMobileFavorite.style.visibility = 'visible';
-            desktopFavoriteCounter.forEach(item => {
-                item.style.visibility = 'visible'
-            });
-        }
-    }
-    
-    function desktopcountersHidder(){
-        //desktop
-        let desktopCartCounter = document.querySelectorAll('.user__shopping-cart span');
-        let desktopFavoriteCounter = document.querySelectorAll('.user__favorites span');
-    
-        if(desktopCartCounter === null){
-            // console.log('default header NOT on the page!'); 
-        }else{
-          //check cart counter
-          desktopCartCounter.forEach(item => {
-            if(item.innerText == '0'){
-                item.style.visibility = 'hidden';
-            }
-          })
-    
-          desktopFavoriteCounter.forEach(item => {
-            if(item.innerText == '0'){
-                item.style.visibility = 'hidden';
-            }
-          })
-        }
-    }
-    function desktopcountersDeHidder(){
-        //desktop
-        let desktopCartCounter = document.querySelectorAll('.user__shopping-cart span');
-        let desktopFavoriteCounter = document.querySelectorAll('.user__favorites span');
-    
-        if(desktopCartCounter === null){
-            // console.log('default header NOT on the page!'); 
-        }else{
-          //check cart counter
-          desktopCartCounter.forEach(item => {
-            if(item.innerText != '0'){
-                item.style.visibility = 'visible';
-            }
-          })
-    
-          desktopFavoriteCounter.forEach(item => {
-            if(item.innerText != '0'){
-                item.style.visibility = 'visible';
-            }
-          })
-        }
-    }
     //trick Mechacnic for radio-buttons in payment choose section
     function trickMechForRadioButtonsInPaymentSection(){
         const paymentRadio = document.querySelectorAll(".cart-payment__select-btn-radio"); 
@@ -4553,7 +4420,6 @@
             }
         }
     }
-    
     trickMechForOptionBlockInDeliverySection()
     
     //product cards mechs Desktop
@@ -4602,6 +4468,13 @@
                 const cartDesktopCustomQuantityInput = cartDesktopCustomQuantityBlock.querySelector('.cart-desktop-product-quantity__custom-input');
                 const cartDesktopCustomQuantityRefresh = cartDesktopCustomQuantityBlock.querySelector('.cart-desktop-product-quantity__apply-btn');
     
+                //Remove Disabled minus if availability is MANY
+                function cartMinusAvailabilityManyFix(){
+                    if(availability === 'много'){
+                        cartMinusBtnReset()
+                    }
+                }
+                cartMinusAvailabilityManyFix();
     
                 //disable minus btn if input placeholder == '1'
                 function cartMinusBtnDisable(){
@@ -4614,7 +4487,6 @@
                             desktopProductCardBtnMinus.classList.remove('cart-desktop-product-quantity__btn-minus');
                             desktopProductCardBtnMinus.classList.add('cart-desktop-product-quantity__btn-minus--disable');
                         }
-                        
                     }
                 }
                 cartMinusBtnDisable();
@@ -4629,8 +4501,10 @@
                 }
                 //disable plus btn if input placeholder > availability
                 function cartPlusBtnDisable(){
-                    desktopProductCardBtnPlus.classList.remove('cart-desktop-product-quantity__btn-plus');
-                    desktopProductCardBtnPlus.classList.add('cart-desktop-product-quantity__btn-plus--disable');
+                    if(desktopProductCardBtnPlus){
+                        desktopProductCardBtnPlus.classList.remove('cart-desktop-product-quantity__btn-plus');
+                        desktopProductCardBtnPlus.classList.add('cart-desktop-product-quantity__btn-plus--disable');
+                    }
                 }
                 //reset plus btn
                 function cartPlusBtnReset(){
@@ -4648,100 +4522,62 @@
                     }
                 }
                 //quantity button mech -/+/input/inputRefresh
-                desktopProductCardBtnMinus.addEventListener('click', function(){
-                    const metaCardInput = parentblock.querySelector('.cart-desktop-product-quantity__default-input');
-                    const metaCardInputPlaceholder = metaCardInput.placeholder;
+                if(desktopProductCardBtnMinus){
+                    desktopProductCardBtnMinus.addEventListener('click', desktopProductCardBtnMinusMechFunc, false);
     
-                    if(metaCardInputPlaceholder == '1'){
-                        cartMinusBtnDisable();
-                    }else{
-                        const params = new URLSearchParams();
-                        params.set('id', key);
+                    function desktopProductCardBtnMinusMechFunc(){
+                        const metaCardInput = parentblock.querySelector('.cart-desktop-product-quantity__default-input');
+                        const metaCardInputPlaceholder = metaCardInput.placeholder;
         
-                        const xhr = new XMLHttpRequest();
-                        xhr.open('POST', '/cart/reduce');
-                        xhr.responseType = 'json';
-        
-                        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-        
-                        xhr.onload = () => {
-                          if (xhr.status !== 200) {
-                            console.warn('cardProduct MinusClick ajax error');
-                          }else{
-                          //  If 1 offer in afterBuyInputBlock checking
-                            const response = xhr.response;
-                            let countFromCart = response.count; 
-                            desktopCartHeaderSpan.innerText = countFromCart;
-                            stickyHeaderDesktopCartCountUpdateInCart();
-                            --desktopProductCardInput.placeholder;
-        
+                        if(metaCardInputPlaceholder == '1'){
                             cartMinusBtnDisable();
-                            cartPlusBtnReset();
-                            desktopProductCardInput.style.pointerEvents = 'auto';
-    
-                            cartProductCardCostRefresh();
-                          }
-                        }
-        
-                        xhr.send(params);
-                    }
-                });
-    
-                desktopProductCardBtnPlus.addEventListener('click', function(){
-                    const metaCardInput = parentblock.querySelector('.cart-desktop-product-quantity__default-input');
-                    const metaCardInputPlaceholder = metaCardInput.placeholder;
-                    cartMinusBtnReset();
-    
-                    if(availability == '1'){
-                        //alert
-                        desktopProductCardAvailabilityBlock.classList.remove('cart-desktop-product__shop');
-                        desktopProductCardAvailabilityBlock.classList.add('cart-desktop-product__shop--alert');
-    
-                        function cardAvailableAlertDisapear(){
-                            desktopProductCardAvailabilityBlock.classList.remove('cart-desktop-product__shop--alert');
-                            desktopProductCardAvailabilityBlock.classList.add('cart-desktop-product__shop');
-                        }
-                        setTimeout(cardAvailableAlertDisapear, 7000);
-    
-                        cartPlusBtnDisable();
-                        desktopProductCardInput.style.pointerEvents = 'none';
-                    }else{
-        
-                        if(Number(metaCardInputPlaceholder) < Number(availability)){
-                            //change
+                        }else{
                             const params = new URLSearchParams();
                             params.set('id', key);
             
                             const xhr = new XMLHttpRequest();
-                            xhr.open('POST', '/cart/add');
+                            xhr.open('POST', '/cart/reduce');
                             xhr.responseType = 'json';
             
                             xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-     
+            
                             xhr.onload = () => {
                               if (xhr.status !== 200) {
-                                console.warn('offerCardMobileAfterBuyCounter MinusClick ajax error');
+                                console.warn('cardProduct MinusClick ajax error');
                               }else{
+                              //  If 1 offer in afterBuyInputBlock checking
                                 const response = xhr.response;
                                 let countFromCart = response.count; 
-                                desktopCartHeaderSpan.style.display = 'block';
                                 desktopCartHeaderSpan.innerText = countFromCart;
                                 stickyHeaderDesktopCartCountUpdateInCart();
-    
-                                ++metaCardInput.placeholder;
-    
+                                --desktopProductCardInput.placeholder;
+            
+                                cartMinusBtnDisable();
+                                cartPlusBtnReset();
+                                desktopProductCardInput.style.pointerEvents = 'auto';
+        
                                 cartProductCardCostRefresh();
                               }
                             }
             
                             xhr.send(params);
-                       
+                        }
+                    }
+                }
+                
+                if(desktopProductCardBtnPlus){
+                    desktopProductCardBtnPlus.addEventListener('click', desktopProductCardBtnPlusMechFunc, false);
     
-                        }else if(Number(metaCardInputPlaceholder) >= Number(availability)){
+                    function desktopProductCardBtnPlusMechFunc(){
+                        const metaCardInput = parentblock.querySelector('.cart-desktop-product-quantity__default-input');
+                        const metaCardInputPlaceholder = metaCardInput.placeholder;
+                        cartMinusBtnReset();
+        
+                        if(availability == '1'){
                             //alert
                             desktopProductCardAvailabilityBlock.classList.remove('cart-desktop-product__shop');
                             desktopProductCardAvailabilityBlock.classList.add('cart-desktop-product__shop--alert');
-    
+        
                             function cardAvailableAlertDisapear(){
                                 desktopProductCardAvailabilityBlock.classList.remove('cart-desktop-product__shop--alert');
                                 desktopProductCardAvailabilityBlock.classList.add('cart-desktop-product__shop');
@@ -4750,39 +4586,85 @@
         
                             cartPlusBtnDisable();
                             desktopProductCardInput.style.pointerEvents = 'none';
-    
-                        }else if(availability === 'много' || availability === 'В наличии' || availability === 'По запросу'){
-                            //change
-                            const params = new URLSearchParams();
-                            params.set('id', key);
+                        }else{
             
-                            const xhr = new XMLHttpRequest();
-                            xhr.open('POST', '/cart/add');
-                            xhr.responseType = 'json';
+                            if(Number(metaCardInputPlaceholder) < Number(availability)){
+                                //change
+                                const params = new URLSearchParams();
+                                params.set('id', key);
+                
+                                const xhr = new XMLHttpRequest();
+                                xhr.open('POST', '/cart/add');
+                                xhr.responseType = 'json';
+                
+                                xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+         
+                                xhr.onload = () => {
+                                  if (xhr.status !== 200) {
+                                    console.warn('offerCardMobileAfterBuyCounter MinusClick ajax error');
+                                  }else{
+                                    const response = xhr.response;
+                                    let countFromCart = response.count; 
+                                    desktopCartHeaderSpan.style.display = 'block';
+                                    desktopCartHeaderSpan.innerText = countFromCart;
+                                    stickyHeaderDesktopCartCountUpdateInCart();
+        
+                                    ++metaCardInput.placeholder;
+        
+                                    cartProductCardCostRefresh();
+                                  }
+                                }
+                
+                                xhr.send(params);
+                           
+        
+                            }else if(Number(metaCardInputPlaceholder) >= Number(availability)){
+                                //alert
+                                desktopProductCardAvailabilityBlock.classList.remove('cart-desktop-product__shop');
+                                desktopProductCardAvailabilityBlock.classList.add('cart-desktop-product__shop--alert');
+        
+                                function cardAvailableAlertDisapear(){
+                                    desktopProductCardAvailabilityBlock.classList.remove('cart-desktop-product__shop--alert');
+                                    desktopProductCardAvailabilityBlock.classList.add('cart-desktop-product__shop');
+                                }
+                                setTimeout(cardAvailableAlertDisapear, 7000);
             
-                            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-     
-                            xhr.onload = () => {
-                              if (xhr.status !== 200) {
-                                console.warn('offerCardMobileAfterBuyCounter PlusClick ajax error');
-                              }else{
-                                const response = xhr.response;
-                                let countFromCart = response.count; 
-                                desktopCartHeaderSpan.style.display = 'block';
-                                desktopCartHeaderSpan.innerText = countFromCart;
-                                stickyHeaderDesktopCartCountUpdateInCart();
-    
-                                ++metaCardInput.placeholder;
-    
-                                cartProductCardCostRefresh();
-                              }
+                                cartPlusBtnDisable();
+                                desktopProductCardInput.style.pointerEvents = 'none';
+        
+                            }else if(availability === 'много' || availability === 'В наличии' || availability === 'По запросу'){
+                                //change
+                                const params = new URLSearchParams();
+                                params.set('id', key);
+                
+                                const xhr = new XMLHttpRequest();
+                                xhr.open('POST', '/cart/add');
+                                xhr.responseType = 'json';
+                
+                                xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+         
+                                xhr.onload = () => {
+                                  if (xhr.status !== 200) {
+                                    console.warn('offerCardMobileAfterBuyCounter PlusClick ajax error');
+                                  }else{
+                                    const response = xhr.response;
+                                    let countFromCart = response.count; 
+                                    desktopCartHeaderSpan.style.display = 'block';
+                                    desktopCartHeaderSpan.innerText = countFromCart;
+                                    stickyHeaderDesktopCartCountUpdateInCart();
+        
+                                    ++metaCardInput.placeholder;
+        
+                                    cartProductCardCostRefresh();
+                                  }
+                                }
+                
+                                xhr.send(params);
                             }
-            
-                            xhr.send(params);
                         }
                     }
-                });
-    
+                }
+                
                 desktopProductCardInput.addEventListener('click', function(){
                     localStorage.setItem('cartDesktopCustomQuantityInputValue', '');
                     if(availability == '1'){
@@ -4832,17 +4714,21 @@
                             cartDesktopCustomQuantityBlock.style.display = 'none';
                         });
                     }
-                    
                 });
     
                 cartDesktopCustomQuantityRefresh.addEventListener('click', function(e){
                     e.preventDefault();
                     cartMinusBtnReset();
+                    cartDesktopCustomQuantityRefresh.classList.add('cart-desktop-product-quantity__apply-btn--rotate');
+                    function removeRotateClassFromCustomInputDelay(){
+                        cartDesktopCustomQuantityRefresh.classList.remove('cart-desktop-product-quantity__apply-btn--rotate');
+                    }
+                    setTimeout(removeRotateClassFromCustomInputDelay, 500);
                     
                     let cartDesktopCustomQuantityInputValue = localStorage.getItem('cartDesktopCustomQuantityInputValue');
     
                     if(cartDesktopCustomQuantityInputValue == ''){
-                        console.warn('cartDesktopCustomQuantityInputValue === empty string');
+                        // console.warn('cartDesktopCustomQuantityInputValue === empty string');
                     }else{
                         const params = new URLSearchParams();
                         params.set('id', key);
@@ -4859,7 +4745,7 @@
                           if (xhr.status !== 200) {
                             console.warn('cartDesktopCustomQuantityInputValue ajax error');
                           } else {
-                            console.warn('cartDesktopCustomQuantityInputValue ajax SUCCESS');
+                            // console.warn('cartDesktopCustomQuantityInputValue ajax SUCCESS');
                             // dynamic data from cart
                             const response = xhr.response;
                             let countFromCart = response.count; 
@@ -4868,6 +4754,11 @@
                             stickyHeaderDesktopCartCountUpdateInCart();
     
                             desktopProductCardInput.placeholder = cartDesktopCustomQuantityInputValue;
+                            function customInputSwitchBlocksDelay(){
+                                cartDesktopCustomQuantityBlock.style.display = 'none';
+                                desktopProductCardQuantityBlock.style.display = 'flex';
+                            }
+                            setTimeout(customInputSwitchBlocksDelay, 450);
     
                             cartProductCardCostRefresh();
     
@@ -5003,7 +4894,7 @@
             }
         }
     }
-    // cartDesktopProductCardQuantity();
+    cartDesktopProductCardQuantity();
     
     //product cards mechs Mobile
     //Quantity btn cart product card + price/cost values update
@@ -5032,13 +4923,6 @@
                 const currentMobileproductCard = mobileProductCardList[i];
                 let key = currentMobileproductCard.dataset.key; 
                 let availability = currentMobileproductCard.dataset.availability;
-    
-                // console.warn('currentMobileproductCard')
-                // console.warn(currentMobileproductCard)
-                // console.warn('key')
-                // console.warn(key)
-                // console.warn('availability')
-                // console.warn(availability)
     
                 const cartMobileCustomQuantityBlock = document.createElement('div');
                 cartMobileCustomQuantityBlock.classList.add('cart-mobile-product-quantity--custom');
@@ -5264,6 +5148,7 @@
                         })
                     }
                 })
+    
                 cartMobileCustomQuantityBackBtn.addEventListener('click', function(){
                     cartMobileCustomQuantityBlock.style.display = 'none';
                     mobileProductCardQantityBlock.style.display = 'flex';
@@ -5272,6 +5157,11 @@
                 cartMobileCustomQuantityRefresh.addEventListener('click', function(e){
                     e.preventDefault();
                     cartMobileMinusBtnReset();
+                    cartMobileCustomQuantityRefresh.classList.add('cart-mobile-product-quantity__apply-btn--rotate');
+                    function removeRotateClassFromCustomInputDelayMobile(){
+                        cartMobileCustomQuantityRefresh.classList.remove('cart-mobile-product-quantity__apply-btn--rotate');
+                    }
+                    setTimeout(removeRotateClassFromCustomInputDelayMobile, 500);
     
                     let cartMobileCustomQuantityInputValue = localStorage.getItem('cartMobileCustomQuantityInputValue');
     
@@ -5302,7 +5192,13 @@
                             stickyHeaderMobileCartCountUpdateInCart();
     
                             mobileProductCardInput.placeholder = cartMobileCustomQuantityInputValue;
-                            cartProductCardCostRefresh()
+                            function customInputSwitchBlocksDelayMobile(){
+                                cartMobileCustomQuantityBlock.style.display = 'none';
+                                mobileProductCardQantityBlock.style.display = 'flex';
+                            }
+                            setTimeout(customInputSwitchBlocksDelayMobile, 450);
+                            
+                            cartProductCardCostRefresh();
     
                             //clear customInputValue
                             function clearCustomInputValue(){
@@ -5315,6 +5211,7 @@
                         xhr.send(params);
                     }
                 });
+    
                 //remove offer
                 mobileProductCardRemoveBtn.addEventListener('click', function(){
                     const closestSeparator = mobileProductCardList[i].nextElementSibling;
@@ -5409,7 +5306,7 @@
                     const reMutantSumOfCostsFormated = reMutantSumOfCosts.replace(/(\d)(?=(\d{3})+$)/g, '$1 ');
     
                     starterPriceBlockMobile.innerHTML = reMutantSumOfCostsFormated;
-                    finalPriceBlockMobile.innerHTML = reMutantSumOfCostsFormated;
+                    // finalPriceBlockMobile.innerHTML = reMutantSumOfCostsFormated;
                 }
                 //function for removing metaData from previous iteration
                 function metaValueCartCostListCleanerMobile(){
@@ -5425,7 +5322,7 @@
             }
         }
     }
-    // cartMobileProductCardQuantity()
+    cartMobileProductCardQuantity();
     
     //favoriteMech Desktop
     function cartDesktopFavBtnMech(){
@@ -5674,29 +5571,26 @@
     }
     cartHeaderNumberFix();
     
-    
     //cart-delivery cart-delivery__option-inner MARGIN without TITLE
     function cartDeliveryOptionInnerWithOutTitleMargin(){
         const optionInners = document.querySelectorAll('.cart-delivery__option-inner');
         
-        if(optionInners === null){
+        if(optionInners){
+            let intViewportWidth = window.innerWidth;
+            if(intViewportWidth > 1100){
     
-        }else{
-            optionInners.forEach( item => {
-                const optionInnerTitle = item.querySelector('.cart-delivery__option-info-title');
-                const optionInnerInfo = item.querySelector('.cart-delivery__info');
-    
-                if(optionInnerTitle === null){
-                    optionInnerInfo.style.margin = "0px 0 0 25px";
-                }else{
-    
-                }
-            });
-           
+                optionInners.forEach( item => {
+                    const optionInnerTitle = item.querySelector('.cart-delivery__option-info-title');
+                    const optionInnerInfo = item.querySelector('.cart-delivery__info');
+        
+                    if(optionInnerTitle === null){
+                        optionInnerInfo.style.margin = "0px 0 0 25px";
+                    }
+                });
+            }
         }
     }
     cartDeliveryOptionInnerWithOutTitleMargin();
-    
     
     //from Back-end || formSubmit
     function cartFormSubmit(formName, link) {
@@ -5765,8 +5659,688 @@
             }
         }
     }
-    
     cartConfirmationDisabledBtn()
+    
+    //DADATA.RU Find with INN для ИП *12 символов
+    function findDataFromInnForIp(){
+        const firstTabcontentBlock = document.querySelector('.cart-customer__radio-btn-content-1');
+    
+        if(firstTabcontentBlock){
+            let firstInnInput = firstTabcontentBlock.querySelector('.cart-customer-organisation-data__input-inn');
+            let secondOrganizationNameInput = firstTabcontentBlock.querySelector('.cart-customer-organisation-data__input-organization-name');
+            let thirdAdressInput = firstTabcontentBlock.querySelector('.cart-customer-organisation-data__input-address');
+            
+            let firstInnHint = firstTabcontentBlock.querySelector('.cart-customer-organisation-data__input-hint');
+    
+            firstInnInput.addEventListener('change', function(e){
+    
+                if(firstInnInput.value.length !== 12){
+                    firstInnHint.innerHTML = `Некорректная длинна ИНН`;
+                    firstInnInput.classList.add('cart-customer-organisation-data__input-field--alert');
+                    function removeFirstInnInputAlertDelay(){
+                        firstInnInput.classList.remove('cart-customer-organisation-data__input-field--alert');
+                        firstInnHint.innerHTML = `Введите ИНН, и мы найдем Вашу организацию`;
+                    }
+                    setTimeout(removeFirstInnInputAlertDelay, 5000);
+                }else{
+                    let url = "https://suggestions.dadata.ru/suggestions/api/4_1/rs/findById/party";
+                    let token = "7d7a4b089cea1b122a5a6e748afc75458f420444";
+                    let query = firstInnInput.value;
+                
+                    let options = {
+                        method: "POST",
+                        mode: "cors",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Accept": "application/json",
+                            "Authorization": "Token " + token
+                        },
+                        body: JSON.stringify({query: query})
+                    }
+                
+                    fetch(url, options)
+                    .then(response => response.json())
+                    .then((data) => {
+                        let address = data.suggestions[0].data.address.value;
+                        let ipOrganization = data.suggestions[0].value;
+                        console.log(data);
+                        thirdAdressInput.value = address;
+                        secondOrganizationNameInput.value = ipOrganization;
+                    })
+                    .catch(error => {
+                        firstInnHint.innerHTML = `Проверьте правильность введенных данных`;
+                        firstInnInput.classList.add('cart-customer-organisation-data__input-field--alert');
+                        function removeFirstInnInputAlertDelay(){
+                            firstInnInput.classList.remove('cart-customer-organisation-data__input-field--alert');
+                            firstInnHint.innerHTML = `Введите ИНН, и мы найдем Вашу организацию`;
+                        }
+                        setTimeout(removeFirstInnInputAlertDelay, 5000);
+                    });
+                }
+            });
+        }
+    }
+    findDataFromInnForIp();
+    
+    //DADATA.RU Find with INN для ЮР Лиц *10 символов
+    function findDataFromInnForUr(){
+        const secondTabcontentBlock = document.querySelector('.cart-customer__radio-btn-content-2');
+    
+        if(secondTabcontentBlock){
+            let firstInnInput = secondTabcontentBlock.querySelector('.cart-customer-organisation-data__input-inn');
+            let secondKppInput = secondTabcontentBlock.querySelector('.cart-customer-organisation-data__input-kpp');
+            let thirdOrganizationNameInput = secondTabcontentBlock.querySelector('.cart-customer-organisation-data__input-organization-name');
+            let fourthAdressInput = secondTabcontentBlock.querySelector('.cart-customer-organisation-data__input-address');
+            
+            let firstInnHint = secondTabcontentBlock.querySelector('.cart-customer-organisation-data__input-hint');
+    
+            firstInnInput.addEventListener('change', function(e){
+    
+                if(firstInnInput.value.length !== 10){
+                    firstInnHint.innerHTML = `Некорректная длинна ИНН`;
+                    firstInnInput.classList.add('cart-customer-organisation-data__input-field--alert');
+                    function removeFirstInnInputAlertDelay(){
+                        firstInnInput.classList.remove('cart-customer-organisation-data__input-field--alert');
+                        firstInnHint.innerHTML = `Введите ИНН, и мы найдем Вашу организацию`;
+                    }
+                    setTimeout(removeFirstInnInputAlertDelay, 5000);
+                }else{
+                    let url = "https://suggestions.dadata.ru/suggestions/api/4_1/rs/findById/party";
+                    let token = "7d7a4b089cea1b122a5a6e748afc75458f420444";
+                    let query = firstInnInput.value;
+                
+                    let options = {
+                        method: "POST",
+                        mode: "cors",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Accept": "application/json",
+                            "Authorization": "Token " + token
+                        },
+                        body: JSON.stringify({query: query})
+                    }
+                
+                    fetch(url, options)
+                    .then(response => response.json())
+                    .then((data) => {
+                        let kpp = data.suggestions[0].data.kpp;
+                        let address = data.suggestions[0].data.address.value;
+                        let organizationName = data.suggestions[0].data.name.full;
+                        console.log(data);
+    
+                        secondKppInput.value = kpp;
+                        thirdOrganizationNameInput.value = organizationName;
+                        fourthAdressInput.value = address;
+                    })
+                    .catch(error => {
+                        firstInnHint.innerHTML = `Проверьте правильность введенных данных`;
+                        firstInnInput.classList.add('cart-customer-organisation-data__input-field--alert');
+                        function removeFirstInnInputAlertDelay(){
+                            firstInnInput.classList.remove('cart-customer-organisation-data__input-field--alert');
+                            firstInnHint.innerHTML = `Введите ИНН, и мы найдем Вашу организацию`;
+                        }
+                        setTimeout(removeFirstInnInputAlertDelay, 5000);
+                    });
+                }
+            });
+        }
+    }
+    findDataFromInnForUr();
+    
+    //DADATA.RU Find With BIK
+    function findDataFromBikIp(){
+        const firstTabcontentBlock = document.querySelector('.cart-customer__radio-btn-content-1');
+    
+        if(firstTabcontentBlock){
+            let firstBikInput = firstTabcontentBlock.querySelector('.cart-customer-payment-details-data__input-bik');
+            let secondBankInput = firstTabcontentBlock.querySelector('.cart-customer-payment-details-data__input-bank');
+            let thirdCorrespondentAccountInput = firstTabcontentBlock.querySelector('.cart-customer-payment-details-data__input-correspondent-account');
+    
+            let firstBikHint = firstTabcontentBlock.querySelector('.cart-customer-payment-details-data__input-hint-bik');
+    
+            firstBikInput.addEventListener('change', function(){
+                if(firstBikInput.value.length !== 9){
+                    firstBikHint.innerHTML = `Некорректная длинна БИК`;
+                    firstBikInput.classList.add('cart-customer-payment-details-data__input-field--alert');
+                    function removeFirstInnInputAlertDelay(){
+                        firstBikInput.classList.remove('cart-customer-payment-details-data__input-field--alert');
+                        firstBikHint.innerHTML = `Введите БИК, и мы найдем Ваш банк`;
+                    }
+                    setTimeout(removeFirstInnInputAlertDelay, 5000);
+                }else{
+    
+                    let url = "https://suggestions.dadata.ru/suggestions/api/4_1/rs/findById/bank";
+                    let token = "7d7a4b089cea1b122a5a6e748afc75458f420444";
+                    let query = firstBikInput.value;
+        
+                    let options = {
+                        method: "POST",
+                        mode: "cors",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Accept": "application/json",
+                            "Authorization": "Token " + token
+                        },
+                        body: JSON.stringify({query: query})
+                    }
+        
+                    fetch(url, options)
+                    .then(response => response.json())
+                    .then((data) => {
+                        console.log(data);
+                        let bank = data.suggestions[0].value;
+                        let correspondentAccount = data.suggestions[0].data.correspondent_account;
+    
+                        secondBankInput.value = bank;
+                        thirdCorrespondentAccountInput.value = correspondentAccount;
+                    })
+                    .catch(error => {
+                        firstBikHint.innerHTML = `Проверьте правильность введенных данных`;
+                        firstBikInput.classList.add('cart-customer-payment-details-data__input-field--alert');
+                        function removeFirstInnInputAlertDelay(){
+                            firstBikInput.classList.remove('cart-customer-payment-details-data__input-field--alert');
+                            firstBikHint.innerHTML = `Введите БИК, и мы найдем Ваш банк`;
+                        }
+                        setTimeout(removeFirstInnInputAlertDelay, 5000);
+                    });
+                }
+            });
+        }
+    }
+    findDataFromBikIp();
+    
+    function findDataFromBikUr(){
+        const secondTabcontentBlock = document.querySelector('.cart-customer__radio-btn-content-2');
+    
+        if(secondTabcontentBlock){
+            let firstBikInput = secondTabcontentBlock.querySelector('.cart-customer-payment-details-data__input-bik');
+            let secondBankInput = secondTabcontentBlock.querySelector('.cart-customer-payment-details-data__input-bank');
+            let thirdCorrespondentAccountInput = secondTabcontentBlock.querySelector('.cart-customer-payment-details-data__input-correspondent-account');
+    
+            let firstBikHint = secondTabcontentBlock.querySelector('.cart-customer-payment-details-data__input-hint-bik');
+    
+            firstBikInput.addEventListener('change', function(){
+                if(firstBikInput.value.length !== 9){
+                    firstBikHint.innerHTML = `Некорректная длинна БИК`;
+                    firstBikInput.classList.add('cart-customer-payment-details-data__input-field--alert');
+                    function removeFirstInnInputAlertDelay(){
+                        firstBikInput.classList.remove('cart-customer-payment-details-data__input-field--alert');
+                        firstBikHint.innerHTML = `Введите БИК, и мы найдем Ваш банк`;
+                    }
+                    setTimeout(removeFirstInnInputAlertDelay, 5000);
+                }else{
+    
+                    let url = "https://suggestions.dadata.ru/suggestions/api/4_1/rs/findById/bank";
+                    let token = "7d7a4b089cea1b122a5a6e748afc75458f420444";
+                    let query = firstBikInput.value;
+        
+                    let options = {
+                        method: "POST",
+                        mode: "cors",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Accept": "application/json",
+                            "Authorization": "Token " + token
+                        },
+                        body: JSON.stringify({query: query})
+                    }
+        
+                    fetch(url, options)
+                    .then(response => response.json())
+                    .then((data) => {
+                        console.log(data);
+                        let bank = data.suggestions[0].value;
+                        let correspondentAccount = data.suggestions[0].data.correspondent_account;
+    
+                        secondBankInput.value = bank;
+                        thirdCorrespondentAccountInput.value = correspondentAccount;
+                    })
+                    .catch(error => {
+                        firstBikHint.innerHTML = `Проверьте правильность введенных данных`;
+                        firstBikInput.classList.add('cart-customer-payment-details-data__input-field--alert');
+                        function removeFirstInnInputAlertDelay(){
+                            firstBikInput.classList.remove('cart-customer-payment-details-data__input-field--alert');
+                            firstBikHint.innerHTML = `Введите БИК, и мы найдем Ваш банк`;
+                        }
+                        setTimeout(removeFirstInnInputAlertDelay, 5000);
+                    });
+                }
+            });
+        }
+    }
+    findDataFromBikUr();
+    
+    //DADATA.ru Tooltip about banks
+    function findDataAboutBank(){
+        let firstBikInput = document.querySelector('#shoporder-legal_bank');
+        if(firstBikInput){
+            firstBikInput.addEventListener('change', function(){
+                let url = "https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/bank";
+                let token = "7d7a4b089cea1b122a5a6e748afc75458f420444";
+                let query = firstBikInput.value;
+                
+                let options = {
+                    method: "POST",
+                    mode: "cors",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Accept": "application/json",
+                        "Authorization": "Token " + token
+                    },
+                    body: JSON.stringify({query: query})
+                }
+                
+                fetch(url, options)
+                .then(response => response.json())
+                .then(result => console.log(result))
+    
+                
+                .catch(error => console.log("error", error));
+            });
+        }
+    }
+    // findDataAboutBank()
+    
+    //mobile header closer
+    function toggleHiddenMenuBtnCart() {
+        let hiddenMenuBtnCart = document.querySelector('.header-cart-mobile__hamburger-btn-icon');
+        let hiddenMenuCart = document.querySelector('.header-cart-mobile__hamburger-menu');
+        let headerCart = document.querySelector('.header-cart');
+        let body = document.querySelector('body');
+    
+        if (hiddenMenuBtnCart){
+            let glassBackground = document.createElement("div");
+            glassBackground.classList.add('header-blur-wrap');
+            headerCart.after(glassBackground);
+    
+            hiddenMenuBtnCart.addEventListener('click', function () {
+                this.classList.toggle('active');
+                hiddenMenuCart.style.display = 'flex';
+                function delayTramsition(){
+                    hiddenMenuCart.classList.toggle('header-cart-mobile__hamburger-menu--on');
+                    glassBackground.classList.toggle('header-blur-wrap--on');
+                    body.classList.toggle('page-body__no-scroll');
+                }
+                setTimeout(delayTramsition, 50);
+            });
+    
+            glassBackground.addEventListener('click', function () {
+                hiddenMenuBtnCart.classList.remove('active');
+                hiddenMenuCart.style.display = 'none';
+                function delayTramsition(){
+                    hiddenMenuCart.classList.remove('header-cart-mobile__hamburger-menu--on');
+                    glassBackground.classList.remove('header-blur-wrap--on');
+                    body.classList.remove('page-body__no-scroll');
+                }
+                setTimeout(delayTramsition, 50);
+            });
+        }
+    }
+    toggleHiddenMenuBtnCart();
+    
+    function headerContactUsModalCart() {
+        let contactUsModal = document.querySelector('.header-contact-us');
+        let contactUsModalClose = document.querySelector('.header-contact-us__close');
+    
+        let contactUsMobileHeaderNumber = document.querySelector('.header-cart-mobile__phone');
+        let contactUsDesktopHeaderNumbers = document.querySelectorAll('.header-cart-desktop__number');
+    
+        let contactUsHeaderMobileHidden = document.querySelector('.header-cart-mobile__hamburger-call-btn');
+       
+    
+        let contactUsHeaderGlassBack = document.querySelector('.header-contact-us__blur');
+    
+        let body = document.querySelector('body');
+    
+        if (contactUsDesktopHeaderNumbers) {
+            for (let i = 0; i < contactUsDesktopHeaderNumbers.length; i++) {
+                contactUsDesktopHeaderNumbers[i].addEventListener('click', function (e) {
+                    e.preventDefault();
+                    contactUsModal.style.display = 'block';
+                    body.classList.add('page-body__no-scroll');
+                });
+            }
+            if(contactUsHeaderMobileHidden){
+                contactUsHeaderMobileHidden.addEventListener('click', function () {
+                    contactUsModal.style.display = 'block';
+                    body.classList.add('page-body__no-scroll');
+                });
+        
+                contactUsMobileHeaderNumber.addEventListener('click', function () {
+                    contactUsModal.style.display = 'block';
+                    body.classList.add('page-body__no-scroll');
+                });
+                
+                if(contactUsModalClose){
+                    contactUsModalClose.addEventListener('click', function () {
+                        contactUsModal.style.display = 'none';
+                        body.classList.remove('page-body__no-scroll');
+                    });
+            
+                    contactUsHeaderGlassBack.addEventListener('click', function () {
+                        contactUsModal.style.display = 'none';
+                        body.classList.remove('page-body__no-scroll');
+                    });
+                }
+            }
+        } 
+    }
+    headerContactUsModalCart();
+    
+    
+    //Dadata autoComplete in Cart
+    //delievery to Moscow adress
+    function addressToMoscowAutoComplete(){
+        let adressInputMoscow = document.querySelector('.cart-delivery-primary-data__input input');
+        if(adressInputMoscow){
+            adressInputMoscow.classList.add('cart-delivery-primary-data__input-field--moscow');
+            dadataAutoAddressInCartDeliveryMoscow();
+            function delaySuggestionStyles(){
+                let suggestParent = document.querySelector('.suggestions-wrapper');
+                let intViewportWidth = window.innerWidth;
+                if(suggestParent){
+    
+                    if((intViewportWidth < 768)){
+                        let suggestChild = suggestParent.querySelector('.suggestions-suggestions');
+                        suggestParent.style.left = '1px';
+                        suggestParent.style.top = '70px';
+                        suggestChild.style.width = '365px';
+                        suggestChild.style.paddingLeft = '15px';
+                        suggestChild.style.fontSize = '14px';
+                        suggestChild.style.border = '1.5px solid #0A51A5';
+                        suggestChild.style.borderRadius = '5px';
+                    }else if(intViewportWidth < 1800){
+                        let suggestChild = suggestParent.querySelector('.suggestions-suggestions');
+                        suggestParent.style.left = '299.5px';
+                        suggestParent.style.top = '50px';
+                        suggestChild.style.width = '446px';
+                        suggestChild.style.paddingLeft = '20px';
+                        suggestChild.style.fontSize = '15px';
+                        suggestChild.style.border = '1.5px solid #0A51A5';
+                        suggestChild.style.borderRadius = '5px';
+                    }else if(intViewportWidth > 1800){
+                        let suggestChild = suggestParent.querySelector('.suggestions-suggestions');
+                        suggestParent.style.left = '374.5px';
+                        suggestParent.style.top = '67px';
+                        suggestChild.style.width = '600px';
+                        suggestChild.style.paddingLeft = '20px';
+                        suggestChild.style.fontSize = '18px';
+                        suggestChild.style.border = '1.5px solid #0A51A5';
+                        suggestChild.style.borderRadius = '5px';
+                    }
+                }
+            }
+            adressInputMoscow.addEventListener('click', function(){
+                delaySuggestionStyles()
+            });
+        }
+    }
+    addressToMoscowAutoComplete();
+    
+    function dadataAutoAddressInCartDeliveryMoscow(){
+        //jquery to dadata
+        const scriptHeaderDadataJquery = document.createElement('script');
+        scriptHeaderDadataJquery.async = false;
+        scriptHeaderDadataJquery.innerHTML = `
+        jQuery(document).ready(function($){
+              let token = "7d7a4b089cea1b122a5a6e748afc75458f420444";
+              let type  = "address";
+              let $city = $(".cart-delivery-primary-data__input-field--moscow");
+              let $address = $("#address") ;
+              
+              function iplocate() {
+                let serviceUrl = "https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address";
+                let params = {
+                  type: "GET",
+                  contentType: "application/json",
+                  headers: {
+                    "Authorization": "Token " + token
+                  }
+                };
+                return $.ajax(serviceUrl, params);
+              }
+              
+              // город и населенный пункт
+              $city.suggestions({
+                token: token,
+                type: type,
+                hint: false,
+                bounds: "city",
+                constraints: {
+                  locations: "city",
+                },
+              });
+    
+              // console.warn( '$city.suggestions ')
+              // console.warn( $city.suggestions() )
+          });
+        `;
+       
+        document.body.appendChild(scriptHeaderDadataJquery);
+    }
+    
+    //activate script when tab open
+    function addressToAllRussiaAutoCompleteStarter(){
+        const deliveryTabs = document.querySelectorAll('.cart-delivery__tab-label');
+        let secondTab =  deliveryTabs[2]
+        // console.warn('deliveryTabs');
+        // console.warn(deliveryTabs);
+        if(secondTab){
+            secondTab.addEventListener('click', function(){
+                //click on 3 delivery tab
+                setTimeout(addressToAllRussiaAutoComplete, 1000);
+            });
+        }
+    } 
+    addressToAllRussiaAutoCompleteStarter();
+    //delievery to all city across Russia adress
+    function addressToAllRussiaAutoComplete(){
+        let deliveryParent = document.querySelectorAll('.cart-delivery__primary-data');
+        let secondDeliveryParentOfAllRussia = deliveryParent[1];
+        // console.warn('secondDeliveryParentOfAllRussia');
+        // console.warn(secondDeliveryParentOfAllRussia);
+        if(secondDeliveryParentOfAllRussia){
+            let inputs = secondDeliveryParentOfAllRussia.querySelectorAll('.cart-delivery-primary-data__input input');
+            let cityInput = inputs[0];
+            // console.warn('secondDeliveryParentOfAllRussia');
+            // console.warn(secondDeliveryParentOfAllRussia);
+            //auto fill city
+            const dadataModalSuccessConfirmCity = localStorage.getItem('dadataModalSuccessConfirmCity');
+            if(dadataModalSuccessConfirmCity){
+                cityInput.value = dadataModalSuccessConfirmCity;
+            }
+    
+            //auto fill address
+            let adressInput = inputs[1];
+            adressInput.classList.add('cart-delivery-primary-data__input-field--allRussia');
+            dadataAutoAddressInCartDeliveryAllRussia();
+            function delaySuggestionStylesAllRussia(){
+                let suggestParent = document.querySelectorAll('.suggestions-wrapper');
+                let secondSuggestParent = suggestParent[1];
+    
+                let intViewportWidth = window.innerWidth;
+                if(suggestParent){
+    
+                    let suggestWrapper = adressInput.nextSibling;
+                    let suggestSuggestInsideWrapper = suggestWrapper.querySelector('div');;
+                    // console.warn('adressInput');
+                    // console.warn(adressInput);
+                    // console.warn('suggestWrapper');
+                    // console.warn(suggestWrapper);
+                    // console.warn('suggestSuggestInsideWrapper');
+                    // console.warn(suggestSuggestInsideWrapper);
+                    if((intViewportWidth < 768)){
+                        
+                        suggestWrapper.style.left = '1px';
+                        suggestWrapper.style.top = '70px';
+                        suggestSuggestInsideWrapper.style.width = '365px';
+                        suggestSuggestInsideWrapper.style.paddingLeft = '15px';
+                        suggestSuggestInsideWrapper.style.fontSize = '14px';
+                        suggestSuggestInsideWrapper.style.border = '1.5px solid #0A51A5';
+                        suggestSuggestInsideWrapper.style.borderRadius = '5px';
+                    }else if(intViewportWidth < 1800){
+                    
+                        suggestWrapper.style.left = '299.5px';
+                        suggestWrapper.style.top = '50px';
+                        suggestSuggestInsideWrapper.style.width = '446px';
+                        suggestSuggestInsideWrapper.style.paddingLeft = '20px';
+                        suggestSuggestInsideWrapper.style.fontSize = '15px';
+                        suggestSuggestInsideWrapper.style.border = '1.5px solid #0A51A5';
+                        suggestSuggestInsideWrapper.style.borderRadius = '5px';
+                    }else if(intViewportWidth > 1800){
+           
+                        suggestWrapper.style.left = '374.5px';
+                        secondSuggesuggestWrapperstParent.style.top = '67px';
+                        suggestSuggestInsideWrapper.style.width = '600px';
+                        suggestSuggestInsideWrapper.style.paddingLeft = '20px';
+                        suggestSuggestInsideWrapper.style.fontSize = '18px';
+                        suggestSuggestInsideWrapper.style.border = '1.5px solid #0A51A5';
+                        suggestSuggestInsideWrapper.style.borderRadius = '5px';
+                    }
+                }
+            }
+    
+            adressInput.addEventListener('click', function(){
+                delaySuggestionStylesAllRussia();
+            });
+        }
+    }
+    // addressToAllRussiaAutoComplete()
+    
+    function dadataAutoAddressInCartDeliveryAllRussia(){
+        //jquery to dadata
+        const scriptHeaderDadataJquery = document.createElement('script');
+        scriptHeaderDadataJquery.async = false;
+        scriptHeaderDadataJquery.innerHTML = `
+        jQuery(document).ready(function($){
+              let token = "7d7a4b089cea1b122a5a6e748afc75458f420444";
+              let type  = "address";
+              let $city = $(".cart-delivery-primary-data__input-field--allRussia");
+              let $address = $("#address") ;
+              
+              function iplocate() {
+                let serviceUrl = "https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address";
+                let params = {
+                  type: "GET",
+                  contentType: "application/json",
+                  headers: {
+                    "Authorization": "Token " + token
+                  }
+                };
+                return $.ajax(serviceUrl, params);
+              }
+              
+              // город и населенный пункт
+              $city.suggestions({
+                token: token,
+                type: type,
+                hint: false,
+                bounds: "city",
+                constraints: {
+                  locations: "city",
+                },
+              });
+    
+              // console.warn( '$city.suggestions ')
+              // console.warn( $city.suggestions() )
+          });
+        `;
+       
+        document.body.appendChild(scriptHeaderDadataJquery);
+    }
+    
+    //recommended-installation-service activete
+    function recommendedInstallServiceActivation(){
+        let installationBtnInner = document.querySelector('.recommended-installation-service__btn-inner');
+        if(installationBtnInner){
+            let hiddenInput = installationBtnInner.querySelector('input');
+            let installationBtn = installationBtnInner.querySelector('.recommended-installation-service__btn');
+            installationBtn.addEventListener('click', function(e){
+                e.preventDefault();
+                installationBtn.classList.toggle('recommended-installation-service__btn--active');
+                // hiddenInput.value = 1;
+                function toggleInputValue(){
+                    if(hiddenInput.value == '0'){
+                        console.warn('INPUT VALUE = 0');
+                        hiddenInput.value = 1;
+                    }else{
+                        console.warn('INPUT VALUE = 1');
+                        hiddenInput.value = 0;
+                    }
+                }
+                toggleInputValue()
+            });
+        }
+    }
+    recommendedInstallServiceActivation();
+    
+    
+    //REMOVE BEFORE RELEASE TESTING PORPOSE ONLY!!!
+    //Imitation of click on available method of paying in cart/payment
+    function cartPaymentClickToAvailable(){
+        let cartPaymentsTabs = document.querySelector('.cart-payment__tabs');
+        if(cartPaymentsTabs){
+            let switchButton = document.querySelector('.cartPaymentSwitchBtn');
+            let secondPaymentTab = document.querySelector('#cart-payment-tab-2');
+    
+            switchButton.addEventListener('click', function(e){
+                e.preventDefault();
+                secondPaymentTab.click();
+            });
+        }
+    }
+    cartPaymentClickToAvailable();
+    
+    //trick Mechacnic for radio-buttons in Customer choose section
+    function trickMechForRadioButtonsInPaymentSection(){
+        const paymentRadio = document.querySelectorAll(".cart-payment__select-btn-radio"); 
+    
+        if(paymentRadio){
+            for(let i = 0;i < paymentRadio.length; i++) { 
+        
+                if(paymentRadio[i].type=="radio") { 
+                    paymentRadio[i].onchange=function() { 
+            
+                        for(let i=0;i<paymentRadio.length;i++) { 
+                            if(paymentRadio[i].type=="radio") { 
+                                paymentRadio[i].checked=false; 
+                            }
+                            this.checked=true
+                        }
+                    }
+                }
+            }
+        }
+    }
+    trickMechForRadioButtonsInPaymentSection();
+    
+    //clear chosen variations after changing payment tab
+    function refreshChoosenPaymentMathod(){
+        let paymentTab = document.querySelectorAll('.cart-payment__tab-label');
+    
+        if(paymentTab){
+            function clearChosenVariations(){
+                let greenConfrimBlock = document.querySelectorAll('.cart-payment__option-info-wrapper');
+                let paymentRadio = document.querySelectorAll(".cart-payment__select-btn-radio"); 
+    
+                if(greenConfrimBlock){
+                    greenConfrimBlock.forEach(item => {
+                        item.classList.remove('cart-payment__option-info-wrapper--active');
+                    });
+                    paymentRadio.forEach(item => {
+                        item.checked=false;
+                    });
+                }
+            }
+            paymentTab.forEach(item =>{
+                item.addEventListener('click', function(){
+                    clearChosenVariations();
+                });
+            });
+        }
+    }
+    
+    refreshChoosenPaymentMathod()
     function offerCardMobileInfoOpen() {
         let mobileListItem = document.querySelectorAll('.mobile-list-item');
     
@@ -5788,12 +6362,9 @@
               mobileInfoBlockClose.addEventListener("click", function() {
                 mobileInfoBlock.classList.remove("mobile-info--on");
               });
-          }
-              
+          } 
         }
-    
       }
-    
     }
     
     offerCardMobileInfoOpen();
@@ -5807,6 +6378,7 @@
             for(let i = 0; i < offerCardMobile.length; i++){
                 let offerCardMobileOpenBtn = offerCardMobile[i].querySelector(".short-panel-mobile__open");
                 let fullMobileCard = offerCardMobile[i].querySelector(".full-mobile-card");
+                let fullMobileCardVendorCodeForFocus = offerCardMobile[i].querySelector(".short-mobile-card__vendor-code");
                 let fullMobileCardCloseBtn = offerCardMobile[i].querySelector(".mobile-filter__close");
                 let shortOptionBlockMobile = offerCardMobile[i].querySelector(".short-options-mobile");
                 if (offerCardMobileOpenBtn === null || fullMobileCard === null || fullMobileCardCloseBtn === null || shortOptionBlockMobile === null) {
@@ -5816,7 +6388,8 @@
                 offerCardMobileOpenBtn.addEventListener("click", function() {
                     fullMobileCard.classList.add("full-mobile-card--on");
                     offerCardMobileOpenBtn.style.visibility = 'hidden';
-                    offerCardMobileOpenBtn.scrollIntoView({behavior: "smooth"});
+                    fullMobileCardVendorCodeForFocus.scrollIntoView({behavior: "smooth"});
+    
                 });
     
                 fullMobileCardCloseBtn.addEventListener("click", function() {
@@ -5824,13 +6397,10 @@
                     fullMobileCard.classList.remove("full-mobile-card--on");
                     shortOptionBlockMobile.scrollIntoView({behavior: "smooth"});
                 });
-    
              }
-    
-            }
+           }
         }
     }
-    
     offerCardMobileOpen();
     
     //Separator
@@ -5847,7 +6417,6 @@
       }
     
     }
-    
     hideFirstSeparatorOnMobile();
     
     //benner error on Desktop
@@ -5887,7 +6456,6 @@
       }
       setTimeout(errorBannerDisappear, 7000);
     }
-    
     
     function errorBannerDesktopRemove(){
       let errorBannerDesktop = document.querySelector('.offers-catalog__error-banner-desktop');
@@ -6032,7 +6600,6 @@
         }
       }
     }
-    
     offerCardFavoriteBtnMobileAdd();
     
     function offerCardFavoriteBtnMobileRemove() {
@@ -6089,7 +6656,6 @@
         }
       }
     }
-    
     offerCardFavoriteBtnMobileRemove();
     
     //tooltip remover
@@ -6247,148 +6813,6 @@
     }
     offersCardDesktopFavoriteBtnAdd(); 
     
-    //btns tips in special-offers on index page
-    function specialOfferFavBtnTooltip(){
-    	let favBtnsDefaultList = document.querySelectorAll('.special-offer-card__favorite--default');
-    	let favBtnsActiveList = document.querySelectorAll('.special-offer-card__favorite--active');
-    
-    	if (favBtnsDefaultList === null){
-    		// console.log('no special offers on the page');
-    	} else{
-    
-    		let intViewportWidth = window.innerWidth;
-    
-        	if(intViewportWidth > 1140){
-            
-    			for(let i = 0;i < favBtnsDefaultList.length; i++){
-    				favBtnsDefaultList[i].addEventListener('mouseover', function(){
-    					let currentTooltip = this.querySelector('.special-offer-card__favorite-default-tip');
-    					
-    					currentTooltip.style.visibility = 'visible';
-    					currentTooltip.style.opacity = '1';
-    				});
-    	
-    				favBtnsDefaultList[i].addEventListener('mouseout', function(){
-    					let currentTooltip = this.querySelector('.special-offer-card__favorite-default-tip');
-    	
-    					currentTooltip.style.visibility = 'hidden';
-    					currentTooltip.style.opacity = '0';
-    				});
-    			}
-    
-    			for(let i = 0; i < favBtnsActiveList.length; i++){
-    				favBtnsActiveList[i].addEventListener('mouseover', function(){
-    					let currentActiveTooltip = this.querySelector('.special-offer-card__favorite-active-tip');
-    					
-    					currentActiveTooltip.style.visibility = 'visible';
-    					currentActiveTooltip.style.opacity = '1';
-    				});
-    
-    				favBtnsActiveList[i].addEventListener('mouseout', function(){
-    					let currentActiveTooltip = this.querySelector('.special-offer-card__favorite-active-tip');
-    
-    					currentActiveTooltip.style.visibility = 'hidden';
-    					currentActiveTooltip.style.opacity = '0';
-    				});
-    			}
-    		}
-    	}
-    }
-    
-    specialOfferFavBtnTooltip();
-    
-    //Favorite button mech for Special Offers On mainPage *in slider
-    function specialOfferFavoriteMech(){
-      let favBtnsDefaultList = document.querySelectorAll('.special-offer-card__favorite--default');
-    	let favBtnsActiveList = document.querySelectorAll('.special-offer-card__favorite--active');
-      let mainHeaderFavoriteCounter = document.querySelector('.user__favorites span');
-    
-    	if (favBtnsDefaultList === null){
-    		// console.log('no special offers on the page');
-    	} else{
-    
-        for(let i = 0;i < favBtnsDefaultList.length; i++){
-    
-          favBtnsDefaultList[i].addEventListener('click', function(e){
-            let currentFavBtn = this;
-            let currentActiveBtn = currentFavBtn.nextElementSibling;
-            let favBtnKey = currentFavBtn.dataset.key;
-    
-            function sendSpecFavBtnKeyToServer() {
-              const xhr = new XMLHttpRequest();
-              xhr.open('POST', '/favorite/add');
-              
-              xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-      
-              xhr.onreadystatechange = function() {
-                if (this.readyState == 4 && this.status == 200) {
-                // currentTooltipIcon.classList.remove('short-options-desktop__favorite-tooltip-icon--load');
-        				currentActiveBtn.classList.add('special-offer-card__favorite--active-on');
-    
-                //dynamic data from cart
-                const jsonResponse = JSON.parse(xhr.responseText);
-                let countFromFav = ++jsonResponse.count;
-                mainHeaderFavoriteCounter.innerText = countFromFav;
-    
-                stickyHeaderDesktopFavoriteCountUpdate();
-                }else if(this.readyState != 4 && this.status != 200){
-    
-                  errorBannerDesktopRemove();
-                  errorBannerDesktop();
-                  currentTooltip.style.visibility = 'hidden';
-                }
-              }
-      
-              xhr.send('key=' + favBtnKey);
-            }
-            sendSpecFavBtnKeyToServer();
-          });
-        }
-    
-        for(let i = 0; i < favBtnsActiveList.length; i++){
-    
-          favBtnsActiveList[i].addEventListener('click', function(e){
-            
-            let currentActiveFavBtn = this;
-            let favBtnKey = currentActiveFavBtn.dataset.key;
-    
-            function sendSpecFavBtnKeyToServer() {
-              const xhr = new XMLHttpRequest();
-              xhr.open('POST', '/favorite/remove');
-              
-              xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-      
-              xhr.onreadystatechange = function() {
-                if (this.readyState == 4 && this.status == 200) {
-                // currentTooltipIcon.classList.remove('short-options-desktop__favorite-tooltip-icon--load');
-        				currentActiveFavBtn.classList.remove('special-offer-card__favorite--active-on');
-    
-                //dynamic data from cart
-                const jsonResponse = JSON.parse(xhr.responseText);
-                let countFromFav = --jsonResponse.count;
-                mainHeaderFavoriteCounter.innerText = countFromFav;
-    
-                stickyHeaderDesktopFavoriteCountUpdate();
-                }else if(this.readyState != 4 && this.status != 200){
-    
-                  errorBannerDesktopRemove();
-                  errorBannerDesktop();
-                  currentTooltip.style.visibility = 'hidden';
-                }
-              }
-              xhr.send('key=' + favBtnKey);
-            }
-            sendSpecFavBtnKeyToServer();
-          });
-        }
-      }
-    }
-    
-    specialOfferFavoriteMech()
-    
-    //Favorite button mech for Special Offers in Catalog
-    
-    
     function offersCardDesktopFavoriteBtnRemove() {
       let shortOptionsDesktop = document.querySelectorAll('.short-options-desktop');
       let body = document.querySelector('.page-body');
@@ -6532,8 +6956,232 @@
         }
       }
     }
-    
     offersCardDesktopFavoriteBtnRemove();
+    
+    //btns tips in special-offers on index page
+    function specialOfferFavBtnTooltip(){
+    	let favBtnsDefaultList = document.querySelectorAll('.special-offer-card__favorite--default');
+    	let favBtnsActiveList = document.querySelectorAll('.special-offer-card__favorite--active');
+    
+    	if (favBtnsDefaultList === null){
+    		// console.log('no special offers on the page');
+    	} else{
+    
+    		let intViewportWidth = window.innerWidth;
+    
+        	if(intViewportWidth > 1140){
+            
+    			for(let i = 0;i < favBtnsDefaultList.length; i++){
+    				favBtnsDefaultList[i].addEventListener('mouseover', function(){
+    					let currentTooltip = this.querySelector('.special-offer-card__favorite-default-tip');
+    					
+    					currentTooltip.style.visibility = 'visible';
+    					currentTooltip.style.opacity = '1';
+    				});
+    	
+    				favBtnsDefaultList[i].addEventListener('mouseout', function(){
+    					let currentTooltip = this.querySelector('.special-offer-card__favorite-default-tip');
+    	
+    					currentTooltip.style.visibility = 'hidden';
+    					currentTooltip.style.opacity = '0';
+    				});
+    			}
+    
+    			for(let i = 0; i < favBtnsActiveList.length; i++){
+    				favBtnsActiveList[i].addEventListener('mouseover', function(){
+    					let currentActiveTooltip = this.querySelector('.special-offer-card__favorite-active-tip');
+    					
+    					currentActiveTooltip.style.visibility = 'visible';
+    					currentActiveTooltip.style.opacity = '1';
+    				});
+    
+    				favBtnsActiveList[i].addEventListener('mouseout', function(){
+    					let currentActiveTooltip = this.querySelector('.special-offer-card__favorite-active-tip');
+    
+    					currentActiveTooltip.style.visibility = 'hidden';
+    					currentActiveTooltip.style.opacity = '0';
+    				});
+    			}
+    		}
+    	}
+    }
+    specialOfferFavBtnTooltip();
+    
+    //Favorite button mech for Special Offers On mainPage *in slider
+    function specialOfferFavoriteMech(){
+      let favBtnsDefaultList = document.querySelectorAll('.special-offer-card__favorite--default');
+    	let favBtnsActiveList = document.querySelectorAll('.special-offer-card__favorite--active');
+      let mainHeaderFavoriteCounter = document.querySelector('.user__favorites span');
+    
+    	if (favBtnsDefaultList === null){
+    		// console.log('no special offers on the page');
+    	} else{
+    
+        for(let i = 0;i < favBtnsDefaultList.length; i++){
+    
+          favBtnsDefaultList[i].addEventListener('click', function(e){
+            let currentFavBtn = this;
+            let currentActiveBtn = currentFavBtn.nextElementSibling;
+            let favBtnKey = currentFavBtn.dataset.key;
+    
+            function sendSpecFavBtnKeyToServer() {
+              const xhr = new XMLHttpRequest();
+              xhr.open('POST', '/favorite/add');
+              
+              xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      
+              xhr.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                // currentTooltipIcon.classList.remove('short-options-desktop__favorite-tooltip-icon--load');
+        				currentActiveBtn.classList.add('special-offer-card__favorite--active-on');
+    
+                //dynamic data from cart
+                const jsonResponse = JSON.parse(xhr.responseText);
+                let countFromFav = ++jsonResponse.count;
+                mainHeaderFavoriteCounter.innerText = countFromFav;
+    
+                stickyHeaderDesktopFavoriteCountUpdate();
+                }else if(this.readyState != 4 && this.status != 200){
+    
+                  errorBannerDesktopRemove();
+                  errorBannerDesktop();
+                  currentTooltip.style.visibility = 'hidden';
+                }
+              }
+      
+              xhr.send('key=' + favBtnKey);
+            }
+            sendSpecFavBtnKeyToServer();
+          });
+        }
+    
+        for(let i = 0; i < favBtnsActiveList.length; i++){
+    
+          favBtnsActiveList[i].addEventListener('click', function(e){
+            
+            let currentActiveFavBtn = this;
+            let favBtnKey = currentActiveFavBtn.dataset.key;
+    
+            function sendSpecFavBtnKeyToServer() {
+              const xhr = new XMLHttpRequest();
+              xhr.open('POST', '/favorite/remove');
+              
+              xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      
+              xhr.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                // currentTooltipIcon.classList.remove('short-options-desktop__favorite-tooltip-icon--load');
+        				currentActiveFavBtn.classList.remove('special-offer-card__favorite--active-on');
+    
+                //dynamic data from cart
+                const jsonResponse = JSON.parse(xhr.responseText);
+                let countFromFav = --jsonResponse.count;
+                mainHeaderFavoriteCounter.innerText = countFromFav;
+    
+                stickyHeaderDesktopFavoriteCountUpdate();
+                }else if(this.readyState != 4 && this.status != 200){
+    
+                  errorBannerDesktopRemove();
+                  errorBannerDesktop();
+                  currentTooltip.style.visibility = 'hidden';
+                }
+              }
+              xhr.send('key=' + favBtnKey);
+            }
+            sendSpecFavBtnKeyToServer();
+          });
+        }
+      }
+    }
+    specialOfferFavoriteMech()
+    
+    //Favorite button mech for Special Offers in Catalog
+    function specialOfferFavoriteMechCatalog(){
+      let favBtnsDefaultList = document.querySelectorAll('.special-offer-catalog__card-favorite--default');
+    	let favBtnsActiveList = document.querySelectorAll('.special-offer-catalog__card-favorite--active');
+      let mainHeaderFavoriteCounter = document.querySelector('.user__favorites span');
+    
+    	if (favBtnsDefaultList === null){
+    		// console.log('no special offers on the page');
+    	} else{
+    
+        for(let i = 0;i < favBtnsDefaultList.length; i++){
+    
+          favBtnsDefaultList[i].addEventListener('click', function(e){
+            let currentFavBtn = this;
+            let currentActiveBtn = currentFavBtn.nextElementSibling;
+            let favBtnKey = currentFavBtn.dataset.key;
+    
+            function sendSpecFavBtnKeyToServer() {
+              const xhr = new XMLHttpRequest();
+              xhr.open('POST', '/favorite/add');
+              
+              xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      
+              xhr.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                // currentTooltipIcon.classList.remove('short-options-desktop__favorite-tooltip-icon--load');
+        				currentActiveBtn.classList.add('special-offer-catalog__card-favorite--active-on');
+    
+                //dynamic data from cart
+                const jsonResponse = JSON.parse(xhr.responseText);
+                let countFromFav = ++jsonResponse.count;
+                mainHeaderFavoriteCounter.innerText = countFromFav;
+    
+                stickyHeaderDesktopFavoriteCountUpdate();
+                }else if(this.readyState != 4 && this.status != 200){
+    
+                  errorBannerDesktopRemove();
+                  errorBannerDesktop();
+                  currentTooltip.style.visibility = 'hidden';
+                }
+              }
+      
+              xhr.send('key=' + favBtnKey);
+            }
+            sendSpecFavBtnKeyToServer();
+          });
+        }
+    
+        for(let i = 0; i < favBtnsActiveList.length; i++){
+    
+          favBtnsActiveList[i].addEventListener('click', function(e){
+            
+            let currentActiveFavBtn = this;
+            let favBtnKey = currentActiveFavBtn.dataset.key;
+    
+            function sendSpecFavBtnKeyToServer() {
+              const xhr = new XMLHttpRequest();
+              xhr.open('POST', '/favorite/remove');
+              
+              xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      
+              xhr.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                // currentTooltipIcon.classList.remove('short-options-desktop__favorite-tooltip-icon--load');
+        				currentActiveFavBtn.classList.remove('special-offer-catalog__card-favorite--active-on');
+    
+                //dynamic data from cart
+                const jsonResponse = JSON.parse(xhr.responseText);
+                let countFromFav = --jsonResponse.count;
+                mainHeaderFavoriteCounter.innerText = countFromFav;
+    
+                stickyHeaderDesktopFavoriteCountUpdate();
+                }else if(this.readyState != 4 && this.status != 200){
+    
+                  errorBannerDesktopRemove();
+                  errorBannerDesktop();
+                  currentTooltip.style.visibility = 'hidden';
+                }
+              }
+              xhr.send('key=' + favBtnKey);
+            }
+            sendSpecFavBtnKeyToServer();
+          });
+        }
+      }
+    }
+    specialOfferFavoriteMechCatalog()
     
     //Clear prev favorite banner
     function favBannerDesktopClear(){
@@ -8044,10 +8692,8 @@
       }
     }
     
-    
     offerCardDesktopBuyButtonTooltip();
     offerCardDesktopBuyButtonDoneTooltip();
-    
     
     //Add to cart button Mobile ✰4
     function offerCardMobileBuyButtonMech() {
@@ -8546,6 +9192,7 @@
       }
     }
     offerCardDesktopFastBuy()
+    
     //Fast buy`s tooltip
     function offerCardDesktopFastBuyTooltipMech(){
       let fastBuyBtns = document.querySelectorAll('.desktop-buy__fast-buy-btn');
@@ -8570,7 +9217,6 @@
         })
       }
     }
-    
     offerCardDesktopFastBuyTooltipMech();
     
     function offerCardMobileFastBuy(){
@@ -8670,7 +9316,6 @@
     
       }
     }
-    
     offerCardDesktopInfoOpen();
     
     function offerCardDesktopOpen() {
@@ -8713,7 +9358,6 @@
       }
     
     }
-    
     offerCardDesktopOpen();
     
     //Separator
@@ -8730,7 +9374,6 @@
       }
     
     }
-    
     hideFirstSeparatorOnDesktop();
     
     // help block blue tooltip
@@ -8948,7 +9591,6 @@
         }
       }
     }
-    
     favoriteToEmailForm();
     
     //OFFERS catalog Sort by Price DESKTOP
@@ -8964,8 +9606,8 @@
           
           const sortByPriceBtnMain = offerCardPricesContainer[i].querySelector('.offers-desktop-filter-price');
           const sortByPriceList = offerCardPricesContainer[i].querySelector('.offers-desktop-filter-price__list');
-          const sortByPriceSortBtnDescending = offerCardPricesContainer[i].querySelector('.offers-desktop-filter-price__item:first-child');
-          const sortByPriceSortBtnAscending = offerCardPricesContainer[i].querySelector('.offers-desktop-filter-price__item:last-child');
+          const sortByPriceSortBtnDescending = offerCardPricesContainer[i].querySelector('.offers-desktop-filter-price__item:last-child');
+          const sortByPriceSortBtnAscending = offerCardPricesContainer[i].querySelector('.offers-desktop-filter-price__item:first-child');
     
           sortByPriceBtnMain.addEventListener('click', function(){
             sortByPriceList.classList.toggle('offers-desktop-filter-price__list--active');
@@ -9051,7 +9693,6 @@
         }
       }
     }
-    
     offersCatalogSortByPriceMechDesktop();
     
     //OFFERS catalog Sort by Price MOBILE
@@ -9068,8 +9709,8 @@
           
           const sortByPriceBtnMain = offerCardPricesContainer[i].querySelector('.offers-mobile-filter-price');
           const sortByPriceList = offerCardPricesContainer[i].querySelector('.offers-mobile-filter-price__list');
-          const sortByPriceSortBtnDescending = offerCardPricesContainer[i].querySelector('.offers-mobile-filter-price__item:first-child');
-          const sortByPriceSortBtnAscending = offerCardPricesContainer[i].querySelector('.offers-mobile-filter-price__item:last-child');
+          const sortByPriceSortBtnDescending = offerCardPricesContainer[i].querySelector('.offers-mobile-filter-price__item:last-child');
+          const sortByPriceSortBtnAscending = offerCardPricesContainer[i].querySelector('.offers-mobile-filter-price__item:first-child');
     
           sortByPriceBtnMain.addEventListener('click', function(){
             sortByPriceList.classList.toggle('offers-mobile-filter-price__list--active');
@@ -9178,8 +9819,8 @@
               
               const sortByPriceBtnMain = offerCardPricesContainer[i].querySelector('.offers-desktop-filter-price');
               const sortByPriceList = offerCardPricesContainer[i].querySelector('.offers-desktop-filter-price__list');
-              const sortByPriceSortBtnDescending = offerCardPricesContainer[i].querySelector('.offers-desktop-filter-price__item:first-child');
-              const sortByPriceSortBtnAscending = offerCardPricesContainer[i].querySelector('.offers-desktop-filter-price__item:last-child');
+              const sortByPriceSortBtnDescending = offerCardPricesContainer[i].querySelector('.offers-desktop-filter-price__item:last-child');
+              const sortByPriceSortBtnAscending = offerCardPricesContainer[i].querySelector('.offers-desktop-filter-price__item:first-child');
         
               sortByPriceBtnMain.addEventListener('click', function(){
                 sortByPriceList.classList.toggle('offers-desktop-filter-price__list--active');
@@ -9267,15 +9908,12 @@
         }
         
         offersCatalogONSortByPriceMechDesktop();
-       
       }
     }
     openedCartFunctions();
     
-    
     // Mechs from back || Pagination
     function fetchingOffersPage(pageNumber = 1){
-            
       const xhr = new XMLHttpRequest();
       let page = '?page='+pageNumber;
       const finalItemCode = window.location.href.split('/')[6];
@@ -9291,6 +9929,7 @@
               const response = xhr.response;
               let responseHtml = document.createElement("div");
               responseHtml.innerHTML = response;
+              shopCatalogMechDesktop();
               
               offersContainer.firstChild.replaceWith(responseHtml);
               hideFirstSeparatorOnMobile();
@@ -9325,7 +9964,7 @@
               const yOffset = -90; 
               const offersContOffset = offersContainer.getBoundingClientRect().top;
               const y = offersContOffset + window.pageYOffset + yOffset;
-              window.scrollTo({top: y, behavior: 'smooth'});
+              window.scrollTo({top: y, behavior: 'instant'});
           }
       } 
       
@@ -9342,15 +9981,16 @@
         });
       }
     }
+    
     function generateNextOfferBtn() {
       const finalItemCode = window.location.href.split('/')[6];
       let nextElParent = document.querySelector('[data-code="'+finalItemCode+'"]').parentElement.nextElementSibling;
       let nextOfferBtn = document.querySelector('.offers-catalog-next-btn');
-
+    
       if (nextElParent) {
         let nextElLink = nextElParent.querySelector('a').getAttribute('href');
         let nextElText = nextElParent.querySelector('a').querySelectorAll('div')[1].innerText;
-
+    
         if (nextOfferBtn) {
           nextOfferBtn.setAttribute('href', nextElLink);
           nextOfferBtn.querySelector('.offers-catalog-next-btn__text b').innerText = nextElText;
@@ -9361,6 +10001,858 @@
         }
       }
     }
+    function singleOfferSlider(){
+        let slides = document.querySelectorAll('.activeSlide__slider-item');
+        let prevBtn = document.querySelector('.activeSlide__prev-slide');
+        let nextBtn = document.querySelector('.activeSlide__next-slide');
+    
+        if(slides){
+            
+          let thumbnailsContainer = document.querySelector('.vendor-slider__thumbnails-inner');
+          let activeThumbnail = document.querySelector('.activeSlide__active-thumbnail');
+          let slidesMassiveArray = slides.length;
+          if(slidesMassiveArray != 1){
+            
+            let slideIndex = 1;
+            showSlides(slideIndex);
+            function nextSlide() {
+                showSlides(slideIndex += 1);
+            }
+      
+            function previousSlide() {
+                showSlides(slideIndex -= 1);  
+            }
+      
+      
+            function currentSlide(n) {
+                showSlides(slideIndex = n);
+            }
+      
+            function showSlides(n){
+                let i;
+                
+                if (n > slides.length) {
+                  slideIndex = 1;
+                }
+                if (n < 1) {
+                    slideIndex = slides.length;
+                }
+            
+                for (let slide of slides) {
+                    slide.style.display = "none";
+                }   
+                let incapSlides  = slides[slideIndex - 1]
+                if(incapSlides){
+                  incapSlides.style.display = "flex"; 
+                }
+            }  
+            
+            if(prevBtn){
+              prevBtn.addEventListener('click', function(){
+                activeThumbnail.style.display = 'none';
+                showSlides(slideIndex -= 1);
+              });
+        
+              nextBtn.addEventListener('click', function(){
+                  // removeVideoFromActiveThumb();
+                  activeThumbnail.style.display = 'none';
+                  showSlides(slideIndex += 1);
+              });
+            }
+    
+      
+            //thumbnail initial
+            slides.forEach(item => {  
+                let currentItem = item;
+                let slideThubmnail = document.createElement("div");
+                thumbnailsContainer.appendChild(slideThubmnail);
+                slideThubmnail.classList.add('vendor-slider__thumbnail');
+                slideThubmnail.innerHTML = currentItem.innerHTML;
+                let slideThumbnailImg = slideThubmnail.querySelector('img');
+                if(slideThumbnailImg){
+                  slideThumbnailImg.style.objectFit = 'contain';
+                  slideThumbnailImg.style.width = '100%';
+                  slideThumbnailImg.style.height = '100%';
+                }
+            });
+            hideArrows();
+          }
+        }
+    }
+    singleOfferSlider();
+    
+    function thumbnailSliderPart(){
+        let activeThumbnail = document.querySelector('.activeSlide__active-thumbnail');
+        let thumbnails = document.querySelectorAll('.vendor-slider__thumbnail');
+        let thumbnailsInner = document.querySelector('.vendor-slider__thumbnails-inner');
+        let prevBtn = document.querySelector('.activeSlide__prev-slide');
+        let nextBtn = document.querySelector('.activeSlide__next-slide');
+    
+        if(activeThumbnail) {
+          for (let i = 0;i < thumbnails.length; i++){
+            thumbnails[i].addEventListener('click', function(){
+                let activeThumb = this;
+                let activeThumbImg = activeThumb.querySelector('img');
+                let activeThumbImgHeight = activeThumbImg.naturalHeight;
+                let activeThumbImgWidth = activeThumbImg.naturalWidth;
+                // console.warn('activeThumbImgWidth');
+                // console.warn(activeThumbImgWidth);
+                if(activeThumbImgWidth < 450){
+                    activeThumbnail.style.display ='flex';
+                    activeThumbnail.innerHTML = activeThumb.innerHTML;
+                    let activeThumbnailImg = activeThumbnail.querySelector('img');
+                    activeThumbnailImg.style.objectFit = 'none';
+                    activeThumbnailImg.style.width = 'auto';
+                    activeThumbnailImg.style.height = 'auto';
+                }else{
+                    activeThumbnail.style.display ='flex';
+                    activeThumbnail.innerHTML = activeThumb.innerHTML;
+                    let activeThumbnailImg = activeThumbnail.querySelector('img');
+                }
+            });
+          }
+          if(thumbnails.length > 4){
+            let thumbnailsCountNumber = thumbnails.length - 4;
+            let thumbnailCounter = document.createElement('div');
+            thumbnailCounter.classList.add('vendor-slider__thumbnail-counter')
+            thumbnailCounter.innerHTML = `
+                  <span>${thumbnailsCountNumber}</span>  
+            `;
+            console.warn(' thumbnails.length');
+            console.warn( thumbnails.length);
+            thumbnails[3].after(thumbnailCounter);
+            thumbnails[3].style.pointerEvents = 'none';
+            let thumbnailCounterSpan = thumbnailCounter.querySelector('span');
+            //show all thumbnails
+            thumbnailCounterSpan.addEventListener('click', function(){
+              thumbnailsInner.classList.remove('vendor-slider__thumbnails-inner');
+              thumbnailsInner.classList.add('vendor-slider__thumbnails-inner--active');
+              thumbnailCounter.style.display = 'none';
+              thumbnails[3].style.pointerEvents = 'auto';
+            });
+      
+            prevBtn.addEventListener('click', function(){
+              thumbnailsInner.classList.add('vendor-slider__thumbnails-inner');
+              thumbnailsInner.classList.remove('vendor-slider__thumbnails-inner--active');
+              thumbnailCounter.style.display = 'flex';
+          });
+      
+          nextBtn.addEventListener('click', function(){
+            thumbnailsInner.classList.add('vendor-slider__thumbnails-inner');
+            thumbnailsInner.classList.remove('vendor-slider__thumbnails-inner--active');
+            thumbnailCounter.style.display = 'flex';
+          });
+          }
+          
+        }
+    }
+    thumbnailSliderPart();
+    
+    // Video in slider
+    function generateVideoInSlider(){
+        let videosBlock = document.querySelectorAll('.activeSlide__slider-video');
+    
+        if (videosBlock === null) {
+            // console.log("sliderVideos left HTML");
+          } else {
+              
+            for (let i = 0; i < videosBlock.length; i++) {
+                setupVideo(videosBlock[i]);
+            }
+    
+            function setupVideo(video) {
+                let link = video.querySelector('.activeSlide__video-link');
+                let media = video.querySelector('.activeSlide__media');
+                let button = video.querySelector('.activeSlide__button');
+          
+          
+                let id = parseMediaURL(media);
+              
+                video.addEventListener('click', () => {
+                    let iframe = createIframe(id);
+                    link.remove();
+                    button.remove();
+                    video.appendChild(iframe);
+                    link.removeAttribute('href');
+                    video.classList.add('video--enabled');
+                    videoControlSingleOfferPage();
+                });
+            }
+    
+            function parseMediaURL(media) {
+                let regexp = /https:\/\/i\.ytimg\.com\/vi\/([a-zA-Z0-9_-]+)\/maxresdefault\.jpg/i;
+                let url = media.src;
+                let match = url.match(regexp);
+                return match[1];
+            }
+    
+            function createIframe(id) {
+                let iframe = document.createElement('iframe');
+              
+                iframe.setAttribute('allowfullscreen', '');
+                iframe.setAttribute('allow', 'autoplay');
+                iframe.setAttribute('src', generateURL(id));
+                iframe.classList.add('video__media');
+              
+                return iframe;
+            }
+    
+            function generateURL(id) {
+                let query = '?rel=0&showinfo=0&autoplay=1&enablejsapi=1';
+                return 'https://www.youtube.com/embed/' + id + query;
+            }
+          }
+    }
+    // generateVideoInSlider();
+    function videoControlSingleOfferPage(){
+        let iframes = document.querySelectorAll('iframe');
+        let nextBtn = document.querySelectorAll('.activeSlide__next-slide');
+        let prevBtn = document.querySelectorAll('.activeSlide__prev-slide');
+    
+        let thumbnailPanel = document.querySelector('.vendor-slider__thumbnails')
+      
+        for(let i = 0; i < nextBtn.length; i++){
+          nextBtn[i].addEventListener('click', function(){
+            // console.warn('BAM!!');
+            var stopAllYouTubeVideos = () => { 
+              var iframes = document.querySelectorAll('iframe');
+              Array.prototype.forEach.call(iframes, iframe => { 
+                iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', 
+              func: 'pauseVideo' }), '*');
+             });
+            }
+            stopAllYouTubeVideos();
+          });
+        }
+        
+        for(let i = 0; i < prevBtn.length; i++){
+          prevBtn[i].addEventListener('click', function(){
+            // console.warn('BAM!!');
+            var stopAllYouTubeVideos = () => { 
+              var iframes = document.querySelectorAll('iframe');
+              Array.prototype.forEach.call(iframes, iframe => { 
+                iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', 
+              func: 'pauseVideo' }), '*');
+             });
+            }
+            stopAllYouTubeVideos();
+          });
+        }
+    
+        
+        window.addEventListener('scroll', function(){
+            let pauseAllYouTubeVideos = () => { 
+              let iframes = document.querySelectorAll('iframe');
+              Array.prototype.forEach.call(iframes, iframe => { 
+                iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', 
+              func: 'pauseVideo' }), '*');
+             });
+            }
+        
+            pauseAllYouTubeVideos();
+        });
+    
+        thumbnailPanel.addEventListener('click', function(){
+            let pauseAllYouTubeVideos = () => { 
+              let iframes = document.querySelectorAll('iframe');
+              Array.prototype.forEach.call(iframes, iframe => { 
+                iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', 
+              func: 'pauseVideo' }), '*');
+             });
+            }
+        
+            pauseAllYouTubeVideos();
+        });
+    
+    
+        
+    }
+    
+    function tumbnailVideo(){
+        let videosInSlider = document.querySelectorAll('.activeSlide__slider-video');
+        let videosliderThubmnails = document.querySelectorAll('.vendor-slider__thumbnail');
+        let activeThumbnail = document.querySelector('.activeSlide__active-thumbnail');
+    
+        if (videosInSlider === null || videosliderThubmnails === null || activeThumbnail === null) {
+            // console.log("videoInSlider left HTML");
+          } else {
+            videosliderThubmnails.forEach(item => {  
+                let videoInThumb = item.querySelector('.activeSlide__slider-video');
+    
+                if (videoInThumb === null){
+                    // console.log("No video in slider!");
+                } else{
+                    let previewOfVideo = videoInThumb.querySelector('.activeSlide__video-link');
+                    item.classList.remove('vendor-slider__thumbnail');
+                    item.classList.add('vendor-slider__thumbnail--video');
+                    let videoThumb = item;
+                    // console.log(videoThumb);
+                    item.innerHTML = previewOfVideo.innerHTML;
+                }
+            });
+          }
+    }
+    
+    // tumbnailVideo();
+    //remove video from thumb
+    function removeVideoFromActiveThumb(){
+        let activeThumbnail = document.querySelector('.activeSlide__active-thumbnail');
+        let iframeActiveThumb = activeThumbnail.querySelector('iframe');
+    
+        if (activeThumbnail === null || iframeActiveThumb === null){
+            // console.log('NO VIDEO IN ACTIVEThumb');
+        } else {
+            iframeActiveThumb.remove();
+        }
+    }
+    
+    //Generate video from THUMB
+    function generateVideoInSliderFromThumb(){
+        let activeThumb = document.querySelector('.activeSlide__active-thumbnail');
+        let videoInSlide = document.querySelectorAll('.activeSlide__slider-video');
+        let videoThumb = document.querySelectorAll('.vendor-slider__thumbnail--video');
+    
+        if(activeThumb === null || videoInSlide === null || videoThumb === null){
+            // console.log('no Video in slider');
+        }else{
+            function setupVideo() {
+    
+                for(let i = 0; i < videoThumb.length; i++){ 
+                    videoThumb[i].addEventListener('click', function(){
+                        let currentThumb = this;
+                        
+                        let media = currentThumb.querySelector('.activeSlide__media');
+                        let button = currentThumb.querySelector('.activeSlide__button');
+    
+                        let id = parseMediaURL(media);
+                        let iframe = createIframe(id);
+                    
+                        
+                        // button.remove();
+                        activeThumb.style.display = 'flex';
+                        activeThumb.appendChild(iframe);
+    
+                        
+                    });  
+                }   
+            }
+        
+            setupVideo();
+        
+            function parseMediaURL(media) {
+                let regexp = /https:\/\/i\.ytimg\.com\/vi\/([a-zA-Z0-9_-]+)\/maxresdefault\.jpg/i;
+                let url = media.src;
+                let match = url.match(regexp);
+              
+                return match[1];
+            }
+        
+            function createIframe(id) {
+                let iframe = document.createElement('iframe');
+              
+                iframe.setAttribute('allowfullscreen', '');
+                iframe.setAttribute('allow', 'autoplay');
+                iframe.setAttribute('src', generateURL(id));
+                iframe.classList.add('video__media');
+              
+                return iframe;
+            }
+        
+            function generateURL(id) {
+                let query = '?rel=0&showinfo=0&autoplay=1&enablejsapi=1';
+              
+                return 'https://www.youtube.com/embed/' + id + query;
+            }
+    
+            videoControlSingleOfferPage();
+        }
+    }
+    // generateVideoInSliderFromThumb();
+    function hideArrows(){
+        let prevArrow = document.querySelector('.activeSlide__prev-slide');
+        let nextArrow = document.querySelector('.activeSlide__next-slide');
+        let activeSlide = document.querySelector('.activeSlide');
+    
+        if (prevArrow) {
+          activeSlide.addEventListener('mouseover', function(){      
+            prevArrow.style.display = 'flex';
+            nextArrow.style.display = 'flex';
+        });
+    
+        activeSlide.addEventListener('mouseout', function(){    
+            prevArrow.style.display = 'none';
+            nextArrow.style.display = 'none';
+        });
+      } 
+    }
+    
+    function singleOfferPageAskButtonTip(){
+        const askBtns = document.querySelectorAll('.single-vendor-description__panel--ask');
+    
+        if(askBtns){
+            for(let i = 0; i < askBtns.length; i++){
+                askBtns[i].addEventListener('mouseover', function(){
+                  let currentTip = this.querySelector('.single-vendor-description__panel--ask-tip');
+          
+                  currentTip.style.visibility = 'visible';
+                  currentTip.style.opacity = '1';
+                });
+          
+                askBtns[i].addEventListener('mouseout', function(){
+                  let currentTip = this.querySelector('.single-vendor-description__panel--ask-tip');
+          
+                  currentTip.style.visibility = 'hidden';
+                  currentTip.style.opacity = '0';
+                });
+            }
+        }
+    }
+    singleOfferPageAskButtonTip();
+    
+    function singleOfferPageShareButtonTip(){
+        const shareBtns = document.querySelectorAll('.single-vendor-description__panel--share');
+    
+        if(shareBtns){
+            for(let i = 0; i < shareBtns.length; i++){
+                shareBtns[i].addEventListener('mouseover', function(){
+                  let currentTip = this.querySelector('.single-vendor-description__panel--share-tip');
+          
+                  currentTip.style.visibility = 'visible';
+                  currentTip.style.opacity = '1';
+                });
+          
+                shareBtns[i].addEventListener('mouseout', function(){
+                  let currentTip = this.querySelector('.single-vendor-description__panel--share-tip');
+          
+                  currentTip.style.visibility = 'hidden';
+                  currentTip.style.opacity = '0';
+                });
+            }
+        }
+    }
+    singleOfferPageShareButtonTip();
+    
+    function singleOfferPageFavoriteButtonTip(){
+        const favoriteBtns = document.querySelectorAll('.single-vendor-description__panel--favorite');
+    
+        if(favoriteBtns){
+            for(let i = 0; i < favoriteBtns.length; i++){
+                favoriteBtns[i].addEventListener('mouseover', function(){
+                  let currentTip = this.querySelector('.single-vendor-description__panel--favorite-tip');
+          
+                  currentTip.style.visibility = 'visible';
+                  currentTip.style.opacity = '1';
+                });
+          
+                favoriteBtns[i].addEventListener('mouseout', function(){
+                  let currentTip = this.querySelector('.single-vendor-description__panel--favorite-tip');
+          
+                  currentTip.style.visibility = 'hidden';
+                  currentTip.style.opacity = '0';
+                });
+            }
+        }
+    }
+    singleOfferPageFavoriteButtonTip();
+    
+    function singleOfferVendorPageBuyButtonMechDesktop(){
+      //check if single slider here
+      let singleSlider = document.querySelector('.single-offer-vendor-page__inner');
+      if(singleSlider){
+        const offersFullCardList = document.querySelectorAll('.desktop-card-item');
+        let body = document.querySelector('body');
+        let cartBtnDesktopMainHeaderSpan = document.querySelector('.user__shopping-cart span');
+        for(let i = 0; i < offersFullCardList.length; i++){
+          let offerManufacturer = offersFullCardList[i].querySelector('.desktop-properties__manufacturer');
+          let offerPrice  = offersFullCardList[i].querySelector('.desktop-card-item__price');
+          let offerbuyBtns  = offersFullCardList[i].querySelectorAll('.desktop-buy__buy-btn');
+    
+          for (let i = 0; i < offerbuyBtns.length; i++){
+              offerbuyBtns[i].addEventListener('click', function buyBtnFunc(e) {
+                e.preventDefault();
+                localStorage.setItem('noModalCustomQuantityInputValue', '');
+                let thisBtn = this;
+                thisBtn.classList.remove('desktop-buy__buy-btn');
+                thisBtn.classList.add('desktop-buy__buy-btn--load');
+                thisBtn.innerHTML = `<div class="desktop-buy__buy-btn-preloader"></div>`;
+                
+                let key = encodeURIComponent(thisBtn.dataset.key);
+                let availability = thisBtn.dataset.availability;
+                
+                function sendOfferToCart() {
+                  const params = new URLSearchParams();
+                  params.set('id', key);
+    
+                  let xhr = new XMLHttpRequest();
+          
+                  xhr.open('POST', '/cart/add');
+                  xhr.responseType = 'json';
+    
+                  xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    
+                  xhr.onload = () => {
+                    if (xhr.status !== 200) {
+                      console.warn('offerCardDesktopBuyButtonMech ajax error');
+                      errorBannerDesktopRemove();
+                      errorBannerDesktop();
+                      thisBtn.classList.remove('desktop-buy__buy-btn--load');
+                      thisBtn.classList.add('desktop-buy__buy-btn');
+                      thisBtn.innerHTML = ` `;
+                    }else{
+                      const response = xhr.response;
+                      let currentPreloader = thisBtn.querySelector('.desktop-buy__buy-btn-preloader');
+                      currentPreloader.remove();
+            
+                      thisBtn.classList.remove('desktop-buy__buy-btn--load');
+                      thisBtn.classList.add('desktop-buy__buy-btn');
+                      thisBtn.innerHTML = ` `;
+    
+                      let parentBuyBlockDesktop = thisBtn.parentElement;  
+                      let currentFastBtn = parentBuyBlockDesktop.querySelector('.desktop-buy__fast-buy-btn');
+                      let desktopCardItemInner = parentBuyBlockDesktop.parentElement;
+                      //Availability sign of offer
+                      let offerCardAvailableSign = desktopCardItemInner.querySelector('.desktop-description__shop');
+    
+                      //Hide buttons
+                      thisBtn.style.display = 'none';
+                      currentFastBtn.style.display = 'none';
+    
+                      //dynamic data from cart
+                      let countFromCart = response.count;
+                      cartBtnDesktopMainHeaderSpan.style.visibility = 'visible';
+                      cartBtnDesktopMainHeaderSpan.innerText = countFromCart;
+                      // console.warn(cartBtnDesktopMainHeaderSpan);
+                      stickyHeaderDesktopCartCountUpdate();
+    
+                      
+                      
+                      //Add quantity btns instead buy btn
+                      let quantityParent = document.createElement('div');
+                      quantityParent.classList.add('desktop-buy-quantity');
+    
+                      let quantityCustomParent = document.createElement('div');
+                      quantityCustomParent.classList.add('desktop-buy-quantity--custom');
+                      
+                      quantityParent.innerHTML = `
+                        <div class="desktop-buy-quantity__btn-minus" data-key="${key}"></div>
+                        <input class="desktop-buy-quantity__default-input" placeholder="1">
+                        <div class="desktop-buy-quantity__btn-plus" data-key="${key}"></div>
+                      `;
+    
+                      quantityCustomParent.innerHTML = `
+                        <div class="desktop-buy-quantity__back-btn"></div>
+    
+                        <div class="desktop-buy-quantity__custom-input-wrapper">
+                          <input class="desktop-buy-quantity__custom-input" pattern="[0-9]*" placeholder="1" type = "number" maxlength = "3" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength); this.value = !!this.value && Math.abs(this.value) >= 1 ? Math.abs(this.value) : null">
+                          <a class="desktop-buy-quantity__buy-btn"></a>
+                        </div>
+                      `;
+    
+                      parentBuyBlockDesktop.appendChild(quantityParent);
+                      parentBuyBlockDesktop.appendChild(quantityCustomParent);
+    
+                      const afterBuyMinusButton = parentBuyBlockDesktop.querySelector('.desktop-buy-quantity__btn-minus');
+                      const afterBuyInput = parentBuyBlockDesktop.querySelector('.desktop-buy-quantity__default-input');
+                      const afterBuyPlusButton = parentBuyBlockDesktop.querySelector('.desktop-buy-quantity__btn-plus');
+                      const afterBuyQuantityBuyButton = parentBuyBlockDesktop.querySelector('.desktop-buy-quantity__buy-btn');
+    
+    
+                      afterBuyMinusButton.addEventListener('click', function(){
+                          //Mechanic after click on Minus button
+                        if(afterBuyInput.placeholder == '1'){
+    
+                          const params = new URLSearchParams();
+                          params.set('id', key);
+          
+                          let xhr = new XMLHttpRequest();
+                  
+                          xhr.open('POST', '/cart/remove');
+                          xhr.responseType = 'json';
+        
+                          xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    
+                          xhr.onload = () => {
+                            if (xhr.status !== 200) {
+                              // console.warn('offerCardDesktopquantityDeleteButtonMech ajax error');
+                            }else{
+                              
+                              const response = xhr.response;
+                              //dynamic data from cart
+                              let countFromCart = response.count;
+                              cartBtnDesktopMainHeaderSpan.style.visibility = 'visible';
+                              cartBtnDesktopMainHeaderSpan.innerText = countFromCart;
+                              // console.warn(cartBtnDesktopMainHeaderSpan);
+                              stickyHeaderDesktopCartCountUpdate();
+                              
+                              //Quantity + - hidden
+                              quantityParent.remove();
+                              quantityCustomParent.remove();
+                              //Fast buy & buy btn onn
+                              currentFastBtn.style.display = 'block';
+                              thisBtn.style.display = 'block';
+                            }
+                          }
+    
+                          xhr.send(params);
+                        }else{
+                          const params = new URLSearchParams();
+                          params.set('id', key);
+                          
+                          const xhr = new XMLHttpRequest();
+    
+                          xhr.open('POST', '/cart/reduce');
+                          xhr.responseType = 'json';
+    
+                          xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    
+                          xhr.onload = () => {
+                            if (xhr.status !== 200) {
+                              console.warn('offerCardMobileAfterBuyCounter MinusClick ajax error');
+                            }else{
+                            //  If 1 offer in afterBuyInputBlock checking
+                              const response = xhr.response;
+                              let countFromCart = response.count; 
+                              cartBtnDesktopMainHeaderSpan.style.visibility = 'visible';
+                              cartBtnDesktopMainHeaderSpan.innerText = countFromCart;
+                              // console.warn(cartBtnDesktopMainHeaderSpan);
+                              stickyHeaderDesktopCartCountUpdate();
+                              cartBtnDesktopMainHeaderSpan.style.visibility = 'visible';
+                              --afterBuyInput.placeholder;
+    
+                              afterBuyPlusButton.classList.remove('desktop-buy-quantity__btn-plus--disable');
+                              afterBuyPlusButton.classList.add('desktop-buy-quantity__btn-plus');
+                              afterBuyInput.style.pointerEvents = 'auto';
+                            }
+                          }
+          
+                          xhr.send(params);
+                        }
+                      });
+    
+                      afterBuyPlusButton.addEventListener('click', function(){
+                        let afterBuyInput = parentBuyBlockDesktop.querySelector('.desktop-buy-quantity__default-input');
+                        let afterBuyInputPlaceholder = afterBuyInput.placeholder;
+    
+                        if(availability == '1'){
+    
+                        offerCardAvailableSign.classList.add('desktop-description__shop--alert');
+    
+                        function offerCardAvailableSignAlertDisapear(){
+                          offerCardAvailableSign.classList.remove('desktop-description__shop--alert');
+                        }
+                        setTimeout(offerCardAvailableSignAlertDisapear, 7000);
+    
+                        afterBuyPlusButton.classList.remove('desktop-buy-quantity__btn-plus');
+                        afterBuyPlusButton.classList.add('desktop-buy-quantity__btn-plus--disable');
+                        afterBuyInput.style.pointerEvents = 'none';
+                        }else{
+    
+                        if(Number(afterBuyInputPlaceholder) < Number(availability)){
+                          const params = new URLSearchParams();
+                          params.set('id', key);
+          
+                          const xhr = new XMLHttpRequest();
+                          xhr.open('POST', '/cart/add');
+                          xhr.responseType = 'json';
+          
+                          xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    
+                          xhr.onload = () => {
+                            if (xhr.status !== 200) {
+                              console.warn('offerCardMobileAfterBuyCounter MinusClick ajax error');
+                            }else{
+                              const response = xhr.response;
+                              //dynamic data from cart
+                              let countFromCart = response.count;
+                              cartBtnDesktopMainHeaderSpan.style.visibility = 'visible';
+                              cartBtnDesktopMainHeaderSpan.innerText = countFromCart;
+                            //  console.warn(cartBtnDesktopMainHeaderSpan);
+                              stickyHeaderDesktopCartCountUpdate();
+                              cartBtnDesktopMainHeaderSpan.style.visibility = 'visible';
+    
+                              ++afterBuyInput.placeholder;
+                            }
+                          }
+          
+                          xhr.send(params);
+                        }else if(Number(afterBuyInputPlaceholder) >= Number(availability)){
+                          offerCardAvailableSign.classList.add('desktop-description__shop--alert');
+    
+                          function offerCardAvailableSignAlertDisapear(){
+                            offerCardAvailableSign.classList.remove('desktop-description__shop--alert');
+                          }
+                          setTimeout(offerCardAvailableSignAlertDisapear, 7000);
+    
+                          afterBuyPlusButton.classList.remove('desktop-buy-quantity__btn-plus');
+                          afterBuyPlusButton.classList.add('desktop-buy-quantity__btn-plus--disable');
+                          afterBuyInput.style.pointerEvents = 'none';
+                        }else if(availability === 'много' || availability === 'В наличии' || availability === 'По запросу'){
+                          const params = new URLSearchParams();
+                          params.set('id', key);
+          
+                          const xhr = new XMLHttpRequest();
+                          xhr.open('POST', '/cart/add');
+                          xhr.responseType = 'json';
+          
+                          xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    
+                          xhr.onload = () => {
+                            if (xhr.status !== 200) {
+                              console.warn('offerCardMobileAfterBuyCounter MinusClick ajax error');
+                            }else{
+                              const response = xhr.response;
+                              //dynamic data from cart
+                              let countFromCart = response.count;
+                              cartBtnDesktopMainHeaderSpan.style.visibility = 'visible';
+                              cartBtnDesktopMainHeaderSpan.innerText = countFromCart;
+                            //  console.warn(cartBtnDesktopMainHeaderSpan);
+                              stickyHeaderDesktopCartCountUpdate();
+    
+                              ++afterBuyInput.placeholder;
+                            }
+                          }
+          
+                          xhr.send(params);
+                        }
+                        }
+                      });
+    
+                      afterBuyInput.addEventListener('click', function(){
+    
+                        if(availability == '1'){
+                          offerCardAvailableSign.classList.add('desktop-description__shop--alert');
+    
+                          function offerCardAvailableSignAlertDisapear(){
+                            offerCardAvailableSign.classList.remove('desktop-description__shop--alert');
+                          }
+                          setTimeout(offerCardAvailableSignAlertDisapear, 7000);
+                          afterBuyInput.style.pointerEvents = 'none';
+                          
+                          afterBuyPlusButton.classList.remove('desktop-buy-quantity__btn-plus');
+                          afterBuyPlusButton.classList.add('desktop-buy-quantity__btn-plus--disable');
+    
+                        }else{
+                          quantityParent.style.display = 'none';
+                          quantityCustomParent.style.display = 'flex';
+    
+                          const afterBuyCustomQuantityInput = parentBuyBlockDesktop.querySelector('.desktop-buy-quantity__custom-input');
+                          const afterBuyCustomQuantityBackBtn = parentBuyBlockDesktop.querySelector('.desktop-buy-quantity__back-btn');
+    
+                          afterBuyCustomQuantityInput.focus();
+                          afterBuyCustomQuantityInput.addEventListener('input', function updateCustomInputValue(e){
+    
+                            const afterBuyCustomQuantityInputValue = afterBuyCustomQuantityInput.value;
+    
+                            if(Number(afterBuyCustomQuantityInput.value) < Number(availability)){
+                              // console.warn(`КАСТОМНЫЙ ИНПУТ МЕНЬШЕ ОСТАТКА осталось ${availability} штук ТОВАР ДОБАВЛЯЕМ`);
+                              // console.warn(`КАСТОМНЫЙ ИНПУТ ${afterBuyCustomQuantityInputValue}`);
+                              // console.warn(`ОСТАТОК ${availability}`);
+    
+                              localStorage.setItem('noModalCustomQuantityInputValue', afterBuyCustomQuantityInputValue);
+    
+                            }else if(Number(afterBuyCustomQuantityInput.value) > Number(availability)){
+                              console.warn(`КАСТОМНЫЙ ИНПУТ БОЛЬШЕ ИЛИ РАВЕН ОСТАТКУ осталось ${availability} штук ТОВАР НЕ ДОБАВЛЯЕМ`);
+                              // console.warn(`КАСТОМНЫЙ ИНПУТ ${afterBuyCustomQuantityInputValue}`);
+                              // console.warn(`ОСТАТОК ${availability}`);
+                              offerCardAvailableSign.classList.add('desktop-description__shop--alert');
+    
+                              function offerCardAvailableSignAlertDisapear(){
+                                offerCardAvailableSign.classList.remove('desktop-description__shop--alert');
+                              }
+                              setTimeout(offerCardAvailableSignAlertDisapear, 7000);
+    
+                              afterBuyCustomQuantityInput.value = availability;
+                              localStorage.setItem('noModalCustomQuantityInputValue', availability);
+    
+                            }else if(availability === 'много' || availability === 'В наличии' || availability === 'По запросу'){
+    
+                              localStorage.setItem('noModalCustomQuantityInputValue', afterBuyCustomQuantityInputValue);
+    
+                            }
+                          });
+    
+                          afterBuyCustomQuantityBackBtn.addEventListener('click', function(){
+                            quantityCustomParent.style.display = 'none';
+                            quantityParent.style.display = 'flex';
+                          });
+                        }
+                      });
+    
+                      afterBuyQuantityBuyButton.addEventListener('click', function(e){
+                        e.preventDefault();
+    
+                        let noModalCustomQuantityInputValue = localStorage.getItem('noModalCustomQuantityInputValue');
+    
+                        if(noModalCustomQuantityInputValue == ''){
+                          // console.warn('noModalCustomQuantityInputValue === empty string');
+    
+                        }else{
+                          // console.warn('noModalCustomQuantityInputValue');
+                          // console.warn(noModalCustomQuantityInputValue);
+                          let thisBtn = this;
+                          thisBtn.classList.remove('desktop-buy-quantity__buy-btn');
+                          thisBtn.classList.add('desktop-buy-quantity__buy-btn--load');
+                          thisBtn.innerHTML = `<div class="desktop-custom-quantity-buy__buy-btn-preloader"></div>`;
+    
+                          function sendOfferToCartDesktopCustomQuamnity(){
+                            const params = new URLSearchParams();
+                            params.set('id', key);
+                            params.append('qty', noModalCustomQuantityInputValue);
+    
+                            let xhr = new XMLHttpRequest();
+    
+                            xhr.open('POST', '/cart/change');
+                            xhr.responseType = 'json';
+    
+                            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    
+                            xhr.onload = () => {
+                              if (xhr.status !== 200) {
+                                // console.warn('modalCustomQuantityBuyButtonMech ajax error');
+                              } else {
+                                // console.warn('modalCustomQuantityBuyButtonMech ajax SUCCESS');
+                                thisBtn.classList.remove('desktop-buy-quantity__buy-btn--load');
+                                thisBtn.classList.add('desktop-buy-quantity__buy-btn');
+                                thisBtn.innerHTML = ` `;
+                                // dynamic data from cart
+                                const response = xhr.response;
+                                let countFromCart = response.count; 
+                                cartBtnDesktopMainHeaderSpan.style.visibility = 'visible';
+                                cartBtnDesktopMainHeaderSpan.innerText = countFromCart;
+                                console.warn(cartBtnDesktopMainHeaderSpan);
+                                stickyHeaderDesktopCartCountUpdate();
+    
+                                afterBuyInput.placeholder = noModalCustomQuantityInputValue;
+    
+                                quantityParent.style.display = 'flex';
+                                quantityCustomParent.style.display = 'none';
+                              }
+                            }
+    
+                            xhr.send(params);
+                          }
+                          setTimeout(sendOfferToCartDesktopCustomQuamnity, 300);
+                        }
+                      });
+                      
+                      //init parent + add tooltip       
+                      offerCardDesktopBuyModalLocalStorageSwitcherHide();  
+                    }
+                  }
+    
+                  xhr.send(params);
+                }
+          
+                setTimeout(function(){
+                  sendOfferToCart();
+                }, 400);     
+              });
+          }
+        }
+      }
+    
+    }
+    singleOfferVendorPageBuyButtonMechDesktop()
     function slider() {
     
         const slidersList = document.querySelectorAll('.slider');
@@ -9404,26 +10896,26 @@
                     showSlides(slideIndex = n);
                 }
     
-                function plusAutoSlides(n) {
-                    showSlides(slideIndex += 1);
-                }
+                // function plusAutoSlides(n) {
+                //     showSlides(slideIndex += 1);
+                // }
     
-                if(Number(autoScrollTimer) <= 0 || autoScrollTimer === "null"){
-                    console.warn('data-timer 0 or less')
-                }else{
+                // if(Number(autoScrollTimer) <= 0 || autoScrollTimer === "null"){
+                //     console.warn('data-timer 0 or less')
+                // }else{
     
-                    window.sliderTimer = setInterval(plusAutoSlides, Number(autoScrollTimer));
+                //     window.sliderTimer = setInterval(plusAutoSlides, Number(autoScrollTimer));
     
-                    currentSlider.addEventListener('mouseenter', function(){
-                        // console.warn('СЛАЙДЕР, ПРИКАЗЫВАЮ ТЕБЕ, ЗАМРИ!!!')
-                        clearInterval(window.sliderTimer);
-                    });
+                //     currentSlider.addEventListener('mouseenter', function(){
+                //         // console.warn('СЛАЙДЕР, ПРИКАЗЫВАЮ ТЕБЕ, ЗАМРИ!!!')
+                //         clearInterval(window.sliderTimer);
+                //     });
     
-                    currentSlider.addEventListener('mouseleave', function(){
-                        // console.warn('СЛАЙДЕР, ОТОМРИ, ОКАЯНЫЙ!!!')
-                        window.sliderTimer = setInterval(plusAutoSlides, Number(autoScrollTimer));
-                    });
-                }
+                //     currentSlider.addEventListener('mouseleave', function(){
+                //         // console.warn('СЛАЙДЕР, ОТОМРИ, ОКАЯНЫЙ!!!')
+                //         window.sliderTimer = setInterval(plusAutoSlides, Number(autoScrollTimer));
+                //     });
+                // }
                 
                 //click on dots
                 dotsWrap.addEventListener('click', function(event) {
@@ -9482,45 +10974,460 @@
             }
         }
     }
-    function dadataApi(){  
-        const currentIp = fetch('https://ipwho.is/')
-            .then((responce) => responce.json())
-            .then((data) => {
-                const currentIpResult = data.ip
-                console.log('currentIpResult');
-                console.log(currentIpResult);
-                let url = "https://suggestions.dadata.ru/suggestions/api/4_1/rs/iplocate/address?ip=";
-                let token = "7d7a4b089cea1b122a5a6e748afc75458f420444";
-                let query = currentIpResult;
-            
-                let options = {
-                    method: "GET",
-                    mode: "cors",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Accept": "application/json",
-                        "Authorization": "Token " + token
-                    }
-                }
-            
-                fetch(url + query, options)
-                .then(response => response.json())
-                .then((result) => {
-                    // console.log(result.location.data.city)
-                    const currentCity = result.location.data.city
-                    //Change user location
-                    let userLocationHeader = document.querySelector('.search-panel__user-location span');
-                    if(userLocationHeader === null){
-                        let userLocationCartHeader = document.querySelector('.header-cart-desktop__user-location span');
-                        userLocationCartHeader.innerText = currentCity;
-                    }else{
-                        userLocationHeader.innerText = currentCity;
-                    }
-                    
-                })
-                .catch(error => console.log("error", error));
+    // toogle hidding menu button
+    function toggleHiddenMenuBtn(){
+      let hiddenMenuBtn = document.querySelector('.hidden-btn__icon');
+      let hiddenMenu = document.querySelector('.user-wrapper__hidden-menu');
+      let header = document.querySelector('.header');
+      let body = document.querySelector('body');
     
-            });      
+      if(hiddenMenuBtn){
+        let glassBackground = document.createElement("div");
+        glassBackground.classList.add('header-blur-wrap');
+        header.after(glassBackground);
+    
+        hiddenMenuBtn.addEventListener('click', function() {
+          this.classList.toggle('active');
+          hiddenMenu.classList.toggle('hidden-menu--on');
+          glassBackground.classList.toggle('header-blur-wrap--on');
+          body.classList.toggle('page-body__no-scroll');
+        });
+    
+        glassBackground.addEventListener('click', function(){
+          hiddenMenuBtn.classList.remove('active');
+          hiddenMenu.classList.remove('hidden-menu--on');
+          glassBackground.classList.remove('header-blur-wrap--on');
+          body.classList.remove('page-body__no-scroll');
+        });
+      }
+    }
+    toggleHiddenMenuBtn();
+    
+    //ContactUsModalOpener
+    function headerContactUsModal(){
+      let mainHeader = document.querySelector('.header');
+      if(mainHeader){
+        let contactUsModal = document.querySelector('.header-contact-us');
+        let contactUsModalClose = document.querySelector('.header-contact-us__close');
+      
+        let contactUsDesktopHeaderNumbers = document.querySelectorAll('.contacts__number');
+      
+        let contactUsHeaderMobileHidden = document.querySelector('.hidden-menu__call-btn');
+        let contactUsHeaderMobileRightPanelNumber = document.querySelector('.right-panel__info');
+      
+        let contactUsHeaderGlassBack = document.querySelector('.header-contact-us__blur');
+      
+        let body = document.querySelector('body');
+      
+        if(contactUsModal === null || contactUsModalClose === null){
+          // console.log('No Header modal on the page');
+        } else {
+      
+          for(let i = 0; i < contactUsDesktopHeaderNumbers.length; i++){
+            contactUsDesktopHeaderNumbers[i].addEventListener('click', function(e){
+              e.preventDefault();
+              contactUsModal.style.display = 'block';
+              body.classList.add('page-body__no-scroll');
+            });
+          }
+      
+          contactUsHeaderMobileHidden.addEventListener('click', function(){
+            contactUsModal.style.display = 'block';
+            body.classList.add('page-body__no-scroll');
+          });
+      
+          contactUsHeaderMobileRightPanelNumber.addEventListener('click', function(){
+            contactUsModal.style.display = 'block';
+            body.classList.add('page-body__no-scroll');
+          });
+      
+          contactUsModalClose.addEventListener('click', function(){
+            contactUsModal.style.display = 'none';
+            body.classList.remove('page-body__no-scroll');
+          });
+      
+          contactUsHeaderGlassBack.addEventListener('click', function(){
+            contactUsModal.style.display = 'none';
+            body.classList.remove('page-body__no-scroll');
+          });
+        }
+      }
+    }
+    headerContactUsModal();
+    
+    //Green navigation arrow mech
+    function navArrowMech(){
+      let navLeftArrow = document.querySelector('.navigation__arrow-left');
+      let navRightArrow = document.querySelector('.navigation__arrow-right');
+      let navFirstItem = document.querySelector('.navigation__nav-item');
+      let navItemsList = document.querySelectorAll('.navigation__nav-item');
+      let navItemsListParent = document.querySelector('.navigation__nav-list');
+      
+    
+      if(navLeftArrow === null || navRightArrow === null || navFirstItem === null){
+        // console.log('no navigation on the page');
+      }else{
+    
+        let lastItem = navItemsList[navItemsList.length - 1];
+        
+        let intViewportWidth = window.innerWidth;
+        // console.warn(intViewportWidth);
+    
+        if(intViewportWidth > 1140){
+    
+          let coordOfLastItem = lastItem.getBoundingClientRect();
+      
+          
+          
+          if(coordOfLastItem.right > intViewportWidth){
+            // console.warn('last item out of viewport');
+    
+            navRightArrow.style.display = 'block';
+    
+            navRightArrow.addEventListener('click', function(){
+              lastItem.scrollIntoView({ block: 'end',  behavior: 'smooth' });
+              navRightArrow.style.display = 'none';
+              navLeftArrow.style.display = 'block';
+            });
+    
+            navLeftArrow.addEventListener('click', function(){
+              navFirstItem.scrollIntoView({ block: 'end', inline: 'end',  behavior: 'smooth' });
+              navLeftArrow.style.display = 'none';
+              navRightArrow.style.display = 'block';
+              
+            });
+    
+          } else{
+            console.warn('last item in viewport');
+    
+            let summ = 0;
+            for(let i = 0; i < navItemsList.length; i++){
+              summ += navItemsList[i].offsetWidth;
+            }
+    
+            let summPlusPl = summ + 550;
+            // console.log('sum of items width ' + summPlusPl + 'px');
+            // console.log(intViewportWidth);
+    
+            if(intViewportWidth > summPlusPl ){
+              navItemsListParent.style.justifyContent = 'flex-end';
+              navItemsListParent.style.paddingRight = '40px';
+              navRightArrow.style.display = 'none';
+              navLeftArrow.style.display = 'none';
+            }
+          }
+        } else {
+          console.warn('mobile viewport');
+        }
+      }
     }
     
-    dadataApi()
+    //dadataHeaderCity init;
+    function dadataModalSuccessInit(){
+      //check lacalStorage parametr dadataModalSuccessConfirmCity which contain chosen city
+      const dadataModalSuccessConfirmCity = localStorage.getItem('dadataModalSuccessConfirmCity');
+      if(dadataModalSuccessConfirmCity){
+        let userLocationHeader = document.querySelector('.search-panel__user-location span');
+        userLocationHeader.classList.add('search-panel__user-location--confirm-location');
+        userLocationHeader.innerText = dadataModalSuccessConfirmCity;
+        dadataPopUpsDesktopGenerate();
+      }else{
+        console.warn('dadataModalSuccessConfirmCity NO PARAMS');
+        dadataHeaderCity();
+      }
+    }
+    dadataModalSuccessInit();
+    
+    //Dadata header current IP and City func
+    function dadataHeaderCity(){  
+      const currentIp = fetch('https://ipwho.is/')
+      .then((responce) => responce.json())
+      .then((data) => {
+          const currentIpResult = data.ip
+          const currentIpCountry = data.country
+          let url = "https://suggestions.dadata.ru/suggestions/api/4_1/rs/iplocate/address?ip=";
+          let token = "7d7a4b089cea1b122a5a6e748afc75458f420444";
+          let query = currentIpResult;
+      
+          let options = {
+              method: "GET",
+              mode: "cors",
+              headers: {
+                  "Content-Type": "application/json",
+                  "Accept": "application/json",
+                  "Authorization": "Token " + token
+              }
+          }
+    
+          if(currentIpCountry === 'Russia'){
+            fetch(url + query, options)
+            .then(response => response.json())
+            .then((result) => {
+              // console.log(result.location.data.city)
+              const currentCity = result.location.data.city
+              //First change of user location
+              let userLocationHeader = document.querySelector('.search-panel__user-location span');
+              let userLocationHeaderMobile = document.querySelector('.search-panel-mobile__user-location span');
+              userLocationHeader.classList.add('search-panel__user-location--ask-fadeInOut-span');
+    
+              if(userLocationHeader){
+                userLocationHeader.innerText = currentCity;               
+                userLocationHeaderMobile.innerText = currentCity;   
+                //DESKTOP WAY OUT
+                dadataPopUpsDesktopGenerate();            
+              }else{
+                let userLocationCartHeader = document.querySelector('.header-cart-desktop__user-location span');
+                let userLocationCartHeaderMobile = document.querySelector('.header-cart-mobile__user-location span');
+                userLocationCartHeader.innerText = currentCity;
+                userLocationCartHeaderMobile.innerText = currentCity;
+              }
+            })
+            .catch(error => {
+              let userLocationHeader = document.querySelector('.search-panel__user-location ');
+              let userLocationHeaderMobile = document.querySelector('.search-panel-mobile__user-location ');
+              if(userLocationHeader){
+                userLocationHeader.innerText = 'Доставляем везде, куда только руки дотянутся!*error';  
+                userLocationHeaderMobile.innerText = 'Доставляем везде, куда только руки дотянутся!*error';    
+              }else{
+                let userLocationCartHeader = document.querySelector('.header-cart-desktop__user-location ');
+                let userLocationCartHeaderMobile = document.querySelector('.header-cart-mobile__user-location ');
+                userLocationCartHeader.innerText = 'Доставляем везде, куда только руки дотянутся!*error';
+                userLocationCartHeaderMobile.innerText = 'Доставляем везде, куда только руки дотянутся!*error';
+              }
+            });
+          }else{
+            console.warn('ВЫ НАХОДИТЕСЬ ЗА ПРЕДЕЛАМИ РФ!');
+          }
+      });      
+    }
+    
+    // generate dadata pop-ups
+    function dadataPopUpsDesktopGenerate(){
+      let userLocationHeader = document.querySelector('.search-panel__user-location span');
+      if(userLocationHeader){
+        //calculate position of header location block
+        let userLocationHeaderPosition = userLocationHeader.getBoundingClientRect();
+        let userLocationHeaderText = userLocationHeader.innerText;
+        let userLocationHeaderPositionTop = parseInt(userLocationHeaderPosition.top);
+        let userLocationHeaderPositionRight = parseInt(userLocationHeaderPosition.right);
+        let userLocationHeaderTextFromStorageChosenCity = localStorage.getItem('dadataModalSuccessConfirmCity');
+        if(userLocationHeaderTextFromStorageChosenCity === null){
+            //generate success and find pop-ups
+            let dadataModalSuccess = document.createElement('div');
+            dadataModalSuccess.classList.add('search-panel__user-location--dadataModalSuccess');
+            dadataModalSuccess.innerHTML = `
+              <div class="search-panel__user-location--dadataModalSuccess-wrapper">
+                <div class="search-panel__user-location--dadataModalSuccess-question">
+                    Ваш город ${userLocationHeaderText}?
+                </div>
+    
+                <div class="search-panel__user-location--dadataModalSuccess-inner">
+                    <div class="search-panel__user-location--dadataModalSuccess-confirmBtn">Все верно!</div>
+                    <div class="search-panel__user-location--dadataModalSuccess-anotherCity">Выбрать город</div>
+                </div>
+              </div> 
+            `;
+            dadataModalSuccess.style.top = userLocationHeaderPositionTop + -12 + 'px';
+            dadataModalSuccess.style.left = userLocationHeaderPositionRight + 20 + 'px';
+            userLocationHeader.after(dadataModalSuccess);
+        }else{
+            //generate success and find pop-ups
+            let userLocationHeaderTextFromStorageChosenCityFresh = localStorage.getItem('dadataModalSuccessConfirmCity');
+    
+            let dadataModalSuccess = document.createElement('div');
+            dadataModalSuccess.classList.add('search-panel__user-location--dadataModalSuccess');
+            dadataModalSuccess.innerHTML = `
+              <div class="search-panel__user-location--dadataModalSuccess-wrapper">
+                <div class="search-panel__user-location--dadataModalSuccess-question">
+                    Ваш город ${userLocationHeaderTextFromStorageChosenCityFresh}?
+                </div>
+    
+                <div class="search-panel__user-location--dadataModalSuccess-inner">
+                    <div class="search-panel__user-location--dadataModalSuccess-confirmBtn">Все верно!</div>
+                    <div class="search-panel__user-location--dadataModalSuccess-anotherCity">Выбрать город</div>
+                </div>
+              </div> 
+            `;
+            dadataModalSuccess.style.top = userLocationHeaderPositionTop + -12 + 'px';
+            dadataModalSuccess.style.left = userLocationHeaderPositionRight + 20 + 'px';
+            userLocationHeader.after(dadataModalSuccess);
+        }
+    
+        //generate ask and find pop-ups
+        let dadataModalFind = document.createElement('div');
+        dadataModalFind.classList.add('search-panel__user-location--dadataModalFind');
+        dadataModalFind.innerHTML = `
+          <div class="search-panel__user-location--dadataModalFind-wrapper">
+              <img src="../img/search-icon-dadataFind.svg" alt="">
+              <div class="search-panel__user-location--dadataModalFind-confirmBtn"></div> 
+              <input type="text" id="dadataHeaderCity" placeholder="Введите название вашего города">
+              
+              <ul class="search-panel__user-location--dadataModalFind-quickPickList">
+                  <li class="search-panel__user-location--dadataModalFind-quickPickItem">Москва</li>
+                  <li class="search-panel__user-location--dadataModalFind-quickPickItem">Санкт-Петербург</li>
+                  <li class="search-panel__user-location--dadataModalFind-quickPickItem">Новосибирск</li>
+                  <li class="search-panel__user-location--dadataModalFind-quickPickItem">Екатеринбург</li>
+                  <li class="search-panel__user-location--dadataModalFind-quickPickItem">Казань</li>
+                  <li class="search-panel__user-location--dadataModalFind-quickPickItem">Нижний Новгород</li>
+                  <li class="search-panel__user-location--dadataModalFind-quickPickItem">Челябинск</li>
+              </ul>
+              
+              <a>*Хочу доставку в Другую страну</a>
+          </div>
+        `;
+        dadataModalFind.style.top = userLocationHeaderPositionTop + -12 + 'px';
+        dadataModalFind.style.left = userLocationHeaderPositionRight + 20 + 'px';
+        userLocationHeader.after(dadataModalFind);
+    
+        //show succeess modal
+        userLocationHeader.addEventListener('click', function(){
+          dadataModalSuccess.style.display = 'flex';
+          dadataModalFind.style.display = 'none';
+        });
+    
+        //confirm city/set local storage + show find modal
+        const dadataModalSuccess = document.querySelector('.search-panel__user-location--dadataModalSuccess');
+        const dadataModalSuccessConfirmBtn = document.querySelector('.search-panel__user-location--dadataModalSuccess-confirmBtn');
+        const dadataModalSuccessAnoterCity = document.querySelector('.search-panel__user-location--dadataModalSuccess-anotherCity');
+        const dadataModalFindInput = document.querySelector('.search-panel__user-location--dadataModalFind-wrapper input');
+        const dadataModalFindInputImg = document.querySelector('.search-panel__user-location--dadataModalFind-wrapper img');
+        const dadataModalFindInputConfirmBtn = document.querySelector('.search-panel__user-location--dadataModalFind-confirmBtn');
+      
+        dadataModalSuccessConfirmBtn.addEventListener('click', function(){
+          localStorage.setItem('dadataModalSuccessConfirmCity', userLocationHeaderText);
+          dadataModalSuccess.remove();
+          dadataModalFind.remove();
+          setTimeout(dadataPopUpsDesktopGenerateReplay, 1000);
+          userLocationHeader.classList.remove('search-panel__user-location--ask-fadeInOut-span');
+          userLocationHeader.classList.add('search-panel__user-location--confirm-location');
+        });
+    
+        dadataModalSuccessAnoterCity.addEventListener('click', function(){
+          dadataModalSuccess.style.display = 'none';
+          dadataModalFind.style.display = 'block';
+        });
+    
+        //confirm and choose from find input
+        dadataModalFindInput.addEventListener('click', function(){
+          dadataModalFindInputImg.style.display = 'none';
+          dadataModalFindInputConfirmBtn.style.display = 'block';
+        });
+    
+        dadataModalFindInputConfirmBtn.addEventListener('click', function(){
+          const dadataModalFindInputValue = dadataModalFindInput.value;
+          if(dadataModalFindInputValue){
+            // console.warn('dadataModalFindInputValue');
+            // console.warn(dadataModalFindInputValue);
+            userLocationHeader.classList.remove('search-panel__user-location--ask-fadeInOut-span');
+            userLocationHeader.classList.add('search-panel__user-location--confirm-location');
+            dadataModalSuccess.remove();
+            dadataModalFind.remove();
+            setTimeout(dadataPopUpsDesktopGenerateReplay, 1000);
+            localStorage.setItem('dadataModalSuccessConfirmCity', dadataModalFindInputValue);
+            userLocationHeader.innerText = dadataModalFindInputValue;
+            
+          }else{
+            //false
+            console.warn('dadataModalFindInputValue');
+            console.warn(dadataModalFindInputValue);
+          }
+        });
+    
+        //quick choose find btns
+        const modalFindQuickChooseBtn = document.querySelectorAll('.search-panel__user-location--dadataModalFind-quickPickItem');
+        modalFindQuickChooseBtn.forEach(item => {
+          const itemText = item.innerText;
+          item.addEventListener('click', function(){
+            dadataModalFindInput.value = itemText;
+            dadataModalFindInputImg.style.display = 'none';
+            dadataModalFindInputConfirmBtn.style.display = 'block';
+          });
+    
+        });
+    
+        setTimeout(dadataAutoCity, 2000);
+      }
+    }
+    
+    // generate dadata pop-ups replay
+    function dadataPopUpsDesktopGenerateReplay(){
+      dadataModalSuccessInit();
+    }
+    
+    //inject jQuery on page for real-time suggestion
+    function dadataAutoCity(){
+        //jquery to dadata
+        const scriptHeaderDadataJquery = document.createElement('script');
+        scriptHeaderDadataJquery.async = false;
+        scriptHeaderDadataJquery.innerHTML = `
+        jQuery(document).ready(function($){
+              let token = "7d7a4b089cea1b122a5a6e748afc75458f420444";
+              let type  = "address";
+              let $city = $("#dadataHeaderCity");
+              let $address = $("#address") ;
+              
+              function iplocate() {
+                let serviceUrl = "https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address";
+                let params = {
+                  type: "GET",
+                  contentType: "application/json",
+                  headers: {
+                    "Authorization": "Token " + token
+                  }
+                };
+                return $.ajax(serviceUrl, params);
+              }
+              
+              // город и населенный пункт
+              $city.suggestions({
+                token: token,
+                type: type,
+                hint: false,
+                bounds: "city",
+                constraints: {
+                  locations: "city",
+                },
+              });
+    
+              // console.warn( '$city.suggestions ')
+              // console.warn( $city.suggestions() )
+          });
+        `;
+       
+        document.body.appendChild(scriptHeaderDadataJquery);
+    }
+    
+    function searchModalToggle() {
+      const searchForm = document.querySelectorAll('form[action="/search"]');
+      let settingBtn, settingsModalWrapper;
+
+      if (searchForm !== null) {
+        searchForm.forEach(item => {
+          settingBtn = item.querySelector('.toggle-settings');
+          if (settingBtn !== null) {
+            
+            settingBtn.addEventListener('click', function (e) {
+              e.preventDefault();
+              settingsModalWrapper = e.target.parentElement.querySelector('.search__modal-wrapper');
+              settingsModalWrapper.classList.toggle("search__modal-wrapper--visible");
+              this.classList.toggle("search__setting--active");
+            });
+          }
+        });
+        
+
+        document.onclick = function (e) {
+          searchForm.forEach(item => {
+            settingsModalWrapper = item.querySelector('.search__modal-wrapper');
+            settingBtn = item.querySelector('.toggle-settings');
+            if (settingsModalWrapper !== null) {
+              if (!settingsModalWrapper.contains(e.target) && !e.target.classList.contains('toggle-settings') || e.target.classList.contains('search__modal-close')) {
+                settingsModalWrapper.classList.remove("search__modal-wrapper--visible");
+                settingBtn.classList.remove("search__setting--active");
+              }
+            }
+          });
+        }
+      }
+    }
+    searchModalToggle();

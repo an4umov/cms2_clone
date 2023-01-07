@@ -177,7 +177,7 @@ class ProductOffersWidget extends Widget
             }
 
             $article['products'] = [];
-            $query = PriceList::find()->select(['manufacturer', 'quality', 'cross_type', 'commentary', 'code', 'price', 'availability', PriceList::PRODUCT_KEY,])->where([PriceList::tableName().'.article_number' => $article['number'],])->asArray();
+            $query = PriceList::find()->select(['manufacturer', 'quality', 'cross_type', 'commentary', 'code', 'price', 'availability', 'delivery_code', PriceList::PRODUCT_KEY,])->where([PriceList::tableName().'.article_number' => $article['number'],])->asArray();
             $subQuery = (new Query())
                 ->select('offer_name')
                 ->from(SpecialOffers::tableName())
@@ -194,24 +194,20 @@ class ProductOffersWidget extends Widget
                 }
                 $article['products'][] = $product;
             }
-            if ($article['price'] != 0) {
-                $data[$article['number']] = $article;
-            } else {
-                $data_noprice[$article['number']] = $article;
+
+            $data[$article['number']] = $article;
+
+            $title_noprice = '';
+            if ($article['price'] == 0) {
+                $title_noprice = 'Товарные предложения не в наличии';
             }
         }
-        // $price = array_column($data, 'price');
-        // sort($price);
-        // echo '<pre>';
-        // print_r($data);
-        // exit();
-        
         if(count($data) > 0 || count($data_noprice) > 0) {
             return $this->render('product_offers', [
                 self::PARAM_TITLE => $this->title,
                 'data' => $data,
-                'data_noprice' => $data_noprice,
-                'title_noprice' => 'Товарные предложения не в наличии',
+                //'data_noprice' => $data_noprice,
+                'title_noprice' => $title_noprice,
                 'isPage' => $this->isPage,
                 'number' => $this->number,
                 'pagination' => $pagination,
@@ -221,5 +217,6 @@ class ProductOffersWidget extends Widget
                 'text' => 'К сожалению ничего не найдено'
             ]);
         }
+
     }
 }

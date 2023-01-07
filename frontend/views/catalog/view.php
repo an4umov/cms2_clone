@@ -125,10 +125,6 @@ $this->title = $model->name;
         <? endif; ?>
     </section>
 
-
-
-    <!-- ------- DESKTOP ------- -->
-    <!-- ------- DESKTOP ------- -->
     <!-- ------- DESKTOP ------- -->
     <section class="shop-catalog-desktop">
         <!-- First Level of Catalog -->

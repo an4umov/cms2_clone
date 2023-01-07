@@ -27,7 +27,7 @@ use yii\web\NotFoundHttpException;
 
 class ShopController extends Controller
 {
-    public function actionVendor(string $number)
+    public function actionVendor(string $shop = null, string $menu = null, string $tag = null, string $alias = null, string $number, string $query = null)
     {
         $model = CatalogHelper::getArticleModelByNumber($number);
 
@@ -35,13 +35,16 @@ class ShopController extends Controller
             throw new NotFoundHttpException('Страница не найдена');
         }
 
+        $breadcrumbs = $this->_breadcrumbs($shop, $menu, $tag, $alias, $number, $query);
+
         return $this->render('vendor', [
             'model' => $model,
             'title' => $model->title ? $model->title : $model->name,
+            'breadcrumbs' => $breadcrumbs,
         ]);
     }
 
-    public function actionProduct(string $number, string $key)
+    public function actionProduct(string $shop = null, string $menu = null, string $tag = null, string $alias = null, string $number, string $key, string $query = null)
     {
         $product = CatalogHelper::getCatalogModelByProductKey($key);
         $model = CatalogHelper::getArticleModelByNumber($number);
@@ -49,21 +52,14 @@ class ShopController extends Controller
             throw new NotFoundHttpException('Страница не найдена');
         }
 
+        $breadcrumbs = $this->_breadcrumbs($shop, $menu, $tag, $alias, $number, $query);
+
         return $this->render('/vendor/view', [
             'product' => $product,
-            'model' => $model
+            'model' => $model,
+            'breadcrumbs' => $breadcrumbs,
         ]);
     }
-
-    // public function actionProduct(string $code)
-    // {
-    //     $key = Yii::$app->request->get('id');
-
-    //     return $this->render('product', [
-    //         'code' => $code,
-    //         'key' => $key,
-    //     ]);
-    // }
 
     /**
      * @param        $alias
@@ -84,6 +80,62 @@ class ShopController extends Controller
             'model' => $model,
             'shop' => $shop,
         ]);
+    }
+
+    private function _breadcrumbs(string $shop = null, string $menu = null, string $tag = null, string $alias = null, string $number, string $query = null) : array
+    {
+
+        if (!empty($shop)) {
+            $department = DepartmentHelper::getDepartmentByUrl($shop);
+            if (empty($department->default_menu_id)) {
+                throw new NotFoundHttpException('Не указано меню по умолчанию для департамента');
+            }
+
+            $isGroupDepartment = CatalogHelper::isGroupDepartment($shop);
+
+            $pageData = [];
+            $pageData['title'] = $department->name;
+            $pageData['content'] = '';
+
+            $breadcrumbs = [
+                ['label' => $isGroupDepartment ? 'Группы товаров' : 'Модели авто', 'url' => $isGroupDepartment ? '/departments' : '/models',],
+                ['label' => $department->name, 'url' => Url::to(['shop/shop', 'shop' => $department->url,])],
+            ];
+
+            if (!empty($menu)) {
+                if (!CatalogHelper::isCatalogCode($menu)) {
+                    $menuModel = DepartmentHelper::getDepartmentMenuByUrl($department->id, $menu);
+                    $breadcrumbs[] = ['label' => $menuModel->name, 'url' => Url::to(['shop/shop', 'shop' => $department->url, 'menu' => $menuModel->url,])];
+                    $pageData['title'] .= ' / '.$department->name;
+
+                    if (!empty($tag)) {
+                        if (CatalogHelper::isCatalogCode($tag)) {
+                            $catalogCode = $tag;
+                            $tag = '';
+                        } else {
+                            $tagModel = DepartmentHelper::getDepartmentMenuTagByUrl($menuModel->id, $tag);
+                            $breadcrumbs[] = ['label' => $tagModel->name, 'url' => Url::to(['shop/shop', 'shop' => $department->url, 'menu' => $menuModel->url, 'tag' => $tagModel->url,])];
+                            $pageData['title'] .= ' / '.$tagModel->name;
+                        }
+                    }
+                }
+            }
+
+            if ($catalogCode) {
+                $catalogCodeModel = CatalogHelper::getCatalogModelByCode($catalogCode);
+                $breadcrumbs[] = ['label' => $catalogCodeModel->name, 'url' => Url::to(CatalogHelper::getBaseCatalogRoute($department, $menu, $tag, $catalogCode))];
+            }
+
+            if ($alias) {
+                $breadcrumbs[] = ['label' => $model['title'], 'url' => Url::to(CatalogHelper::getBaseCatalogRoute($department, $menu, $tag, $catalogCode))];
+            }
+        }
+        if (!empty($query)) {
+            $breadcrumbs[] = ['url' => '/search?text='.$query, 'label' => 'Назад к результатам поиска'];
+        }
+        $breadcrumbs[] = ['label' => ''];
+
+        return $breadcrumbs;
     }
 
     /**

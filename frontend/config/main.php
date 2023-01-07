@@ -67,12 +67,15 @@ return [
             'showScriptName' => false,
             'rules' => [
                 '/catalog/offers/<code>' => 'catalog/offers', // товарные предложения через AJAX
+                //'/catalog/offers/<code>' => 'catalog/offers', // товарные предложения через AJAX
                 '/catalog/<code>' => 'catalog/view', //страница Каталога
 
                 '/departments' => 'catalog/departments', //Группы товаров
                 '/models' => 'catalog/models', //Модели авто
 
-                
+                '/dep/<shop:\H+>/<menu:\H+>/<tag:\H+>/<number>/<key>' => 'shop/product', //отдельная страница товара
+                '/dep/<shop:\H+>/<menu:\H+>/<tag:\H+>/<number>' => 'shop/vendor', //страница Артикула
+
                 '/product/<number>' => 'shop/vendor', //страница Артикула
                 '/product/<number>/<key>' => 'shop/product', //отдельная страница товара
 

@@ -24,7 +24,7 @@ $cartImages = [];
 $isEmpty = empty($cartItems = $cart->getItems());
 
 foreach ($cartItems as $item) {
-    $cartImages[$item->getId()] = Html::img('/img/'.Catalog::IMAGE_NOT_AVAILABLE_180);
+    $cartImages[$item->getId()] = '/img/'.Catalog::IMAGE_NOT_AVAILABLE_180;
 
     $images = CatalogHelper::scanCatalogImages($item->getProduct()->article_number);
     if ($images) {
@@ -55,37 +55,37 @@ $errors = \Yii::$app->session->getFlash('errors')[0];
     <!-- title + reload-btn BLOCK FROM CART.HTML -->
     <div class="cart__title-inner" style="width: 800px">
         <h1 class="cart__title">Проверка информации</h1>
-        <a href="/cart" class="cart__refresh-btn" style="min-width: 300px; background-position: 7% 50%;">Изменить состав Корзины</a>
+        <a href="/cart" class="cart__light-cart-btn" style="min-width: 300px; background-position: 7% 50%;">Изменить состав Корзины</a>
     </div>
     <!-- mobile products -->
     <ul class="cart__mobile-products">
         <? foreach($cartItems as $item): ?>
         <? $product = $item->getProduct(); ?>
         <!-- cart product -->
-        <li class="cart__mobile-product cart-mobile-product" data-key="<?= $product->key ?>" data-availability="<?= $product->availability ?>">
+        <li class="cart__mobile-product cart-confirmation-mobile-product" data-key="<?= $product->key ?>" data-availability="<?= $product->availability ?>">
             <!-- description -->
-            <div class="cart-mobile-product__inner">
-                <div class="cart-mobile-product__picture">
+            <div class="cart-confirmation-mobile-product__inner">
+                <div class="cart-confirmation-mobile-product__picture">
                     <a href="<?= Url::to(['shop/vendor', 'number' => $product->product_code,])?>"><?= Html::img($cartImages[$item->getId()]) ?></a>
                 </div>
-                <div class="cart-mobile-product__description">
-                    <div class="cart-mobile-product__description-inner">
+                <div class="cart-confirmation-mobile-product__description">
+                    <div class="cart-confirmation-mobile-product__description-inner">
                         <div class="cart-mobile-product__vendor-code">Артикул: <span><?= $product->article_number ?></span></div>
                         <div class="cart-mobile-product__manufactor"><?= $product->manufacturer ?></div>
                     </div>
                     <!-- title -->
-                    <div class="cart-mobile-product__title">
+                    <div class="cart-confirmation-mobile-product__title">
                         <?= $product->article->name ?>
                     </div>
                     <!-- delivery -->
-                    <div class="cart-mobile-product__delivery">
+                    <div class="cart-confirmation-mobile-product__delivery">
                         <div class="cart-mobile-product__shop">lr.ru - <?= $product->availability ?> <? if (is_numeric($product->availability)): ?><span>шт</span><? endif; ?></div>
                     </div>
                 </div>
             </div>
             <!-- cost -->
-            <div class="cart-mobile-product__cost-inner">
-                <div class="cart-mobile-product__cost">стоимость:<p><?= CatalogHelper::formatPrice($item->getCost()) ?></p></div>
+            <div class="cart-confirmation-mobile-product__cost-inner">
+                <div class="cart-confirmation-mobile-product__cost">стоимость:<p><?= CatalogHelper::formatPrice($item->getCost()) ?></p></div>
             </div>
         </li>
         <div class="cart__mobile-product-separator"></div>

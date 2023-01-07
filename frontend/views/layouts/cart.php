@@ -82,13 +82,13 @@ $cartData = CartHelper::getCartSettingTreeData()[0];
 								if ($value['is_active']) {
 						?>
 						<li class="header-cart-mobile__nav-item <?= $activeAction === $type ? 'header-cart-mobile__nav-item--current' : '' ?><?= $disabledDesktopClass ?>">
-							<a href="/cart/<?=$urlType?>" data-form-id="" <? if (!empty($urlType)) { ?>onclick="cartFormSubmit('shop_order_form_'+this.getAttribute('data-form-id'), this)"<? } ?>><?=$value['name']?></a>
+							<a href="/cart/<?=$urlType?>" data-form="shop_order_form_1" <? if (!empty($urlType)) { ?>onclick="cartFormSubmit('', this)"<? } ?>><?=$value['name']?></a>
 						</li>
 						<?php } } ?>
 					</ul>
 					<!-- user -->
 					<div class="header-cart-mobile__user">
-						<a href="" class="header-cart-mobile__favorites">
+						<a href="/favorite" class="header-cart-mobile__favorites">
 							<img src="/img/favorites-icon.svg" alt="">
 							<span><?= $favoriteCount ?></span>
 						</a>
@@ -99,12 +99,12 @@ $cartData = CartHelper::getCartSettingTreeData()[0];
 						<div class="header-cart-mobile__hamburger">
 							<div class="header-cart-mobile__hamburger-btn">
 								<a class="header-cart-mobile__hamburger-btn-icon">
-									<span class="hb-line-1"></span>
-									<span class="hb-line-2"></span>
-									<span class="hb-line-3"></span>
+									<span class="hbc-line line-1"></span>
+                                	<span class="hbc-line line-2"></span>
+                                	<span class="hbc-line line-3"></span>
 								</a>
 							</div>
-							<div class="header-cart-mobile__hamburger-menu" style="display: none;">
+							<div class="header-cart-mobile__hamburger-menu">
 								<!-- <div class="header-cart-mobile__hamburger-enter"><a href="#">Вход</a></div> -->
 								<ul class="header-cart-mobile__hamburger-links">
 									<li class="header-cart-mobile__hamburger-link"><a href="#">Faq</a></li>
@@ -183,6 +183,38 @@ $cartData = CartHelper::getCartSettingTreeData()[0];
 				</div>
 			</div>
 		</div>
+
+		<div class="header-contact-us">
+            <div class="header-contact-us__blur"></div>
+            <div class="header-contact-us__wrapper">
+                <div class="header-contact-us__close"></div>
+                <div class="header-contact-us__title">
+                    Связаться с нами
+                </div>
+                <div class="header-contact-us__subtitle">
+                    По телефону:
+                </div>
+                <ul class="header-contact-us__numbers">
+                    <li class="header-contact-us__number">
+                        <a href="tel:+74956496060"><?= $headerSettings['phone'] ?></a>
+                    </li>
+                    <li class="header-contact-us__number">
+                        <a href="tel:+74956496060"><?= $headerSettings['phone'] ?></a>
+                    </li>
+                </ul>
+                <div class="header-contact-us__subtitle">
+                    В мессенджерах:
+                </div>
+                <ul class="header-contact-us__app-links">
+                    <li class="header-contact-us__app-link header-contact-us__app-link--whatsapp">
+                        <a href=""></a>
+                    </li>
+                    <li class="header-contact-us__app-link header-contact-us__app-link--telegram">
+                        <a href=""></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
 	</header>
 
 	<?= \common\widgets\Alert::widget(['isBackend' => false, 'view' => $this,]) ?>

@@ -4,6 +4,7 @@ use common\components\helpers\CatalogHelper;
 use \common\components\helpers\ContentHelper;
 use common\models\Catalog;
 use yii\helpers\Html;
+use yii\widgets\Breadcrumbs;
 
 /**
  * @var \yii\web\View $this
@@ -11,14 +12,24 @@ use yii\helpers\Html;
  * @var \common\models\Articles $model
  */
 
-$this->title = $model->name;
+$this->title = $model->title;
 
 $images = CatalogHelper::scanCatalogImages($model->number);
 if (!$images) {
     $images[] = '/img/'.Catalog::IMAGE_NOT_AVAILABLE_180;
 }
-
-
+if (count($breadcrumbs) > 1) {
+    echo Breadcrumbs::widget([
+        'options' => ['class' => 'breadcrumbs',],
+        'itemTemplate' => "<li>{link}</li>\n",
+        'encodeLabels' => false,
+        'homeLink' => [
+            'label' => '',
+            'url' => '/',
+        ],
+        'links' => $breadcrumbs,
+    ]);
+}
 ?>
 <!--Single-offer-vendor-page-->
 <section class="single-offer-vendor-page">
@@ -58,26 +69,35 @@ if (!$images) {
                 <div class="activeSlide__next-slide"></div>
             </div>
 
-            <div class="vendor-slider__inner">
-                <div class="vendor-slider__thumbnails">
-                    <div class="vendor-slider__thumbnails-inner"></div>
-                    <div class="vendor-slider__control vendor-slider__control--prev"></div>
-                    <div class="vendor-slider__control vendor-slider__control--next"> </div>
-                </div>
-
-            </div>
+            <div class="vendor-slider__thumbnails-inner"></div>
         </div>
+        
         <div class="single-offer-vendor-page__description single-vendor-description">
             <div class="single-vendor-description__vendor">
                 Артикул: <span><?= $model->number ?></span>
             </div>
             <div class="single-vendor-description__text">
-                <?= $model->description ?>
+                <?php 
+                    $description = nl2br(htmlentities($model->description, ENT_QUOTES, 'UTF-8'))
+                ?>
+                <?= $description ?>
             </div>
             <div class="single-vendor-description__panel">
-                <?= ContentHelper::generatePanelAskButton() ?>
-                <?= ContentHelper::generatePanelShareButton() ?>
-                <?= ContentHelper::generatePanelFavoriteButton() ?>
+                <a href="#" class="single-vendor-description__panel--ask">
+                        <div class="single-vendor-description__panel--ask-tip">
+                            Задать вопрос
+                        </div>
+                    </a>
+                    <a href="#" class="single-vendor-description__panel--share">
+                        <div class="single-vendor-description__panel--share-tip">
+                            Поделиться
+                        </div>
+                    </a>
+                    <a class="single-vendor-description__panel--favorite" data-key="<?=$model->number?>">
+                        <div class="single-vendor-description__panel--favorite-tip">
+                            в Избранное
+                        </div>
+                    </a>
             </div>
         </div>
     </div>

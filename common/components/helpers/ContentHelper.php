@@ -3032,95 +3032,112 @@ class ContentHelper
                 break;
             case Block::GLOBAL_TYPE_SLIDER_CAROUSEL:
                 $isAutoRotation = false;
-                $rotationType = $delay = '';
-
+                $delay = '';
+                $sliderHeight = [];
+                
                 foreach ($fields as $field) {
                     $value = $json[$field['id']] ?? '';
-                    
-                    switch ($field['type']) {
-                        case BlockField::TYPE_TEXT:
-                            if ($field['name'] === 'Высота(Desktop)') {
-                                $sliderHeight['desktop'] = (string)$value;
-                            } elseif ($field['name'] === 'Высота(Tablet)') {
-                                $sliderHeight['tablet'] = (string)$value;
-                            } elseif ($field['name'] === 'Высота(Mobile)') {
-                                $sliderHeight['mobile'] = (string)$value;
-                            } else {
-                                $delay = (string) $value;
-                            }
-                            break;
-                        case BlockField::TYPE_BOOL:
-                            $likeHome = (string)$value;
-                            break;
-                        case BlockField::TYPE_LIST:
-                            if (!empty($field['list'])) {
-                                $id = 'slider-'.$field['id'];
-                                $items = [];
+                    if($field['type'] == 'digit') {
+                        $delay = $value;
+                    }
+                    if ($field['type'] == 'list' || $field['type'] == 'radio') {
+                        if ($field['type'] == 'radio' && isset($json[$field['id']])) {
+                            $heightKey = 0;
+                            $sliderType = '';
+                            // 368 Слайдер "Как для Главной" во всю ширину
+                            // 369 Слайдер "Как для Главной" с обрезкой по ширине 1140px
+                            // 370 Слайдер с произвольной высотой, на всю ширину
+                            // 371 Слайдер с произвольной высотой, с обрезкой по ширине 1140px
+                            if (isset($json['radio_type_list'][0]['radio_type'])) {
+                                $sliderType = $json['radio_type_list'][0]['radio_type'];
+                                if ($sliderType == 370 || $sliderType == 371) {
+                                    foreach ($json[$sliderType] as $radioTypeFileds) {
 
-                                if (is_array($value) && !empty($value)) {
-                                    $sortValue = [];
-                                    $index = 0;
-                                    foreach ($value as $valueID => $valueItem) {
-                                        $fieldSort = isset($valueItem[Content::SORT_KEY]) ? $valueItem[Content::SORT_KEY] : $valueID;
-                                        $sortValue[$fieldSort] = $valueItem;
-                                        
-                                    }
-                                    ksort($sortValue);
-                                    unset($value);
-                                    foreach ($sortValue as $valueItem) {
-                                        $pageID = 0;
-                                        /** @var BlockFieldList $item */
-                                        foreach ($field['list'] as $key => $item) {
-                                            $val = (is_array($valueItem) && isset($valueItem[$item->id])) ? $valueItem[$item->id] : '';
-                                            switch ($item->type) {
-                                                case BlockField::TYPE_IMAGE:
-                                                    if ($item->name === 'Картинка, desktop') {
-                                                        $data[$index]['img']['desktop'] = (string)$val;
-                                                    } elseif ($item->name === 'Картинка, mobile') {
-                                                        $data[$index]['img']['mobile'] = (string)$val;
-                                                    } elseif ($item->name === 'Картинка, wide2k') {
-                                                        $data[$index]['img']['wide2k'] = (string)$val;
-                                                    }
-                                                    break;
-                                                case BlockField::TYPE_TEXTAREA:
-                                                    if ($item->name === 'Заголовок') {
-                                                        $data[$index]['header'] = (string)$val;
-                                                    } elseif ($item->name === 'Текст') {
-                                                        $data[$index]['text'] = (string) $val;
-                                                    }
-                                                    break;
-                                                case BlockField::TYPE_PAGE_ID:
-                                                    if ($item->name === 'Ссылка со слайда') {
-                                                        $data[$index]['link'] = (string)$val;
-                                                    }
-                                                    break;
-                                                case BlockField::TYPE_COLOR:
-                                                    if ($item->name === 'Цвет заголовка') {
-                                                        $data[$index]['header_color'] = (string)$val;
-                                                    } elseif ($item->name === 'Цвет текста') {
-                                                        $data[$index]['text_color'] = (string) $val;
-                                                    }
-                                                    break;
-                                                case BlockField::TYPE_BOOL:
-                                                    if ($item->name === 'Оригинальный размер') {
-                                                        $data[$index]['fill_image'] = (string)$val;
-                                                    }
-                                                    break;
+                                        foreach ($radioTypeFileds as $sliderHeightVal) {
+                                            if ($heightKey == 0) {
+                                                $sliderHeight['desktop'] = $sliderHeightVal;
+                                            } elseif ($heightKey == 1) {
+                                                $sliderHeight['tablet'] = $sliderHeightVal;
+                                            } elseif ($heightKey == 2) {
+                                                $sliderHeight['mobile'] = $sliderHeightVal;
                                             }
+                                            $heightKey ++;
                                         }
-                                        $index ++;
-                                    }
-                                }
-                                if (!empty($data)) {
-                                    if ( self::getCurrentPage() == 'home' || $likeHome) {
-                                        $html .= BlockHelper::getSlider($data, $delay);
-                                    } else {
-                                        $width = '100%';
-                                        $html .= BlockHelper::getNewsSlider($data, $delay, $width, $sliderHeight, $isPage);
                                     }
                                 }
                             }
-                            break;
+                        }
+                        
+                        if (!empty($field['list'])) {
+                            $id = 'slider-'.$field['id'];
+                            $items = [];
+                            if (is_array($value) && !empty($value)) {
+                                $sortValue = [];
+                                $index = 0;
+                                foreach ($value as $valueID => $valueItem) {
+                                    $fieldSort = isset($valueItem[Content::SORT_KEY]) ? $valueItem[Content::SORT_KEY] : $valueID;
+                                    $sortValue[$fieldSort] = $valueItem;
+                                    
+                                }
+                                ksort($sortValue);
+                                unset($value);
+                                foreach ($sortValue as $valueItem) {
+                                    $pageID = 0;
+                                    /** @var BlockFieldList $item */
+                                    foreach ($field['list'] as $key => $item) {
+                                        $val = (is_array($valueItem) && isset($valueItem[$item->id])) ? $valueItem[$item->id] : '';
+                                        switch ($item->type) {
+                                            case BlockField::TYPE_IMAGE:
+                                                if ($item->name === 'Картинка, desktop') {
+                                                    $data[$index]['img']['desktop'] = (string)$val;
+                                                } elseif ($item->name === 'Картинка, tablet') {
+                                                    $data[$index]['img']['tablet'] = (string)$val;
+                                                } elseif ($item->name === 'Картинка, mobile') {
+                                                    $data[$index]['img']['mobile'] = (string)$val;
+                                                }
+                                                break;
+                                            case BlockField::TYPE_TEXTAREA:
+                                                if ($item->name === 'Заголовок') {
+                                                    $data[$index]['header'] = (string)$val;
+                                                } elseif ($item->name === 'Текст') {
+                                                    $data[$index]['text'] = (string) $val;
+                                                }
+                                                break;
+                                            case BlockField::TYPE_PAGE_ID:
+                                                if ($item->name === 'Ссылка со слайда') {
+                                                    $data[$index]['link'] = (string)$val;
+                                                }
+                                                break;
+                                            case BlockField::TYPE_COLOR:
+                                                if ($item->name === 'Цвет заголовка') {
+                                                    $data[$index]['header_color'] = (string)$val;
+                                                } elseif ($item->name === 'Цвет текста') {
+                                                    $data[$index]['text_color'] = (string) $val;
+                                                }
+                                                break;
+                                            case BlockField::TYPE_BOOL:
+                                                if ($item->name === 'Оригинальный размер') {
+                                                    $data[$index]['fill_image'] = (string)$val;
+                                                }
+                                                break;
+                                        }
+                                    }
+                                    $index ++;
+                                }
+                            }
+                        }
+                        if (!empty($data)) {
+                            if (isset($sliderType)) {
+                                if (self::getCurrentPage() == 'home' || $sliderType == 368 || $sliderType == 369) {
+                                    if (self::getCurrentPage() == 'home') {
+                                        $sliderType = 368;
+                                    }
+                                    $html .= BlockHelper::getSlider($sliderType, $data, $delay);
+                                } else {
+                                    $html .= BlockHelper::getNewsSlider($sliderType, $sliderHeight, $data, $delay, $isPage);
+                                }
+                            }
+                        }
                     }
                 }
                 break;

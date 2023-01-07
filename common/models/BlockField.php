@@ -13,8 +13,10 @@ use yii\helpers\ArrayHelper;
  * @property int $id
  * @property int $block_id
  * @property string $name
+ * @property string $name_id
  * @property string $type
  * @property string $description
+ * @property string $info
  * @property int $sort
  * @property int $created_at
  * @property int $updated_at
@@ -30,6 +32,7 @@ class BlockField extends \yii\db\ActiveRecord
     const TYPE_TEXTAREA_EXT = 'textarea_ext';
     const TYPE_IMAGE = 'image';
     const TYPE_BOOL = 'bool';
+    const TYPE_RADIO = 'radio';
     const TYPE_DATE = 'date';
     const TYPE_COLOR = 'color';
     const TYPE_GRADIENT_COLOR = 'gradient_color';
@@ -58,6 +61,7 @@ class BlockField extends \yii\db\ActiveRecord
         self::TYPE_TEXTAREA_EXT,
         self::TYPE_IMAGE,
         self::TYPE_BOOL,
+        self::TYPE_RADIO,
         self::TYPE_DATE,
         self::TYPE_COLOR,
         self::TYPE_GRADIENT_COLOR,
@@ -94,6 +98,7 @@ class BlockField extends \yii\db\ActiveRecord
             self::TYPE_TEXTAREA_EXT => 'Текст с форматом',
             self::TYPE_IMAGE => 'Картинка',
             self::TYPE_BOOL => 'Булево',
+            self::TYPE_RADIO => 'Радио кнопка (со списком полей)',
             self::TYPE_DATE => 'Дата',
             self::TYPE_COLOR => 'Цвет',
             self::TYPE_GRADIENT_COLOR => 'Градиентная заливка',
@@ -119,6 +124,7 @@ class BlockField extends \yii\db\ActiveRecord
             self::TYPE_TEXTAREA_EXT => 'label label-default',
             self::TYPE_IMAGE => 'label label-success',
             self::TYPE_BOOL => 'label label-inverse',
+            self::TYPE_RADIO => 'label label-primary',
             self::TYPE_DATE => 'label label-info',
             self::TYPE_COLOR => 'label label-warning',
             self::TYPE_GRADIENT_COLOR => 'label label-warning',
@@ -144,6 +150,7 @@ class BlockField extends \yii\db\ActiveRecord
             self::TYPE_TEXTAREA_EXT => 'fa fa-credit-card',
             self::TYPE_IMAGE => 'far fa-image',
             self::TYPE_BOOL => 'fa fa-adjust',
+            self::TYPE_RADIO => 'fas fa-dot-circle',
             self::TYPE_DATE => 'fa fa-calendar',
             self::TYPE_COLOR => 'fas fa-palette',
             self::TYPE_GRADIENT_COLOR => 'fas fa-fill-drip',
@@ -243,11 +250,11 @@ class BlockField extends \yii\db\ActiveRecord
             [['block_id', 'name'], 'required'],
             [['block_id', 'sort', 'created_at', 'updated_at', 'deleted_at'], 'default', 'value' => null],
             [['block_id', 'sort', 'created_at', 'updated_at', 'deleted_at'], 'integer'],
-            [['type', 'description',], 'string'],
+            [['type', 'description', 'info'], 'string'],
             ['type', 'in', 'range' => self::TYPES,],
             [['name'], 'string', 'max' => 128],
             [['block_id'], 'exist', 'skipOnError' => true, 'targetClass' => Block::class, 'targetAttribute' => ['block_id' => 'id',],],
-            [['sort_list', 'list', 'values_list',], 'safe',],
+            [['sort_list', 'list', 'radio', 'values_list',], 'safe',],
         ];
     }
 
@@ -260,8 +267,10 @@ class BlockField extends \yii\db\ActiveRecord
             'id' => 'ID',
             'block_id' => 'Блок',
             'name' => 'Название',
+            'name_id' => 'Текстовый ID',
             'type' => 'Тип',
             'description' => 'Пояснение к полю',
+            'info' => 'Дополнительная информация',
             'sort' => 'Сортировка',
             'created_at' => 'Создано',
             'updated_at' => 'Обновлено',
@@ -340,7 +349,7 @@ class BlockField extends \yii\db\ActiveRecord
         $saved = parent::save($runValidation, $attributeNames);
 
         if ($saved) {
-            if ($this->type === self::TYPE_LIST && !empty($this->list)) {
+            if ($this->type === self::TYPE_LIST || $this->type === self::TYPE_RADIO && !empty($this->list)) {
                 $sortIndex = 1;
                 $existsList = $this->getBlockFieldLists()->indexBy('id')->all();
 

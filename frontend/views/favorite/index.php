@@ -15,21 +15,32 @@ $class = $isPage ? 'offers-vendor-catalog-mobile' : 'offers-catalog-mobile';
 
 <? if (empty($data)): ?>
     <!-- Блок с информацией об отсутствии товарных предложений -->
-    <div class="single-offer-vendor-page__no-offers-info no-offers-info">
-        <div class="no-offers-info__content">
-            <div class="no-offers-info__first-paragraph">
-                <img class="no-offers-info__picture" src="/img/offers/no-offers-info-pic.png" alt="no-offers">
-                <p>В избранном пока ничего нет</p>
+    <div class="no-offers-info-banner">
+        <div class="no-offers-info-banner__title">
+            В избранном пока ничего нет
+        </div>
+        <div class="no-offers-info-banner__inner">
+            <div class="no-offers-info-banner__image">
+                <img src="/img/no-offer-new-illustration.svg" alt="">
             </div>
-            <div class="no-offers-info__second-paragraph">
-                кликайте по сердечку в<a class="send-offer-request" href="/models">каталоге</a>
+            <div class="no-offers-info-banner__wrapper">
+                <div class="no-offers-info-banner__info">
+                    Kликайте по сердечку в каталоге ;)
+                </div>
+                <a href="/models" class="no-offers-info-banner__btn"> Перейти в каталог </a>
             </div>
         </div>
-        <div class="no-offers-info__shadow"></div>
     </div>
 <? else: ?>
 
     <section class="<?= $class ?>">
+        <div class="favorite-to-mail-form__wrapper">
+            <?= Html::beginTag('form', ['class' => 'favorite-to-mail-form']) ?>
+            <?= Html::input('email', 'email', '',['placeholder' => 'Введите email', 'class' => 'favorite-to-mail-form__input'],) ?>
+            <?= Html::beginTag('div', ['class' => 'favorite-to-mail-form__button']) ?>Отправить<?= Html::endTag('div') ?>
+            <?= Html::beginTag('div', ['class' => 'favorite-to-mail-form__helper']) ?>Отправить список Избранного на почту<?= Html::endTag('div') ?>
+            <?= Html::endTag('form') ?>
+        </div>
         <? if ($isPage): ?>
             <?= Html::tag('h2', $title, ['class' => 'offers-vendor-catalog-mobile__title',]) ?>
         <? else: ?>
@@ -42,6 +53,15 @@ $class = $isPage ? 'offers-vendor-catalog-mobile' : 'offers-catalog-mobile';
                 <?= CatalogHelper::getCardProductMobileHtml($item) ?>
             <? endif; ?>
         <? endforeach; ?>
+        <? if(count($data) > 5) { ?>
+        <div class="favorite-to-mail-form__wrapper">
+            <?= Html::beginTag('form', ['class' => 'favorite-to-mail-form']) ?>
+            <?= Html::input('email', 'email', '',['placeholder' => 'Введите email', 'class' => 'favorite-to-mail-form__input'],) ?>
+            <?= Html::beginTag('div', ['class' => 'favorite-to-mail-form__button']) ?>Отправить<?= Html::endTag('div') ?>
+            <?= Html::beginTag('div', ['class' => 'favorite-to-mail-form__helper']) ?>Отправить список Избранного на почту<?= Html::endTag('div') ?>
+            <?= Html::endTag('form') ?>
+        </div>
+        <? } ?>
     </section>
     <? $class = $isPage ? 'offers-vendor-catalog-desktop' : 'offers-catalog-desktop'; ?>
     <section class="<?= $class ?>">
@@ -88,5 +108,26 @@ $class = $isPage ? 'offers-vendor-catalog-mobile' : 'offers-catalog-mobile';
     </section>
     <br>
     <br>
-    <?= \yii\widgets\LinkPager::widget(['pagination' => $pagination,]) ?>
+    <section class="pagination">
+        <?= \yii\widgets\LinkPager::widget([
+            'pagination' => $pagination,
+            'prevPageCssClass' => 'pagination__prev-btn',
+            'nextPageCssClass' => 'pagination__next-btn',
+
+            'prevPageLabel' => '',
+            'nextPageLabel' => '',
+            'pageCssClass' => 'pagination__item',
+            'linkContainerOptions' => [
+                'class' => ''
+            ],
+            'linkOptions' => [
+            ],
+            'activePageCssClass' => 'pagination__item--active',
+            'disabledPageCssClass' => '',
+            'options' => [
+                'class' => 'pagination__list',
+            ]
+        ]) ?>
+    </section>
+
 <? endif; ?>

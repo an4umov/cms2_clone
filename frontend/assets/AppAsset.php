@@ -24,9 +24,11 @@ class AppAsset extends AssetBundle
 //        echo $key;
 
         $this->css = [
-            'css/style.css?'.$version,
+            'css/style.css?v='.time(),
         ];
         $this->js = [
+            'js/third-party/jquery.min.js?'.$version,
+            'js/third-party/jquery.suggestions.min.js?'.$version,
             'js/script.js?'.$version,
         ];
         $this->depends = [

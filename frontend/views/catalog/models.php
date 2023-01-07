@@ -28,7 +28,7 @@ if (!empty($last['label'])) {
     $this->title = 'Модели авто';
 }
 ?>
-<? if (count($breadcrumbs) > 1): ?>
+<? if (count($breadcrumbs) > 0): ?>
     <?= \frontend\components\widgets\BreadcrumbsWidget::widget(['breadcrumbs' => $breadcrumbs,]); ?>
 <? endif; ?>
 

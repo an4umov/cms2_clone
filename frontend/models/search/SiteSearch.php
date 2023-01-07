@@ -11,6 +11,8 @@ class SiteSearch extends Model
 {
     const PAGESIZE = 10;
     const TEXT = 'text';
+    const SEARCH_IN_ARTICLE = 'search_in_article';
+    const SEARCH_IN_NAME = 'search_in_name';
 
     const TYPE_CONTAINS = 'contains';
     const TYPE_EQUALS = 'equals';
@@ -19,6 +21,8 @@ class SiteSearch extends Model
     const TYPES = [self::TYPE_CONTAINS, self::TYPE_EQUALS, self::TYPE_BEGIN,];
 
     public $text;
+    public $search_in_article;
+    public $search_in_name;
 //    public $type;
 //    public $search_in_url;
 //    public $search_in_title;
@@ -30,7 +34,7 @@ class SiteSearch extends Model
     public function init()
     {
         parent::init();
-
+        $this->search_in_name = true;
 //        $this->type = self::TYPE_CONTAINS;
 //        $this->search_in_url = false;
 //        $this->search_in_title = true;
@@ -70,6 +74,12 @@ class SiteSearch extends Model
             $this->text = $data[self::TEXT];
         }
 
+        if (!empty($data[self::SEARCH_IN_ARTICLE])) {
+            $this->search_in_article = true;
+        } else {
+            $this->search_in_article = false;
+        }
+
         return true;
     }
 
@@ -106,7 +116,10 @@ class SiteSearch extends Model
         $query->where('');
 
         if (!empty($this->text)) {
-            $query->andWhere(['ilike', Articles::tableName().'.number', $this->text,]);
+            $query->andWhere(['ilike', Articles::tableName().'.name', $this->text,]);
+        }
+        if (!empty($params[self::SEARCH_IN_ARTICLE])) {
+            $query->orWhere(['ilike', Articles::tableName().'.number', '%'.$this->text.'%',]);
         }
 
         return $dataProvider;

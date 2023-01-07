@@ -487,6 +487,7 @@ app.loadBlockFieldList = function (id) {
         },
         success: function(html){
             jQuery('#form-block-field-list-container').html(jQuery(html));
+            //jQuery('.blockfield-info').tinymce({    });
         },
         error: function(html){
             app.addError('Ошибка загрузки данных!');
@@ -614,7 +615,7 @@ app.addBlockFieldChange = function (e) {
     let select = jQuery(this);
     let value = select.val();
 
-    if (value === 'list') {
+    if (value === 'list' || value === 'radio') {
         let fieldID = parseInt(jQuery('#blockfield-id').val());
 
         if (!!fieldID) {

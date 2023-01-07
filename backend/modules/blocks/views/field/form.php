@@ -3,6 +3,7 @@
 use common\models\BlockField;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
+use zxbodya\yii2\tinymce\TinyMce;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\BlockField */
@@ -12,7 +13,7 @@ use yii\widgets\ActiveForm;
 $formID = 'form-block-field-'.$action;
 
 if (!$model->isNewRecord) {
-    if ($model->type === BlockField::TYPE_LIST) {
+    if ($model->type === BlockField::TYPE_LIST || $model->type === BlockField::TYPE_RADIO) {
         $js = 'app.loadBlockFieldList(' . $model->id . ');';
         $this->registerJs($js);
     } elseif ($model->type === BlockField::TYPE_VALUES_LIST) {
@@ -20,6 +21,7 @@ if (!$model->isNewRecord) {
         $this->registerJs($js);
     }
 }
+$this->registerJs("if (typeof tinyMCE !== 'undefined') { tinyMCE.remove(); }");
 ?>
 
 <div class="block-form">
@@ -37,10 +39,40 @@ if (!$model->isNewRecord) {
         <? endif; ?>
 
         <?= $form->field($model, 'name')->textInput(['maxlength' => true, 'disabled' => !$model->isNewRecord,]) ?>
+        <? if ($model->type === BlockField::TYPE_RADIO): ?>
+        <?= $form->field($model, 'name_id')->textInput(['maxlength' => true,]) ?>
+        <? endif; ?>
+
         <?= $form->field($model, 'type')->dropDownList($model->getTypeOptions(), ['prompt' => 'Выбрать...',]) ?>
         <?= $form->field($model, 'description')->textInput() ?>
+        <? if ($model->type === BlockField::TYPE_RADIO): ?>
+            <label class="control-label"><?= $model->getAttributeLabel('info')?></label>
+            <?php 
+                $tinyID = 'tinymce-widget-info-'.$model->id;
+                $settings = [
+                    'settings' => [
+                        'height' => 100,
+                        'plugins' => [
+                            "textcolor link wordcount",
+                        ],
+                        'content_css' => '/css/tinymce.css',
+                        "toolbar" => "undo redo | bold forecolor | bullist",
+                        'selector' => '#'.$tinyID,
+                        'menubar' => false,
+                    ],
+                    'name' => 'BlockField[info]',
+                    'value' => $model->info,
+                    'id' => $tinyID,
+                    'class' => 'form-control',
+                    'language' => 'ru',
+                ];
+                $description = TinyMce::widget($settings);
+                echo $description;
+            ?>
+            <br>
+        <? endif; ?>
         <div id="form-block-field-list-container">
-            <? if ($model->type === BlockField::TYPE_LIST || $model->type === BlockField::TYPE_VALUES_LIST): ?><img src="/img/loader2.gif" alt="" style="width: 22px; vertical-align: text-top; margin-right: 5px;"> Загрузка элементов списка...<? endif; ?>
+            <? if ($model->type === BlockField::TYPE_LIST || $model->type === BlockField::TYPE_VALUES_LIST || $model->type === BlockField::TYPE_RADIO): ?><img src="/img/loader2.gif" alt="" style="width: 22px; vertical-align: text-top; margin-right: 5px;"> Загрузка элементов списка...<? endif; ?>
         </div>
         <?php ActiveForm::end(); ?>
     <? else: ?>
@@ -67,4 +99,6 @@ if (!$model->isNewRecord) {
             }
         }
     });
+
+
 </script>

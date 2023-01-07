@@ -25,7 +25,7 @@ $cartImages = [];
 $isEmpty = empty($cartItems = $cart->getItems());
 
 foreach ($cartItems as $item) {
-    $cartImages[$item->getId()] = Html::img('/img/'.Catalog::IMAGE_NOT_AVAILABLE_180);
+    $cartImages[$item->getId()] = '/img/'.Catalog::IMAGE_NOT_AVAILABLE_180;
 
     $images = CatalogHelper::scanCatalogImages($item->getProduct()->article_number);
     if ($images) {
@@ -85,7 +85,7 @@ $form = ActiveForm::begin([
                 <!-- description -->
                 <div class="cart-mobile-product<?= $disabledClass ?>__inner">
                     <div class="cart-mobile-product<?= $disabledClass ?>__picture">
-                        <a href="<?= Url::to(['shop/code', 'code' => $product->product_code,])?>"><?= Html::img($cartImages[$item->getId()]) ?></a>
+                        <a href="<?= Url::to(['shop/product', 'number' => $product->article_number, 'key' => $product->key])?>"><?= Html::img($cartImages[$item->getId()]) ?></a>
                     </div>
                     <div class="cart-mobile-product<?= $disabledClass ?>__description">
                         <div class="cart-mobile-product<?= $disabledClass ?>__description-inner">
@@ -96,12 +96,12 @@ $form = ActiveForm::begin([
                         </div>
                         <!-- title -->
                         <div class="cart-mobile-product<?= $disabledClass ?>__title">
-                            <a href="<?= Url::to(['shop/code', 'code' => $product->product_code,])?>"><?= $product->article->name ?></a>
+                            <a href="<?= Url::to(['shop/product', 'number' => $product->article_number, 'key' => $product->key])?>"><?= $product->article->name ?></a>
                         </div>
                         <? if (empty($disabledClass)): ?>
                             <!-- delivery -->
                             <div class="cart-mobile-product__delivery">
-                                <div class="cart-mobile-product__shop">lr.ru - <?= $product->availability ?> <? if (is_numeric($product->availability)): ?><span>шт</span><? endif; ?></div>
+                                <div class="cart-mobile-product__shop"><?= $product->availability ?> <? if (is_numeric($product->availability)): ?><span>шт</span><? endif; ?></div>
                                 <div class="cart-mobile-product__delivery-info">Отгрузим через 2 дня</div>
                             </div>
                         <? else: ?>
@@ -117,11 +117,6 @@ $form = ActiveForm::begin([
                     <!-- cost -->
                     <div class="cart-mobile-product__cost-inner">
                         <div class="cart-mobile-product__cost">стоимость:<p><?= CatalogHelper::formatPrice($item->getCost()) ?></p></div>
-                        <div class="cart-mobile-product__quantity cart-mobile-product-quantity" style="display: none;">
-                            <div class="cart-mobile-product-quantity__btn-minus"></div>
-                            <input class="cart-mobile-product-quantity__default-input" placeholder="<?= $item->getQuantity() ?>">
-                            <div class="cart-mobile-product-quantity__btn-plus"></div>
-                        </div>
                         <!-- default-input -->
                         <div class="cart-mobile-product__quantity cart-mobile-product-quantity">
 
@@ -169,7 +164,7 @@ $form = ActiveForm::begin([
             <li class="cart__desktop-product cart-desktop-product<?= $disabledClass ?>" data-key="<?= $product->key ?>" data-availability="<?= $product->availability ?>">
                 <div class="cart-desktop-product<?= $disabledClass ?>__description-inner">
                     <div class="cart-desktop-product<?= $disabledClass ?>__picture">
-                        <a href="<?= Url::to(['shop/vendor', 'number' => $product->article_number,])?>" target="_blank"><?= Html::img($cartImages[$item->getId()]) ?></a>
+                        <a href="<?= Url::to(['shop/product', 'number' => $product->article_number, 'key' => $product->key])?>" target="_blank"><?= Html::img($cartImages[$item->getId()]) ?></a>
                     </div>
                     <!-- product description -->
                     <div class="cart-desktop-product<?= $disabledClass ?>__description">
@@ -182,13 +177,13 @@ $form = ActiveForm::begin([
                         </div>
                         <!-- title -->
                         <div class="cart-desktop-product<?= $disabledClass ?>__title">
-                            <a href="<?= Url::to(['shop/vendor', 'number' => $product->article_number,])?>" target="_blank"><?= $product->article->name ?></a>
+                            <a href="<?= Url::to(['shop/product', 'number' => $product->article_number, 'key' => $product->key])?>" target="_blank"><?= $product->article->name ?></a>
                         </div>
 
                         <? if (empty($disabledClass)): ?>
                             <!-- delivery -->
                             <div class="cart-desktop-product__delivery">
-                                <div class="cart-desktop-product__shop">lr.ru - <?= $product->availability ?> <? if (is_numeric($product->availability)): ?><span>шт</span><? endif; ?></div>
+                                <div class="cart-desktop-product__shop"><?= $product->availability ?> <? if (is_numeric($product->availability)): ?><span>шт</span><? endif; ?></div>
                                 <div class="cart-desktop-product__delivery-info">Отгрузим через 2 дня</div>
                             </div>
                         <? else: ?>

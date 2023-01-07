@@ -9,6 +9,7 @@ use common\models\Department;
 use common\models\FullPrice;
 use common\models\PriceList;
 use common\models\ReclamaStatus;
+use common\models\Delivery;
 use common\models\SettingsMainShopLevel;
 use common\models\SpecialOffers;
 use frontend\components\widgets\CatalogListWidget;
@@ -51,6 +52,52 @@ class CatalogHelper
     const COUNTER_TYPE_TYPE = 'type';
     const COUNTER_TYPE_MODEL = 'model';
     const COUNTER_TYPE_GENERATION = 'generation';
+
+    public static function generateVendorURLs($articleNumber): array
+    {
+        $request = \Yii::$app->request;
+        $params = $request->getBodyParams();
+        $query = $request->getQueryParam('text');
+
+        if (!empty($params)) {
+            $urlString = key($params);
+            $urlString = str_replace(array('/dep'), "", $urlString);
+            $urlArr = array_filter(explode('/', $urlString));
+            $finalVendorUrl = ['shop/vendor', 'shop' => $urlArr[1], 'menu' => $urlArr[2], 'tag' => $urlArr[3], 'number' => $articleNumber,];
+
+        } else {
+            if (!empty($query)) {
+                $finalVendorUrl = ['shop/vendor', 'number' => $articleNumber, 'query' => $query];
+            } else {
+                $finalVendorUrl = ['shop/vendor', 'number' => $articleNumber];
+            }
+        }
+        
+        return $finalVendorUrl;
+    }
+
+    public static function generateProductURLs($articleNumber, $productKey): array
+    {
+        $request = \Yii::$app->request;
+        $params = $request->getBodyParams();
+        $query = $request->getQueryParam('text');
+
+        if (!empty($params)) {
+            $urlString = key($params);
+            $urlString = str_replace(array('/dep'), "", $urlString);
+            $urlArr = array_filter(explode('/', $urlString));
+            $finalProductUrl = ['shop/product', 'shop' => $urlArr[1], 'menu' => $urlArr[2], 'tag' => $urlArr[3], 'number' => $articleNumber, 'key' => $productKey];
+
+        } else {
+            if (!empty($query)) {
+                $finalProductUrl = ['shop/product', 'number' => $articleNumber, 'key' => $productKey, 'query' => $query];
+            } else {
+                $finalProductUrl = ['shop/product', 'number' => $articleNumber, 'key' => $productKey];
+            }
+        }
+        
+        return $finalProductUrl;
+    }
 
     /**
      * @param int $level
@@ -320,6 +367,17 @@ class CatalogHelper
     }
 
     /**
+     * Get delivery
+     * @param string $delivery_code
+     *
+     * @return PriceList|null
+     */
+    public static function getDeliveryTimeText(string $delivery_code)
+    {
+        return Delivery::findOne(['code' => $delivery_code,]);
+    }
+
+    /**
      * @param string $code
      *
      * @return string
@@ -538,23 +596,17 @@ class CatalogHelper
     }
 
     /**
-     * @param string $code
+     * @param string $images
      *
      * @return array
      */
     public static function catalogImagesSizes(string $images) : array
     {
-        $sizes = getimagesize(Url::base(true).$images);
-        $sizes = array_slice($sizes, 0, 2);
-        foreach ($sizes as $key=> $item) {
-            if ($key == 0) {
-                $sizes['width'] = $sizes[0];
-            } else {
-                $sizes['height'] = $sizes[1];
-            }
-            unset($sizes[$key]);
-        }
+        $sizes = [];
+        list($width, $height) = getimagesize(Url::base(true).$images);
 
+        $sizes['width'] = $width;
+        $sizes['height'] = $height;
 
         return $sizes;
     }
@@ -833,6 +885,8 @@ class CatalogHelper
      */
     public static function getCardProductMobileHtml(array $article) : string
     {
+        $finalVendorUrl = self::generateVendorURLs($article['number']);
+
         $stocks = $filterHide = $favIcon = '';
         $isFavorite = \common\components\helpers\FavoriteHelper::isFavorite($article['number']);
         if (count($article['products']) <= 1) {
@@ -847,9 +901,9 @@ class CatalogHelper
             }
         }
         if (!empty($article['image'])) {
-            $image = Html::a(Html::img($article['image']), ['shop/vendor', 'number' => $article['number'],]);
+            $image = Html::a(Html::img($article['image']), $finalVendorUrl);
         } else {
-            $image = Html::a(Html::img('/img/'.Catalog::IMAGE_NOT_AVAILABLE_180), ['shop/vendor', 'number' => $article['number'],]);
+            $image = Html::a(Html::img('/img/'.Catalog::IMAGE_NOT_AVAILABLE_180), $finalVendorUrl);
         }
         $noOffersTitleClass = 'short-mobile-card__title';
         $noOffersCodeClass = 'short-mobile-card__vendor-code';
@@ -893,14 +947,28 @@ class CatalogHelper
                         <div class="mobile-filter__price offers-mobile-filter-price">
                             по цене
                             <ul class="offers-mobile-filter-price__list">
-                                <li class="offers-mobile-filter-price__item">дороже</li>
                                 <li class="offers-mobile-filter-price__item">дешевле</li>
+                                <li class="offers-mobile-filter-price__item">дороже</li>
                             </ul>
                         </div>
-                        <div class="mobile-filter__delivery-date">по сроку доставки</div>
+                        
                     </div>';
         $html .= '<div class="full-mobile-card__list">';
         foreach ($article['products'] as $product) {
+            $delivery_text = '';
+            $delivery_color = '';
+            if (!empty($product['delivery_code'])) {
+                $delivery_data = self::getDeliveryTimeText($product['delivery_code']);
+                $delivery_type = mb_strtolower($delivery_data['delivery']);
+                $delivery_time = mb_strtolower($delivery_data['delivery_time']);
+                if ($delivery_type == $delivery_time) {
+                    $delivery_text = $delivery_type;
+                } else {
+                    $delivery_text = $delivery_type . ', ' . $delivery_time;
+                }
+                $delivery_text = mb_convert_case($delivery_text, MB_CASE_TITLE, "UTF-8");
+                $delivery_color = $delivery_data['color'];
+            }
             $stocks = '';
             if (!empty($product['offers'])) {
                 foreach ($product['offers'] as $name => $color) {
@@ -941,8 +1009,7 @@ class CatalogHelper
                                 </div>
                             </div>
                             <div class="mobile-list-item__description mobile-description">
-                                <div class="mobile-description__shop">LR.RU</div>
-                                <div class="mobile-description__delivery"></div>
+                                <div class="mobile-description__delievery" style="color: '.$delivery_color.';">'.$delivery_text.'</div>
                                 <div class="mobile-description__quantity">'.($isAvailabilityInt ? $availability.' шт' : $availability).'</div>
                             </div>
                             <div class="mobile-list-item__buy mobile-buy">
@@ -953,45 +1020,43 @@ class CatalogHelper
     
                         <div class="mobile-list-item__info-inner mobile-info">
                             <div class="mobile-info__links">
-                                <a href="'.Url::to(['shop/product', 'number' => $article['number'], 'key' => $product[PriceList::PRODUCT_KEY]]).'" class="mobile-info__link">Перейти на страницу товара</a>
-                                <a href="'.Url::to(['shop/vendor', 'number' => $article['number'],]).'" class="mobile-info__link">все варианты поставки данного товара</a>
-                            </div>
-                            <div class="mobile-info__items">
-                                <div class="mobile-info__items-close"></div>';
-            if (!empty($product['commentary'])) {
-                                $html .= '<div class="mobile-info__item mobile-info-item">
-                                    <div class="mobile-info-item__title">
-                                        <div class="mobile-info-item__title--attention"></div>
-                                    </div>
-                                    <div class="mobile-info-item__text mobile-info-item__text--attention">'.$product['commentary'].'</div>
-                                </div>';
-            }
-            if (false) {
-                                $html .= '<div class="mobile-info__item mobile-info-item">
-                                    <div class="mobile-info-item__title">
-                                        <div class="mobile-info-item__title--replacement"> </div>
-                                    </div>
-                                    <div class="mobile-info-item__text mobile-info-item__text--attention">
-                                        Дополнительная информация относительно замены
-                                    </div>
-                                </div>';
-            }
-            if ($product['code'] === PriceList::CODE_PRICE_LR_RU) {
-                                $html .= '<div class="mobile-info__item mobile-info-item">
-                                    <div class="mobile-info-item__title">
-                                        <div class="mobile-info-item__title--showroom"></div>
-                                    </div>
-                                    <div class="mobile-info-item__text mobile-info-item__text--attention">Товар имеется в шоу-руме LR.RU</div>
-                                </div>';
-            }
-            if (false) {
-                                $html .= '<div class="mobile-info__item mobile-info-item">
-                                    <div class="mobile-info-item__title mobile-info-item__title--producer">Allmakes</div>
-                                    <div class="mobile-info-item__text">Allmakes - Английский  производитель запасных частей  из Лондона.<a href="">Подробнее<span>&ensp;>></span></a></div>
-                                </div>';
-            }
-            $html .= '</div>
-                        </div>
+                                <a href="'.Url::to(self::generateProductURLs($article['number'], $product[PriceList::PRODUCT_KEY])).'" class="mobile-info__link">Перейти на страницу товара</a>
+                                <a href="'.Url::to($finalVendorUrl).'" class="mobile-info__link">все варианты поставки данного товара</a>
+                            </div>';
+                            if ($product['code'] === PriceList::CODE_PRICE_LR_RU || !empty($product['commentary']) || !empty($product['quality'])) {
+                                $html .= '<div class="mobile-info__items"><div class="mobile-info__items-close"></div>';
+                                if (!empty($product['commentary'])) {
+                                    $html .= '
+                                    <div class="mobile-info__item mobile-info-item">
+                                        <div class="mobile-info-item__title">
+                                            <div class="mobile-info-item__title--attention"></div>
+                                        </div>
+                                        <div class="mobile-info-item__text mobile-info-item__text--attention">'.$product['commentary'].'</div>
+                                    </div>';
+                                }
+                                if ($product['code'] === PriceList::CODE_PRICE_LR_RU) {
+                                    $html .= '
+                                    <div class="mobile-info__item mobile-info-item">
+                                        <div class="mobile-info-item__title">
+                                            <div class="mobile-info-item__title--showroom"></div>
+                                        </div>
+                                        <div class="mobile-info-item__text mobile-info-item__text--attention">Товар имеется в шоу-руме LR.RU</div>
+                                    </div>';
+                                }
+                                if (!empty($product['quality'])) {
+                                    $html .= '
+                                        <div class="mobile-info__item mobile-info-item">
+                                            <div class="mobile-info-item__title">
+                                                '.$product['quality'].'
+                                            </div>
+                                            <div class="mobile-info-item__text">
+                                            </div>
+                                        </div>
+                                    ';
+                                }
+                                $html .= '</div>';
+                            }
+                            $html .= '    </div>
                     </div>';
         }
         $html .= '</div>';
@@ -1009,16 +1074,36 @@ class CatalogHelper
      */
     public static function getCardProductMobilePageHtml(array $article) : string
     {
+        $finalVendorUrl = self::generateVendorURLs($article['number']);
         $html = '
         <div class="offers-vendor-catalog-mobile__offer">
             <div class="offer-card-mobile__full">
                 <div class="full-mobile-card__filter mobile-filter">
-                    <div>Сортировать:</div>
-                    <div class="mobile-filter__price">По цене</div>
-                    <div class="mobile-filter__date">По дате</div>
+                    <p class="mobile-filter__text">Сортировать:</p>
+                    <div class="mobile-filter__price offers-mobile-filter-price">
+                            по цене
+                            <ul class="offers-mobile-filter-price__list">
+                                <li class="offers-mobile-filter-price__item">дешевле</li>
+                                <li class="offers-mobile-filter-price__item">дороже</li>
+                            </ul>
+                        </div>
                 </div>';
 
         foreach ($article['products'] as $product) {
+            $delivery_text = '';
+            $delivery_color = '';
+            if (!empty($product['delivery_code'])) {
+                $delivery_data = self::getDeliveryTimeText($product['delivery_code']);
+                $delivery_type = mb_strtolower($delivery_data['delivery']);
+                $delivery_time = mb_strtolower($delivery_data['delivery_time']);
+                if ($delivery_type == $delivery_time) {
+                    $delivery_text = $delivery_type;
+                } else {
+                    $delivery_text = $delivery_type . ', ' . $delivery_time;
+                }
+                $delivery_text = mb_convert_case($delivery_text, MB_CASE_TITLE, "UTF-8");
+                $delivery_color = $delivery_data['color'];
+            }
             $stocks = '';
             if (!empty($product['offers'])) {
                 foreach ($product['offers'] as $name => $color) {
@@ -1059,8 +1144,7 @@ class CatalogHelper
                                 </div>
                             </div>
                             <div class="mobile-list-item__description mobile-description">
-                                <div class="mobile-description__shop">LR.RU</div>
-                                <div class="mobile-description__delivery"></div>
+                                <div class="mobile-description__delievery" style="color: '.$delivery_color.';">'.$delivery_text.'</div>
                                 <div class="mobile-description__quantity">'.($isAvailabilityInt ? $availability.' шт' : $availability).'</div>
                             </div>
                             <div class="mobile-list-item__buy mobile-buy">
@@ -1072,43 +1156,41 @@ class CatalogHelper
                         <div class="mobile-list-item__info-inner mobile-info">
                             <div class="mobile-info__links">
                                 <a href="'.Url::toRoute(['shop/vendor', 'number' => $article['number'], 'key' => $product[PriceList::PRODUCT_KEY]]).'" class="mobile-info__link">Перейти на страницу товара</a>
+                            </div>';
+            if ($product['code'] === PriceList::CODE_PRICE_LR_RU || !empty($product['commentary']) || !empty($product['quality'])) {
+                $html .= '<div class="mobile-info__items"><div class="mobile-info__items-close"></div>';
+                if (!empty($product['commentary'])) {
+                    $html .= '
+                    <div class="mobile-info__item mobile-info-item">
+                        <div class="mobile-info-item__title">
+                            <div class="mobile-info-item__title--attention"></div>
+                        </div>
+                        <div class="mobile-info-item__text mobile-info-item__text--attention">'.$product['commentary'].'</div>
+                    </div>';
+                }
+                if ($product['code'] === PriceList::CODE_PRICE_LR_RU) {
+                    $html .= '
+                    <div class="mobile-info__item mobile-info-item">
+                        <div class="mobile-info-item__title">
+                            <div class="mobile-info-item__title--showroom"></div>
+                        </div>
+                        <div class="mobile-info-item__text mobile-info-item__text--attention">Товар имеется в шоу-руме LR.RU</div>
+                    </div>';
+                }
+                if (!empty($product['quality'])) {
+                    $html .= '
+                        <div class="mobile-info__item mobile-info-item">
+                            <div class="mobile-info-item__title">
+                                '.$product['quality'].'
                             </div>
-                            <div class="mobile-info__items">
-                                <div class="mobile-info__items-close"></div>';
-            if (!empty($product['commentary'])) {
-                                $html .= '<div class="mobile-info__item mobile-info-item">
-                                    <div class="mobile-info-item__title">
-                                        <div class="mobile-info-item__title--attention"></div>
-                                    </div>
-                                    <div class="mobile-info-item__text mobile-info-item__text--attention">'.$product['commentary'].'</div>
-                                </div>';
+                            <div class="mobile-info-item__text">
+                            </div>
+                        </div>
+                    ';
+                }
+                $html .= '</div>';
             }
-            if (false) {
-                                $html .= '<div class="mobile-info__item mobile-info-item">
-                                    <div class="mobile-info-item__title">
-                                        <div class="mobile-info-item__title--replacement"> </div>
-                                    </div>
-                                    <div class="mobile-info-item__text mobile-info-item__text--attention">
-                                        Дополнительная информация относительно замены
-                                    </div>
-                                </div>';
-            }
-            if ($product['code'] === PriceList::CODE_PRICE_LR_RU) {
-                                $html .= '<div class="mobile-info__item mobile-info-item">
-                                    <div class="mobile-info-item__title">
-                                        <div class="mobile-info-item__title--showroom"></div>
-                                    </div>
-                                    <div class="mobile-info-item__text mobile-info-item__text--attention">Товар имеется в шоу-руме LR.RU</div>
-                                </div>';
-            }
-            if (false) {
-                                $html .= '<div class="mobile-info__item mobile-info-item">
-                                    <div class="mobile-info-item__title mobile-info-item__title--producer">Allmakes</div>
-                                    <div class="mobile-info-item__text">Allmakes - Английский  производитель запасных частей  из Лондона.<a href="">Подробнее<span>&ensp;>></span></a></div>
-                                </div>';
-            }
-            $html .= '</div>
-                </div>';
+            $html .= '</div>';
         }
 
         $html .= '</div></div>';
@@ -1122,7 +1204,9 @@ class CatalogHelper
      * @return string
      */
     public static function getCardProductDesktopHtml(array $article) : string
-    {
+    {   
+        $finalVendorUrl = self::generateVendorURLs($article['number']);
+
         $stocks = $filterHide = $favIcon = '';
         $isFavorite = \common\components\helpers\FavoriteHelper::isFavorite($article['number']);
         if (count($article['products']) <= 1) {
@@ -1137,9 +1221,9 @@ class CatalogHelper
             }
         }
         if (!empty($article['image'])) {
-            $image = Html::a(Html::img($article['image']), ['shop/vendor', 'number' => $article['number'],]);
+            $image = Html::a(Html::img($article['image']), $finalVendorUrl);
         } else {
-            $image = Html::a(Html::img('/img/'.Catalog::IMAGE_NOT_AVAILABLE_180), ['shop/vendor', 'number' => $article['number'],]);
+            $image = Html::a(Html::img('/img/'.Catalog::IMAGE_NOT_AVAILABLE_180), $finalVendorUrl);
         }
         $noOffersCodeClass = 'short-card-description__vendor-code';
         $noOffersTitleClass = 'short-card-description__title';
@@ -1173,7 +1257,7 @@ class CatalogHelper
                 <div class="offer-card-desktop__short short-desktop-card">
                     <div class="short-desktop-card__picture">'.$image.'</div>
                     <div class="short-desktop-card__description short-card-description">
-                        '.Html::a('', ['shop/vendor', 'number' => $article['number'],], ['class' => 'short-card-description__link', 'target' => '_blank']).'
+                        '.Html::a('', $finalVendorUrl, ['class' => 'short-card-description__link', 'target' => '_blank']).'
                         <div class="'.$noOffersCodeClass.'">'.$article['number'].'</div>
                         <div class="'.$noOffersTitleClass.'">'.$article['name'].'</div>
                         <div class="short-card-description__text">'.self::parseCardItemDescription($article['description'], $article['number'], 'short-card-description').'</div>
@@ -1191,20 +1275,34 @@ class CatalogHelper
                 <div class="offer-card-desktop__full full-desktop-card">
                     <!-- Filter -->
                     <div class="full-desktop-card__filter desktop-filter">
-                        <p class="desktop-filter__text" style="'.$filterHide.'">Сортировать:</p>
-                        <div class="desktop-filter__price offers-desktop-filter-price" style="'.$filterHide.'">
+                        <p class="desktop-filter__text" style="">Сортировать:</p>
+                        <div class="desktop-filter__price offers-desktop-filter-price" style="">
                             по цене
                             <ul class="offers-desktop-filter-price__list">
-                                <li class="offers-desktop-filter-price__item">дороже</li>
                                 <li class="offers-desktop-filter-price__item">дешевле</li>
+                                <li class="offers-desktop-filter-price__item">дороже</li>
                             </ul>
                         </div> 
-                        <div class="desktop-filter__delivery-date" style="'.$filterHide.'">по сроку доставки</div>
+                        <div class="desktop-filter__delivery-date" style="display: none">по сроку доставки</div>
                         <div class="desktop-filter__close">Скрыть</div>
                     </div>                
                     <!-- offers-list -->
                     <div class="full-desktop-card__list">';
         foreach ($article['products'] as $product) {
+            $delivery_text = '';
+            $delivery_color = '';
+            if (!empty($product['delivery_code'])) {
+                $delivery_data = self::getDeliveryTimeText($product['delivery_code']);
+                $delivery_type = mb_strtolower($delivery_data['delivery']);
+                $delivery_time = mb_strtolower($delivery_data['delivery_time']);
+                if ($delivery_type == $delivery_time) {
+                    $delivery_text = $delivery_type;
+                } else {
+                    $delivery_text = $delivery_type . ', ' . $delivery_time;
+                }
+                $delivery_text = mb_convert_case($delivery_text, MB_CASE_TITLE, "UTF-8");
+                $delivery_color = $delivery_data['color'];
+            }
             $stocks = '';
             if (!empty($product['offers'])) {
                 foreach ($product['offers'] as $name => $color) {
@@ -1224,91 +1322,80 @@ class CatalogHelper
             if (!is_numeric($product['price'])) {
                 $priceClass = 'desktop-card-item__price--optional';
             }
-            $html .= '<div class="full-desktop-card__item desktop-card-item">
-                            <div class="desktop-card-item__inner">
-                                <div class="desktop-card-item__properties desktop-properties">
-                                    <div class="desktop-properties__wrapper">
-                                        <div class="desktop-properties__manufacturer">' . $product['manufacturer'] . '</div>
-                                        <div class="desktop-properties__inner">
-                                            <div class="desktop-properties__quality">' . $product['quality'] . '</div>
-                                            '.$replacement.'
-                                        </div>
-                                    </div>
-                                    <div class="desktop-properties__icons">
-                                        ' . (!empty($product['commentary']) ? '<div class="desktop-properties__icons--attention"></div>' : '') . '
-                                        ' . (!empty($product['code']) && $product['code'] === PriceList::CODE_PRICE_LR_RU ? '<div class="desktop-properties__icons--showroom"></div>' : '') . '                                    
-                                    </div>
+            $html .= '
+                <div class="full-desktop-card__item desktop-card-item">
+                    <div class="desktop-card-item__inner">
+                        <div class="desktop-card-item__properties desktop-properties">
+                            <div class="desktop-properties__wrapper">
+                                <div class="desktop-properties__manufacturer">' . $product['manufacturer'] . '</div>
+                                <div class="desktop-properties__inner">
+                                    <div class="desktop-properties__quality">' . $product['quality'] . '</div>
                                 </div>
-                                <div class="desktop-card-item__price-inner">
-                                    <div class="'. $priceClass.'">'.(is_numeric($product['price']) ? self::formatPrice($product['price']) : $product['price']).'</div>
-                                    ' . $stocks . '
-                                </div>
-                                <div class="desktop-card-item__description desktop-description">
-                                    <div class="desktop-description__shop">lr.ru - ' . ($isAvailabilityInt ? $availability . ' <span>шт</span>' : $availability) . '</div>
-                                    <!--div-- class="desktop-description__delievery">Заказ у Партнера, срок 45 дней</div-->
-                                </div>';
+                            </div>
+                            <div class="desktop-properties__icons">
+                                ' . (!empty($product['commentary']) ? '<div class="desktop-properties__icons--attention"></div>' : '') . '
+                                ' . (!empty($product['code']) && $product['code'] === PriceList::CODE_PRICE_LR_RU ? '<div class="desktop-properties__icons--showroom"></div>' : '') . '                                    
+                            </div>
+                        </div>
+                        <div class="desktop-card-item__price-inner">
+                            <div class="'. $priceClass.'">'.(is_numeric($product['price']) ? self::formatPrice($product['price']) : $product['price']).'</div>
+                            ' . $stocks . '
+                        </div>
+                        <div class="desktop-card-item__description desktop-description">
+                            <div class="desktop-description__shop">' . ($isAvailabilityInt ? $availability . ' <span>шт</span>' : $availability) . '</div>
+                            <div class="desktop-description__delievery" style="color: '.$delivery_color.';">'.$delivery_text.'</div>
+                        </div>
+            ';
             if (is_numeric($product['price'])) {
-                $html .= '<div class="desktop-card-item__buy desktop-buy">
+                $html .= '
+                <div class="desktop-card-item__buy desktop-buy">
                     <a href="" class="desktop-buy__fast-buy-btn" data-key="'.$product[PriceList::PRODUCT_KEY].'" data-availability="'.$product['availability'].'"></a>
                     <a href="" class="desktop-buy__buy-btn" data-key="'.$product[PriceList::PRODUCT_KEY].'" data-availability="'.$product['availability'].'"></a>
-                </div>';
+                </div>
+                ';
             }
 
-                            $html .= '</div>
-                            <div class="desktop-card-item__info desktop-info">
-                                <div class="desktop-info__links">
-                                    <a href="'.Url::to(['shop/product', 'number' => $article['number'], 'key' => $product[PriceList::PRODUCT_KEY]]).'" class="desktop-info__link" target="_blank">Перейти на страницу товара</a>
-                                    <a href="'.Url::to(['shop/vendor', 'number' => $article['number'],]).'" class="desktop-info__link" target="_blank">все варианты поставки данного товара</a>
-                                </div>';
-                            if (!empty($product['code']) && $product['code'] === PriceList::CODE_PRICE_LR_RU) {
-                            $html .= '<div class="desktop-info__items 123">
-                                    <div class="desktop-info__items-close"></div>';
+            $html .= '
+                </div>
+                <div class="desktop-card-item__info desktop-info">
+                    <div class="desktop-info__links">
+                        <a href="'.Url::to(self::generateProductURLs($article['number'], $product[PriceList::PRODUCT_KEY])).'" class="desktop-info__link" target="_blank">Перейти на страницу товара</a>
+                        <a href="'.Url::to($finalVendorUrl).'" class="desktop-info__link" target="_blank">все варианты поставки данного товара</a>
+                    </div>';
+            if ($product['code'] === PriceList::CODE_PRICE_LR_RU || !empty($product['commentary']) || !empty($product['quality'])) {
+            $html .= '
+                <div class="desktop-info__items">
+                    <div class="desktop-info__items-close"></div>';
             if (!empty($product['commentary'])) {
-                $html .= '<div class="desktop-info__item desktop-info-item">
-                                        <div class="desktop-info-item__title">
-                                            <div class="desktop-info-item__title--attention">  </div>
-                                        </div>
-                                        <div class="desktop-info-item__text desktop-info-item__text--attention">'.$product['commentary'].'</div>
-                                    </div>';
-            }
-            if (false) {
-                $html .= '<div class="desktop-info__item desktop-info-item">
-                                        <div class="desktop-info-item__title">
-                                            <div class="desktop-info-item__title--replacement">  </div>
-                                        </div>
-                                        <div class="desktop-info-item__text desktop-info-item__text--attention">
-                                            Дополнительная информация относительно замены
-                                        </div>
-                                    </div>';
+                $html .= '
+                <div class="desktop-info__item desktop-info-item">
+                    <div class="desktop-info-item__title">
+                        <div class="desktop-info-item__title--attention"></div>
+                    </div>
+                    <div class="desktop-info-item__text desktop-info-item__text--attention">'.$product['commentary'].'</div>
+                </div>
+                ';
             }
             if ($product['code'] === PriceList::CODE_PRICE_LR_RU) {
-                $html .= '<div class="desktop-info__item desktop-info-item">
-                                        <div class="desktop-info-item__title">
-                                            <div class="desktop-info-item__title--showroom">  </div>
-                                        </div>
-                                        <div class="desktop-info-item__text desktop-info-item__text--attention">Товар имеется в шоу-руме LR.RU</div>
-                                    </div>';
+                $html .= '
+                <div class="desktop-info__item desktop-info-item">
+                    <div class="desktop-info-item__title">
+                        <div class="desktop-info-item__title--showroom">  </div>
+                    </div>
+                    <div class="desktop-info-item__text desktop-info-item__text--attention">Товар имеется в шоу-руме LR.RU</div>
+                </div>
+                ';
             }
-            if (false) {
+            if ($product['quality']) {
                 $html .= '
 					<div class="desktop-info__item desktop-info-item">
 						<div class="desktop-info-item__title">
-							Allmakes
+							'.$product['quality'].'
 						</div>
 						<div class="desktop-info-item__text">
-							Allmakes - Английский  производитель запасных частей  из Лондона.
-							<a href="">Подробнее<span> &gt;&gt;</span></a>
 						</div>
 					</div>
-					<div class="desktop-info__item desktop-info-item">
-						<div class="desktop-info-item__title">
-							GENUINE
-						</div>
-						<div class="desktop-info-item__text">
-							Параметр качества. GENUINE относятся к оригинальным запчастям, имющим маркировку производителя.
-							<a href="">Подробнее о параметрах качества<span> &gt;&gt;</span></a>
-						</div>
-					</div>';
+                ';
             }
             $html .= '</div>';
             }
@@ -1347,45 +1434,58 @@ class CatalogHelper
                     <div class="desktop-filter__price offers-desktop-filter-price">
                         по цене
                         <ul class="offers-desktop-filter-price__list">
-                            <li class="offers-desktop-filter-price__item">дороже</li>
                             <li class="offers-desktop-filter-price__item">дешевле</li>
+                            <li class="offers-desktop-filter-price__item">дороже</li>
                         </ul>
                     </div> 
-                    <div class="desktop-filter__delivery-date">по сроку доставки</div>
-                    <div class="desktop-filter__close">Скрыть</div>
+                    <div class="desktop-filter__delivery-date" style="display: none">по сроку доставки</div>
+                    <div class="desktop-filter__close" style="display: none">Скрыть</div>
                 </div>  
                     
                 <!-- offers-list -->
                 <div class="full-desktop-card__list">';
-        foreach ($article['products'] as $product) {
-            $stocks = '';
-            if (!empty($product['offers'])) {
-                foreach ($product['offers'] as $name => $color) {
-                    $stocks .= Html::tag('div', $name,
-                        ['class' => 'desktop-card-item__best-price', 'style' => 'color: ' . $color . ';',]);
-                }
-            }
-
-            $availability = $product['availability'];
-            $isAvailabilityInt = intval($availability) > 0;
-            $replacement = !empty($product['cross_type']) ? '<div class="desktop-properties__replacement">  </div>' : '';
-
-            $priceClass = 'desktop-card-item__price';
-            if (!empty($stocks)) {
-                $priceClass .= ' desktop-card-item__price--best';
-            }
-            if (!is_numeric($product['price'])) {
-                $priceClass = 'desktop-card-item__price--optional';
-            }
-
-            $html .= '<div class="full-desktop-card__item desktop-card-item">
+                foreach ($article['products'] as $product) {
+                    $delivery_text = '';
+                    $delivery_color = '';
+                    if (!empty($product['delivery_code'])) {
+                        $delivery_data = self::getDeliveryTimeText($product['delivery_code']);
+                        $delivery_type = mb_strtolower($delivery_data['delivery']);
+                        $delivery_time = mb_strtolower($delivery_data['delivery_time']);
+                        if ($delivery_type == $delivery_time) {
+                            $delivery_text = $delivery_type;
+                        } else {
+                            $delivery_text = $delivery_type . ', ' . $delivery_time;
+                        }
+                        $delivery_text = mb_convert_case($delivery_text, MB_CASE_TITLE, "UTF-8");
+                        $delivery_color = $delivery_data['color'];
+                    }
+                    $stocks = '';
+                    if (!empty($product['offers'])) {
+                        foreach ($product['offers'] as $name => $color) {
+                            $stocks .= Html::tag('div', $name,
+                                ['class' => 'desktop-card-item__best-price', 'style' => 'color: ' . $color . ';',]);
+                        }
+                    }
+        
+                    $availability = $product['availability'];
+                    $isAvailabilityInt = intval($availability) > 0;
+                    $replacement = !empty($product['cross_type']) ? '<div class="desktop-properties__replacement" title="'.$product['cross_type'].'">  </div>' : '';
+        
+                    $priceClass = 'desktop-card-item__price';
+                    if (!empty($stocks)) {
+                        $priceClass .= ' desktop-card-item__price--best';
+                    }
+                    if (!is_numeric($product['price'])) {
+                        $priceClass = 'desktop-card-item__price--optional';
+                    }
+                    $html .= '
+                        <div class="full-desktop-card__item desktop-card-item">
                             <div class="desktop-card-item__inner">
                                 <div class="desktop-card-item__properties desktop-properties">
                                     <div class="desktop-properties__wrapper">
                                         <div class="desktop-properties__manufacturer">' . $product['manufacturer'] . '</div>
                                         <div class="desktop-properties__inner">
                                             <div class="desktop-properties__quality">' . $product['quality'] . '</div>
-                                            '.$replacement.'
                                         </div>
                                     </div>
                                     <div class="desktop-properties__icons">
@@ -1394,79 +1494,68 @@ class CatalogHelper
                                     </div>
                                 </div>
                                 <div class="desktop-card-item__price-inner">
-                                    <div class="'.$priceClass.'">'.(is_numeric($product['price']) ? self::formatPrice($product['price']) : $product['price']).'</div>
+                                    <div class="'. $priceClass.'">'.(is_numeric($product['price']) ? self::formatPrice($product['price']) : $product['price']).'</div>
                                     ' . $stocks . '
                                 </div>
                                 <div class="desktop-card-item__description desktop-description">
-                                    <div class="desktop-description__shop">lr.ru - ' . ($isAvailabilityInt ? $availability . ' <span>шт</span>' : $availability) . '</div>
-                                    <!--div-- class="desktop-description__delievery">Заказ у Партнера, срок 45 дней</div-->
-                                </div>';
-            if (is_numeric($product['price'])) {
-                $html .= '<div class="desktop-card-item__buy desktop-buy" >
-                    <a href = "" class="desktop-buy__fast-buy-btn" data-key="'.$product[PriceList::PRODUCT_KEY].'" data-availability="'.$product['availability'].'"></a>
-                    <a href = "" class="desktop-buy__buy-btn" data-key="'.$product[PriceList::PRODUCT_KEY].'" data-availability="'.$product['availability'].'"></a>
-                </div>';
-            }
-                            $html .= '</div>
-                            <div class="desktop-card-item__info desktop-info">
-                                <div class="desktop-info__links">
-                                    <a href="'.Url::to(['shop/product', 'number' => $article['number'], 'key' => $product[PriceList::PRODUCT_KEY]]).'" class="desktop-info__link" target="_blank">Перейти на страницу товара</a>
-                                </div>';
-            if (!empty($product['code']) && $product['code'] === PriceList::CODE_PRICE_LR_RU) {
-                                $html .= '<div class="desktop-info__items">
-                                    <div class="desktop-info__items-close"></div>';
-            if (!empty($product['commentary'])) {
-                $html .= '<div class="desktop-info__item desktop-info-item">
-                                        <div class="desktop-info-item__title">
-                                            <div class="desktop-info-item__title--attention">  </div>
-                                        </div>
-                                        <div class="desktop-info-item__text desktop-info-item__text--attention">'.$product['commentary'].'</div>
-                                    </div>';
-            }
-            if (false) {
-                $html .= '<div class="desktop-info__item desktop-info-item">
-                                        <div class="desktop-info-item__title">
-                                            <div class="desktop-info-item__title--replacement">  </div>
-                                        </div>
-                                        <div class="desktop-info-item__text desktop-info-item__text--attention">
-                                            Дополнительная информация относительно замены
-                                        </div>
-                                    </div>';
-            }
-            if ($product['code'] === PriceList::CODE_PRICE_LR_RU) {
-                $html .= '<div class="desktop-info__item desktop-info-item">
-                                        <div class="desktop-info-item__title">
-                                            <div class="desktop-info-item__title--showroom">  </div>
-                                        </div>
-                                        <div class="desktop-info-item__text desktop-info-item__text--attention">Товар имеется в шоу-руме LR.RU</div>
-                                    </div>';
-            }
-            if (false) {
-                $html .= '
-                <div class="desktop-info__item desktop-info-item">
-					<div class="desktop-info-item__title">
-						Allmakes
-					</div>
-					<div class="desktop-info-item__text">
-						Allmakes - Английский  производитель запасных частей  из Лондона.
-						<a href="">Подробнее<span> &gt;&gt;</span></a>
-					</div>
-				</div>
-				<div class="desktop-info__item desktop-info-item">
-					<div class="desktop-info-item__title">
-						GENUINE
-					</div>
-					<div class="desktop-info-item__text">
-						Параметр качества. GENUINE относятся к оригинальным запчастям, имющим маркировку производителя.
-						<a href="">Подробнее о параметрах качества<span> &gt;&gt;</span></a>
-					</div>
-				</div>
-                ';
-            }
-            $html .= '</div>';
-            }
-			$html .= '</div></div>';
-        }
+                                    <div class="desktop-description__shop">' . ($isAvailabilityInt ? $availability . ' <span>шт</span>' : $availability) . '</div>
+                                    <div class="desktop-description__delievery" style="color: '.$delivery_color.';">'.$delivery_text.'</div>
+                                </div>
+                    ';
+                    if (is_numeric($product['price'])) {
+                        $html .= '
+                        <div class="desktop-card-item__buy desktop-buy">
+                            <a href="" class="desktop-buy__fast-buy-btn" data-key="'.$product[PriceList::PRODUCT_KEY].'" data-availability="'.$product['availability'].'"></a>
+                            <a href="" class="desktop-buy__buy-btn" data-key="'.$product[PriceList::PRODUCT_KEY].'" data-availability="'.$product['availability'].'"></a>
+                        </div>
+                        ';
+                    }
+        
+                    $html .= '
+                        </div>
+                        <div class="desktop-card-item__info desktop-info">
+                            <div class="desktop-info__links">
+                                <a href="'.Url::to(self::generateProductURLs($article['number'], $product[PriceList::PRODUCT_KEY])).'" class="desktop-info__link" target="_blank">Перейти на страницу товара</a>
+                            </div>';
+                    if ($product['code'] === PriceList::CODE_PRICE_LR_RU || !empty($product['commentary']) || !empty($product['quality'])) {
+                    $html .= '
+                        <div class="desktop-info__items">
+                            <div class="desktop-info__items-close"></div>';
+                    if (!empty($product['commentary'])) {
+                        $html .= '
+                        <div class="desktop-info__item desktop-info-item">
+                            <div class="desktop-info-item__title">
+                                <div class="desktop-info-item__title--attention"></div>
+                            </div>
+                            <div class="desktop-info-item__text desktop-info-item__text--attention">'.$product['commentary'].'</div>
+                        </div>
+                        ';
+                    }
+                    if ($product['code'] === PriceList::CODE_PRICE_LR_RU) {
+                        $html .= '
+                        <div class="desktop-info__item desktop-info-item">
+                            <div class="desktop-info-item__title">
+                                <div class="desktop-info-item__title--showroom">  </div>
+                            </div>
+                            <div class="desktop-info-item__text desktop-info-item__text--attention">Товар имеется в шоу-руме LR.RU</div>
+                        </div>
+                        ';
+                    }
+                    if ($product['quality']) {
+                        $html .= '
+                            <div class="desktop-info__item desktop-info-item">
+                                <div class="desktop-info-item__title">
+                                    '.$product['quality'].'
+                                </div>
+                                <div class="desktop-info-item__text">
+                                </div>
+                            </div>
+                        ';
+                    }
+                    $html .= '</div>';
+                    }
+                    $html .= '</div></div>';
+                }
 
         $html .= '</div>
             </div>
@@ -1502,7 +1591,8 @@ class CatalogHelper
      * @return string
      */
     public static function parseCardItemDescription(string $text, string $number, string $classBase) : string {
-        return AppHelper::truncateWords($text, 50, '... '.Html::a('Подробнее', ['shop/vendor', 'number' => $number,], ['class' => $classBase.'__more', 'style' => 'position: inherit;margin-left: 0;width: auto;height: auto;',]));
+        $finalVendorUrl = self::generateVendorURLs($number);
+        return AppHelper::truncateWords($text, 50, '... '.Html::a('Подробнее', $finalVendorUrl, ['class' => $classBase.'__more', 'style' => 'position: inherit;margin-left: 0;width: auto;height: auto;',]));
     }
 
     /**
@@ -1941,10 +2031,6 @@ class CatalogHelper
                 self::_calculateTagForLink2($structureData, $codes, $row, true);
             }
         }
-
-//        echo '<pre>';
-//        print_r($codes);
-//        exit;
 
         foreach ($trees as $typeCode => $tree) {
             // 1 level

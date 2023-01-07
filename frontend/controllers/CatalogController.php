@@ -197,7 +197,7 @@ class CatalogController extends Controller
 
         $model = CatalogHelper::getCatalogModelByCode($code);
         $topLevelModelData = (new CatalogTreeSearch())->findTopLevelModel($model);
-//        print_r($topLevelModelData);exit;
+
         if (!empty($topLevelModelData['model'])) {
             $tree = CatalogHelper::getCatalogTreeData($topLevelModelData['model']);
         } else {

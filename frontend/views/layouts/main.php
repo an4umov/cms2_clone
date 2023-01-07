@@ -61,10 +61,25 @@ $favoriteCount = count(FavoriteHelper::list());
                 <? if ($shop !== DepartmentMenuWidget::ACTIVE_SHOP_ALL): ?>
                     <?= Html::hiddenInput('shop', $shop); ?>
                 <? endif; ?>
-                <?= Html::activeTextInput($searchModel, SiteSearch::TEXT, ['tag' => false, 'name' => SiteSearch::TEXT, 'class' => 'search-mobile__input', 'placeholder' => 'Поиск по артикулу или наименованию...',]);
+                <?= Html::activeTextInput($searchModel, SiteSearch::TEXT, ['tag' => false, 'name' => SiteSearch::TEXT, 'class' => 'search-mobile__input', 'placeholder' => 'Введите запрос..', 'required' => 'true']);
                 ?>
-                <button class="search-mobile__setting"></button>
+                <button class="search-mobile__setting toggle-settings" type="button"></button>
                 <button class="search-mobile__submit" type="submit"></button>
+                <div class="search__modal-wrapper">
+                    <div class="search__modal">
+                        <div class="search__modal-header">
+                            <b>Настройка поиска</b>
+                            Ищем в:
+                        </div>
+                        <div class="search__modal-body">
+                            <input type="checkbox" id="search__input-name-mobile" class="search__input-checkbox" name="search_in_name" checked readonly disabled="disabled">
+                            <label for="search__input-name-mobile">Наименовании запчасти</label>
+                            <input type="checkbox" id="search__input-article-mobile" class="search__input-checkbox" name="search_in_article">
+                            <label for="search__input-article-mobile">Номере запчасти (Артикуле)</label>
+                            <button class="search__modal-close" type="submit">OK</button>
+                        </div>
+                    </div>
+                </div>
                 <?= Html::endForm() ?>
             </div>
             <!-- right panel mobile -->
@@ -73,11 +88,11 @@ $favoriteCount = count(FavoriteHelper::list());
                     <?= $headerSettings['phone'] ?>
                 </div>
                 <div class="right-panel__user user-mobile">
-                    <a href="#" class="user-mobile__favorites">
+                    <a href="/favorite" class="user-mobile__favorites">
                         <img src="/img/favorites-icon.svg" alt="">
                         <span><?= $favoriteCount ?></span>
                     </a>
-                    <a href="#" class="user-mobile__shopping-cart">
+                    <a href="/cart" class="user-mobile__shopping-cart">
                         <img src="/img/shopping-cart-icon.svg" alt="">
                         <span><?= $cartCount ?></span>
                     </a>
@@ -119,7 +134,7 @@ $favoriteCount = count(FavoriteHelper::list());
                 <? if ($shop !== DepartmentMenuWidget::ACTIVE_SHOP_ALL): ?>
                     <?= Html::hiddenInput('shop', $shop); ?>
                 <? endif; ?>
-                <?= Html::activeTextInput($searchModel, SiteSearch::TEXT, ['tag' => false, 'name' => SiteSearch::TEXT, 'class' => 'search__input', 'placeholder' => 'Поиск по артикулу или наименованию...',]);
+                <?= Html::activeTextInput($searchModel, SiteSearch::TEXT, ['tag' => false, 'name' => SiteSearch::TEXT, 'class' => 'search__input', 'placeholder' => 'Введите запрос..', 'required' => true]);
                 /*
                 $form->field($model, 'search', ['template' => '{input}', 'options' => ['tag' => false,],])->textInput([
                     'placeholder' => Yii::t('app', 'поиск по артикулу или наименованию...'),
@@ -127,8 +142,23 @@ $favoriteCount = count(FavoriteHelper::list());
                     'name' => 'search',
                 ])->label(false)->hint(false)*/
                 ?>
-                <button class="search__setting"></button>
+                <button class="search__setting toggle-settings" type="button"></button>
                 <button class="search__submit" type="submit"></button>
+                <div class="search__modal-wrapper">
+                    <div class="search__modal">
+                        <div class="search__modal-header">
+                            <b>Настройка поиска</b>
+                            Ищем в:
+                        </div>
+                        <div class="search__modal-body">
+                            <input type="checkbox" id="search__input-name" class="search__input-checkbox" name="search_in_name" checked readonly disabled="disabled">
+                            <label for="search__input-name">Наименовании запчасти</label>
+                            <input type="checkbox" id="search__input-article" class="search__input-checkbox" name="search_in_article">
+                            <label for="search__input-article">Номере запчасти (Артикуле)</label>
+                            <button class="search__modal-close" type="submit">OK</button>
+                        </div>
+                    </div>
+                </div>
                 <?= Html::endForm() ?>
             </div>
             <!-- user desktop -->
@@ -142,10 +172,6 @@ $favoriteCount = count(FavoriteHelper::list());
                     <img src="/img/shopping-cart-icon.svg" alt="">
                     <p>Корзина</p>
                     <span><?= $cartCount ?></span>
-                </a>
-                <a class="user__enter">
-                    <!-- <img src="/img/enter-icon.svg" alt="">
-                    <p title="<?= $displayName ?>">Вход</p> -->
                 </a>
             </div>
             <!-- contacts desktop -->

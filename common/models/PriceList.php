@@ -14,6 +14,7 @@ use yii\behaviors\TimestampBehavior;
  * @property string $cross_type
  * @property string $article_number
  * @property string $product_code
+ * @property string $delivery_code
  * @property string $manufacturer
  * @property string $quality
  * @property string $price
@@ -54,7 +55,7 @@ class PriceList extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['code', 'article_number', 'manufacturer'], 'required'],
+            [['code', 'article_number', 'manufacturer', 'delivery_code'], 'required'],
             [['commentary',], 'string'],
             [['key'], 'string', 'max' => self::KEY_LENGTH,],
             [['multiplicity', 'created_at', 'updated_at'], 'default', 'value' => null],
@@ -76,6 +77,7 @@ class PriceList extends \yii\db\ActiveRecord
             'cross_type' => 'Тип замены',
             'article_number' => 'Артикул товара',
             'product_code' => 'Код товара',
+            'delivery_code' => 'Код доставки',
             'manufacturer' => 'Производитель',
             'quality' => 'Показатель качества',
             'price' => 'Цена товара',
